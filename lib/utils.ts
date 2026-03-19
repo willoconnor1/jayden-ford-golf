@@ -24,25 +24,25 @@ export function roundBadgeColor(scoreToPar: number): string {
 
   if (scoreToPar < 0) {
     const abs = Math.abs(scoreToPar);
-    if (abs === 1) return "bg-red-300 text-red-900 font-semibold";
-    if (abs === 2) return "bg-red-300/80 text-red-950 font-semibold";
-    if (abs === 3) return "bg-red-400 text-white font-semibold";
-    if (abs === 4) return "bg-red-400/90 text-white font-semibold";
-    if (abs === 5) return "bg-red-500 text-white font-semibold";
-    if (abs === 6) return "bg-red-500/90 text-white font-semibold";
-    if (abs === 7) return "bg-red-600 text-white font-semibold";
-    if (abs === 8) return "bg-red-600/90 text-white font-semibold";
+    if (abs === 1) return "bg-red-300/70 text-red-900 font-semibold";
+    if (abs === 2) return "bg-red-300 text-red-900 font-semibold";
+    if (abs === 3) return "bg-red-400/80 text-white font-semibold";
+    if (abs === 4) return "bg-red-400 text-white font-semibold";
+    if (abs === 5) return "bg-red-500/80 text-white font-semibold";
+    if (abs === 6) return "bg-red-500 text-white font-semibold";
+    if (abs === 7) return "bg-red-600/80 text-white font-semibold";
+    if (abs === 8) return "bg-red-600 text-white font-semibold";
     return "bg-red-700 text-white font-semibold";     // -9 or better
   }
 
   // over par
-  if (scoreToPar === 1) return "bg-sky-300 text-sky-900 font-semibold";
-  if (scoreToPar === 2) return "bg-sky-300/80 text-sky-950 font-semibold";
-  if (scoreToPar === 3) return "bg-sky-400 text-white font-semibold";
-  if (scoreToPar === 4) return "bg-sky-400/90 text-white font-semibold";
-  if (scoreToPar === 5) return "bg-blue-400 text-white font-semibold";
+  if (scoreToPar === 1) return "bg-sky-300/70 text-sky-900 font-semibold";
+  if (scoreToPar === 2) return "bg-sky-300 text-sky-900 font-semibold";
+  if (scoreToPar === 3) return "bg-sky-400/80 text-white font-semibold";
+  if (scoreToPar === 4) return "bg-sky-400 text-white font-semibold";
+  if (scoreToPar === 5) return "bg-blue-400/80 text-white font-semibold";
   if (scoreToPar === 6) return "bg-blue-500 text-white font-semibold";
-  if (scoreToPar === 7) return "bg-blue-600 text-white font-semibold";
-  if (scoreToPar === 8) return "bg-blue-600/90 text-white font-semibold";
+  if (scoreToPar === 7) return "bg-blue-600/80 text-white font-semibold";
+  if (scoreToPar === 8) return "bg-blue-600 text-white font-semibold";
   return "bg-blue-700 text-white font-semibold";      // +9 or worse
 }
