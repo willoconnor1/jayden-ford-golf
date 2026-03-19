@@ -1,14 +1,15 @@
 "use client";
 
-import { HoleData, FairwayHit } from "@/lib/types";
+import { HoleData, FairwayHit, ShotData } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Minus, Plus, ChevronDown, ChevronUp } from "lucide-react";
+import { Minus, Plus, ChevronDown, ChevronUp, Crosshair } from "lucide-react";
 import { useState } from "react";
 import { cn, holeScoreColor } from "@/lib/utils";
+import { ShotEntryCard } from "./shot-entry-card";
 
 interface HoleEntryCardProps {
   hole: HoleData;
@@ -52,6 +53,75 @@ function NumberStepper({
       >
         <Plus className="h-3.5 w-3.5" />
       </Button>
+    </div>
+  );
+}
+
+function defaultShot(): ShotData {
+  return { club: "7-iron", targetDistance: 150, lie: "fairway", missX: 0, missY: 0 };
+}
+
+function ShotTrackingSection({
+  hole,
+  update,
+}: {
+  hole: HoleData;
+  update: (partial: Partial<HoleData>) => void;
+}) {
+  const [showShots, setShowShots] = useState((hole.shots?.length ?? 0) > 0);
+  const nonPuttShots = Math.max(0, hole.score - hole.putts);
+  const shots = hole.shots || [];
+
+  const toggleShots = () => {
+    if (showShots) {
+      update({ shots: undefined });
+      setShowShots(false);
+    } else {
+      const newShots = Array.from({ length: nonPuttShots }, () => defaultShot());
+      update({ shots: newShots });
+      setShowShots(true);
+    }
+  };
+
+  const updateShot = (index: number, shot: ShotData) => {
+    const newShots = [...shots];
+    newShots[index] = shot;
+    update({ shots: newShots });
+  };
+
+  // Sync shot count if score/putts changes
+  const expectedCount = nonPuttShots;
+  if (showShots && shots.length !== expectedCount) {
+    const synced =
+      shots.length < expectedCount
+        ? [...shots, ...Array.from({ length: expectedCount - shots.length }, () => defaultShot())]
+        : shots.slice(0, expectedCount);
+    update({ shots: synced });
+  }
+
+  return (
+    <div className="space-y-2 pt-2 border-t border-border/50">
+      <button
+        type="button"
+        onClick={toggleShots}
+        className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <Crosshair className="h-3.5 w-3.5" />
+        {showShots ? "Remove shot tracking" : `Track ${nonPuttShots} shot${nonPuttShots !== 1 ? "s" : ""}`}
+      </button>
+
+      {showShots && shots.length > 0 && (
+        <div className="space-y-2">
+          {shots.map((shot, i) => (
+            <ShotEntryCard
+              key={i}
+              shotIndex={i}
+              shot={shot}
+              onChange={(s) => updateShot(i, s)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -179,32 +249,52 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
           </div>
         </div>
 
-        {/* Putts - stacked on mobile */}
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        {/* Putts */}
+        <div className="space-y-2">
           <NumberStepper
             label="Putts"
             value={hole.putts}
-            onChange={(v) => update({ putts: v })}
+            onChange={(v) => {
+              const prev = hole.puttDistances || [];
+              const puttDistances =
+                v > prev.length
+                  ? [...prev, ...Array(v - prev.length).fill(0)]
+                  : prev.slice(0, v);
+              update({ putts: v, puttDistances });
+            }}
             min={0}
             max={10}
           />
-          <div className="flex items-center gap-1.5">
-            <Label className="text-xs text-muted-foreground shrink-0">1st putt</Label>
-            <Input
-              type="number"
-              value={hole.firstPuttDistance || ""}
-              onChange={(e) =>
-                update({
-                  firstPuttDistance: parseInt(e.target.value) || 0,
-                })
-              }
-              className="w-16 h-9 text-xs"
-              placeholder="ft"
-              min={0}
-              max={120}
-            />
-            <span className="text-xs text-muted-foreground">ft</span>
-          </div>
+          {hole.putts > 0 && (
+            <div className="space-y-1.5 pl-14">
+              {Array.from({ length: hole.putts }).map((_, i) => {
+                const ordinal =
+                  i === 0 ? "1st" : i === 1 ? "2nd" : i === 2 ? "3rd" : `${i + 1}th`;
+                return (
+                  <div key={i} className="flex items-center gap-1.5">
+                    <Label className="text-xs text-muted-foreground shrink-0 w-14">
+                      {ordinal} putt
+                    </Label>
+                    <Input
+                      type="number"
+                      value={(hole.puttDistances || [])[i] || ""}
+                      onChange={(e) => {
+                        const newDists = [...(hole.puttDistances || [])];
+                        while (newDists.length <= i) newDists.push(0);
+                        newDists[i] = parseInt(e.target.value) || 0;
+                        update({ puttDistances: newDists });
+                      }}
+                      className="w-16 h-8 text-xs"
+                      placeholder="ft"
+                      min={0}
+                      max={120}
+                    />
+                    <span className="text-xs text-muted-foreground">ft</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Expandable section */}
@@ -218,7 +308,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
           ) : (
             <ChevronDown className="h-3.5 w-3.5" />
           )}
-          {expanded ? "Less" : "More"} (penalties, up & down, sand)
+          {expanded ? "Less" : "More"} (penalties, up & down, sand, shots)
         </button>
 
         {expanded && (
@@ -280,6 +370,9 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                 </div>
               )}
             </div>
+
+            {/* Shot tracking */}
+            <ShotTrackingSection hole={hole} update={update} />
           </div>
         )}
       </CardContent>

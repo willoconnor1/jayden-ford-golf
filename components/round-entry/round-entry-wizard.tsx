@@ -29,7 +29,7 @@ function createDefaultHoles(pars: number[], distances: number[]): HoleData[] {
     fairwayHit: par === 3 ? "na" : "yes",
     greenInRegulation: false,
     putts: 2,
-    firstPuttDistance: 20,
+    puttDistances: [20, 3],
     penaltyStrokes: 0,
     upAndDownAttempt: false,
     upAndDownConverted: false,

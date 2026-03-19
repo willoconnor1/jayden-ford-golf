@@ -9,12 +9,13 @@ export interface HoleData {
   fairwayHit: FairwayHit;
   greenInRegulation: boolean;
   putts: number;
-  firstPuttDistance: number; // feet
+  puttDistances: number[]; // distance in feet for each putt (index 0 = 1st putt)
   penaltyStrokes: number;
   upAndDownAttempt: boolean;
   upAndDownConverted: boolean;
   sandSaveAttempt: boolean;
   sandSaveConverted: boolean;
+  shots?: ShotData[];
 }
 
 export interface CourseInfo {
@@ -115,6 +116,37 @@ export interface Drill {
   duration: string;
   difficulty: "beginner" | "intermediate" | "advanced";
   targetStat: string;
+}
+
+// ── Shot Dispersion ──────────────────────────────────────────────
+
+export type ShotLie = "fairway" | "rough" | "sand" | "penalty-area" | "abnormal";
+
+export type AbnormalLieDetail =
+  | "pine-straw"
+  | "deep-rough"
+  | "in-trees"
+  | "divot"
+  | "hardpan"
+  | "uphill"
+  | "downhill"
+  | "sidehill"
+  | "other";
+
+export type Club =
+  | "driver" | "3-wood" | "5-wood" | "7-wood"
+  | "2-hybrid" | "3-hybrid" | "4-hybrid" | "5-hybrid"
+  | "2-iron" | "3-iron" | "4-iron" | "5-iron" | "6-iron"
+  | "7-iron" | "8-iron" | "9-iron"
+  | "pw" | "gw" | "sw" | "lw";
+
+export interface ShotData {
+  club: Club;
+  targetDistance: number;          // yards — intended distance
+  lie: ShotLie;
+  abnormalDetail?: AbnormalLieDetail;
+  missX: number;                   // feet — negative = left, positive = right
+  missY: number;                   // feet — negative = short, positive = long
 }
 
 export interface PracticeFocus {

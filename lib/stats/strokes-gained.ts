@@ -19,7 +19,8 @@ export function calculateHoleStrokesGained(
   hole: HoleData
 ): StrokesGainedResult {
   // SG: Putting — most accurate since we have first putt distance
-  const expectedPutts = getExpectedStrokes("green", hole.firstPuttDistance);
+  const firstPuttDist = hole.puttDistances?.[0] ?? 0;
+  const expectedPutts = getExpectedStrokes("green", firstPuttDist);
   const sgPutting = expectedPutts - hole.putts;
 
   // Expected strokes from tee
@@ -57,7 +58,7 @@ export function calculateHoleStrokesGained(
         : getExpectedStrokes(approachLie, approachStartDistance);
     const expectedAfterApproach = getExpectedStrokes(
       "green",
-      hole.firstPuttDistance
+      hole.puttDistances?.[0] ?? 0
     );
     sgApproach = expectedBeforeApproach - 1 - expectedAfterApproach;
   }

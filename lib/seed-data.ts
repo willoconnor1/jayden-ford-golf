@@ -39,37 +39,48 @@ function generateHoleData(
       greenInRegulation = rand() < 0.22;
     }
 
-    // Putts & first putt distance
+    // Putts & putt distances
     let putts: number;
-    let firstPuttDistance: number;
+    let firstPuttDist: number;
 
     if (greenInRegulation) {
       if (diff <= -1) {
         putts = 1;
-        firstPuttDistance = Math.floor(rand() * 12) + 5;
+        firstPuttDist = Math.floor(rand() * 12) + 5;
       } else if (diff === 0) {
         putts = 2;
-        firstPuttDistance = Math.floor(rand() * 25) + 12;
+        firstPuttDist = Math.floor(rand() * 25) + 12;
       } else if (diff === 1) {
         putts = rand() < 0.6 ? 3 : 2;
-        firstPuttDistance = Math.floor(rand() * 20) + 28;
+        firstPuttDist = Math.floor(rand() * 20) + 28;
       } else {
         putts = 3;
-        firstPuttDistance = Math.floor(rand() * 15) + 35;
+        firstPuttDist = Math.floor(rand() * 15) + 35;
       }
     } else {
       if (diff <= -1) {
         putts = rand() < 0.25 ? 0 : 1;
-        firstPuttDistance = putts === 0 ? 0 : Math.floor(rand() * 4) + 1;
+        firstPuttDist = putts === 0 ? 0 : Math.floor(rand() * 4) + 1;
       } else if (diff === 0) {
         putts = 1;
-        firstPuttDistance = Math.floor(rand() * 6) + 2;
+        firstPuttDist = Math.floor(rand() * 6) + 2;
       } else if (diff === 1) {
         putts = 2;
-        firstPuttDistance = Math.floor(rand() * 15) + 8;
+        firstPuttDist = Math.floor(rand() * 15) + 8;
       } else {
         putts = 2;
-        firstPuttDistance = Math.floor(rand() * 12) + 10;
+        firstPuttDist = Math.floor(rand() * 12) + 10;
+      }
+    }
+
+    // Build putt distances array
+    const puttDistances: number[] = [];
+    if (putts > 0) {
+      puttDistances.push(firstPuttDist);
+      let rem = firstPuttDist;
+      for (let j = 1; j < putts; j++) {
+        rem = Math.max(1, Math.floor(rem * (rand() * 0.3 + 0.2)));
+        puttDistances.push(rem);
       }
     }
 
@@ -99,7 +110,7 @@ function generateHoleData(
       fairwayHit,
       greenInRegulation,
       putts,
-      firstPuttDistance,
+      puttDistances,
       penaltyStrokes,
       upAndDownAttempt,
       upAndDownConverted,

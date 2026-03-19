@@ -1,7 +1,25 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { Round } from "@/lib/types";
+import { Round, HoleData } from "@/lib/types";
 import { getSeedRounds } from "@/lib/seed-data";
+
+/** Migrate old firstPuttDistance to puttDistances array */
+function migratePuttDistances(hole: HoleData & { firstPuttDistance?: number }): HoleData {
+  if ("puttDistances" in hole && Array.isArray(hole.puttDistances)) return hole as HoleData;
+  const first = hole.firstPuttDistance ?? 0;
+  const putts = hole.putts ?? 0;
+  const puttDistances: number[] = [];
+  if (putts > 0) {
+    puttDistances.push(first);
+    let rem = first;
+    for (let j = 1; j < putts; j++) {
+      rem = Math.max(1, Math.round(rem * 0.35));
+      puttDistances.push(rem);
+    }
+  }
+  const { firstPuttDistance: _, ...rest } = hole;
+  return { ...rest, puttDistances } as HoleData;
+}
 
 interface RoundStore {
   rounds: Round[];
@@ -40,7 +58,18 @@ export const useRoundStore = create<RoundStore>()(
     }),
     {
       name: "golf-rounds-storage",
+      version: 2,
       storage: createJSONStorage(() => localStorage),
+      migrate: (persisted: unknown, version: number) => {
+        const state = persisted as RoundStore;
+        if (version < 2 && state.rounds) {
+          state.rounds = state.rounds.map((round) => ({
+            ...round,
+            holes: round.holes.map((hole) => migratePuttDistances(hole as HoleData & { firstPuttDistance?: number })),
+          }));
+        }
+        return state;
+      },
       onRehydrateStorage: () => (state) => {
         // Auto-seed demo data on first visit
         if (state && !state.seeded && state.rounds.length === 0) {

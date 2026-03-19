@@ -9,6 +9,8 @@ import {
   TrendingUp,
   Target,
   Dumbbell,
+  Crosshair,
+  Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +21,8 @@ const links = [
   { href: "/strokes-gained", label: "Strokes Gained", mobileLabel: "SG", icon: TrendingUp },
   { href: "/goals", label: "Goals", mobileLabel: "Goals", icon: Target },
   { href: "/practice", label: "Practice", mobileLabel: "Practice", icon: Dumbbell },
+  { href: "/dispersion", label: "Dispersion", mobileLabel: "Shots", icon: Crosshair },
+  { href: "/settings", label: "Settings", mobileLabel: "Settings", icon: Settings },
 ];
 
 export function NavBar() {
