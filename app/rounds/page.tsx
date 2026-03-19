@@ -10,7 +10,7 @@ import { useRoundStore } from "@/stores/round-store";
 import { useHydration } from "@/hooks/use-hydration";
 import { calculateRoundStats } from "@/lib/stats/calculate-stats";
 import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { cn, roundBadgeColor } from "@/lib/utils";
 import { toast } from "sonner";
 
 export default function RoundsPage() {
@@ -79,12 +79,9 @@ export default function RoundsPage() {
                             {stats.totalScore}
                           </span>
                           <Badge
-                            variant={scoreToPar <= 0 ? "default" : "secondary"}
                             className={cn(
                               "tabular-nums text-xs",
-                              scoreToPar < 0 && "bg-green-600",
-                              scoreToPar === 0 && "bg-blue-600",
-                              scoreToPar > 0 && "bg-muted text-muted-foreground"
+                              roundBadgeColor(scoreToPar)
                             )}
                           >
                             {scoreToPar === 0 ? "E" : scoreToPar > 0 ? `+${scoreToPar}` : scoreToPar}

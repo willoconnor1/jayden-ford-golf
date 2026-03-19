@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Minus, Plus, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn, holeScoreColor } from "@/lib/utils";
 
 interface HoleEntryCardProps {
   hole: HoleData;
@@ -98,19 +98,14 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
             <span
               className={cn(
                 "text-lg font-bold tabular-nums",
-                scoreToPar < 0 && "text-green-600",
-                scoreToPar === 0 && "text-foreground",
-                scoreToPar > 0 && "text-red-500"
+                holeScoreColor(scoreToPar)
               )}
             >
               {hole.score}
             </span>
             {scoreToPar !== 0 && (
               <span
-                className={cn(
-                  "text-xs",
-                  scoreToPar < 0 ? "text-green-600" : "text-red-500"
-                )}
+                className={cn("text-xs", holeScoreColor(scoreToPar))}
               >
                 ({scoreToPar > 0 ? "+" : ""}
                 {scoreToPar})

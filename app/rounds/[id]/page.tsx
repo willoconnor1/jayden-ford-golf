@@ -12,7 +12,7 @@ import { useHydration } from "@/hooks/use-hydration";
 import { calculateRoundStats } from "@/lib/stats/calculate-stats";
 import { calculateRoundStrokesGained } from "@/lib/stats/strokes-gained";
 import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { cn, holeScoreColor, roundBadgeColor } from "@/lib/utils";
 
 export default function RoundDetailPage({
   params,
@@ -63,9 +63,7 @@ export default function RoundDetailPage({
             <Badge
               className={cn(
                 "mt-2 text-sm",
-                stats.scoreToPar < 0 && "bg-green-600",
-                stats.scoreToPar === 0 && "bg-blue-600",
-                stats.scoreToPar > 0 && "bg-muted text-muted-foreground"
+                roundBadgeColor(stats.scoreToPar)
               )}
             >
               {stats.scoreToPar === 0
@@ -110,8 +108,7 @@ export default function RoundDetailPage({
                       key={i}
                       className={cn(
                         "py-1.5 px-0.5",
-                        h.score < h.par && "text-green-600",
-                        h.score > h.par && "text-red-500"
+                        holeScoreColor(h.score - h.par)
                       )}
                     >
                       {h.score}
@@ -164,8 +161,7 @@ export default function RoundDetailPage({
                       key={i}
                       className={cn(
                         "py-1.5 px-0.5",
-                        h.score < h.par && "text-green-600",
-                        h.score > h.par && "text-red-500"
+                        holeScoreColor(h.score - h.par)
                       )}
                     >
                       {h.score}

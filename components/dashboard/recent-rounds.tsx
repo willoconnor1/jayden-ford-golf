@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Round } from "@/lib/types";
 import { calculateRoundStats } from "@/lib/stats/calculate-stats";
 import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { cn, roundBadgeColor } from "@/lib/utils";
 
 interface RecentRoundsProps {
   rounds: Round[];
@@ -51,12 +51,9 @@ export function RecentRounds({ rounds }: RecentRoundsProps) {
                   {stats.totalScore}
                 </span>
                 <Badge
-                  variant={scoreToPar <= 0 ? "default" : "secondary"}
                   className={cn(
                     "text-xs tabular-nums",
-                    scoreToPar < 0 && "bg-green-600 hover:bg-green-700",
-                    scoreToPar === 0 && "bg-blue-600 hover:bg-blue-700",
-                    scoreToPar > 0 && "bg-muted text-muted-foreground"
+                    roundBadgeColor(scoreToPar)
                   )}
                 >
                   {scoreToPar === 0 ? "E" : scoreToPar > 0 ? `+${scoreToPar}` : scoreToPar}

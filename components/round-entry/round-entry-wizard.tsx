@@ -15,7 +15,7 @@ import { DEFAULT_HOLE_PARS } from "@/lib/constants";
 import { calculateRoundStats } from "@/lib/stats/calculate-stats";
 import { ArrowLeft, ArrowRight, Save } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn, holeScoreColor } from "@/lib/utils";
 
 const STEPS = ["Course Info", "Front 9", "Back 9", "Summary"];
 
@@ -409,8 +409,7 @@ export function RoundEntryWizard() {
                             key={i}
                             className={cn(
                               "py-1.5 px-0.5",
-                              h.score < h.par && "text-green-600",
-                              h.score > h.par && "text-red-500"
+                              holeScoreColor(h.score - h.par)
                             )}
                           >
                             {h.score}
@@ -454,8 +453,7 @@ export function RoundEntryWizard() {
                             key={i}
                             className={cn(
                               "py-1.5 px-0.5",
-                              h.score < h.par && "text-green-600",
-                              h.score > h.par && "text-red-500"
+                              holeScoreColor(h.score - h.par)
                             )}
                           >
                             {h.score}
