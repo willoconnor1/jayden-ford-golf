@@ -1,0 +1,292 @@
+"use client";
+
+import { use } from "react";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/layout/page-header";
+import { useRoundStore } from "@/stores/round-store";
+import { useHydration } from "@/hooks/use-hydration";
+import { calculateRoundStats } from "@/lib/stats/calculate-stats";
+import { calculateRoundStrokesGained } from "@/lib/stats/strokes-gained";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+
+export default function RoundDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+  const hydrated = useHydration();
+  const getRound = useRoundStore((s) => s.getRound);
+
+  if (!hydrated) {
+    return <div className="animate-pulse h-96 bg-muted rounded-lg" />;
+  }
+
+  const round = getRound(id);
+
+  if (!round) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-muted-foreground">Round not found.</p>
+        <Link href="/rounds" className={buttonVariants({ variant: "outline" }) + " mt-4"}>
+          Back to Rounds
+        </Link>
+      </div>
+    );
+  }
+
+  const stats = calculateRoundStats(round);
+  const sg = calculateRoundStrokesGained(round);
+
+  return (
+    <>
+      <Link href="/rounds" className={buttonVariants({ variant: "ghost" }) + " mb-4"}>
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to Rounds
+      </Link>
+
+      <PageHeader
+        title={round.course.name}
+        description={`${format(new Date(round.date), "MMMM d, yyyy")} ${round.course.tees ? `| ${round.course.tees} tees` : ""}`}
+      />
+
+      <div className="space-y-6">
+        {/* Score header */}
+        <Card>
+          <CardContent className="py-6 text-center">
+            <p className="text-5xl font-bold">{stats.totalScore}</p>
+            <Badge
+              className={cn(
+                "mt-2 text-sm",
+                stats.scoreToPar < 0 && "bg-green-600",
+                stats.scoreToPar === 0 && "bg-blue-600",
+                stats.scoreToPar > 0 && "bg-muted text-muted-foreground"
+              )}
+            >
+              {stats.scoreToPar === 0
+                ? "Even Par"
+                : stats.scoreToPar > 0
+                  ? `+${stats.scoreToPar}`
+                  : stats.scoreToPar}
+            </Badge>
+          </CardContent>
+        </Card>
+
+        {/* Scorecard */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Scorecard</CardTitle>
+          </CardHeader>
+          <CardContent className="overflow-x-auto">
+            <table className="w-full text-xs text-center">
+              <thead>
+                <tr className="border-b">
+                  <th className="py-1 px-1 text-left text-muted-foreground">Hole</th>
+                  {round.holes.slice(0, 9).map((_, i) => (
+                    <th key={i} className="py-1 px-1">{i + 1}</th>
+                  ))}
+                  <th className="py-1 px-1 font-bold">Out</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b text-muted-foreground">
+                  <td className="py-1 px-1 text-left">Par</td>
+                  {round.holes.slice(0, 9).map((h, i) => (
+                    <td key={i} className="py-1 px-1">{h.par}</td>
+                  ))}
+                  <td className="py-1 px-1 font-medium">
+                    {round.holes.slice(0, 9).reduce((s, h) => s + h.par, 0)}
+                  </td>
+                </tr>
+                <tr className="border-b font-medium">
+                  <td className="py-1 px-1 text-left">Score</td>
+                  {round.holes.slice(0, 9).map((h, i) => (
+                    <td
+                      key={i}
+                      className={cn(
+                        "py-1 px-1",
+                        h.score < h.par && "text-green-600",
+                        h.score > h.par && "text-red-500"
+                      )}
+                    >
+                      {h.score}
+                    </td>
+                  ))}
+                  <td className="py-1 px-1 font-bold">
+                    {round.holes.slice(0, 9).reduce((s, h) => s + h.score, 0)}
+                  </td>
+                </tr>
+                <tr className="border-b text-muted-foreground">
+                  <td className="py-1 px-1 text-left">Putts</td>
+                  {round.holes.slice(0, 9).map((h, i) => (
+                    <td key={i} className="py-1 px-1">{h.putts}</td>
+                  ))}
+                  <td className="py-1 px-1 font-medium">
+                    {round.holes.slice(0, 9).reduce((s, h) => s + h.putts, 0)}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table className="w-full text-xs text-center mt-3">
+              <thead>
+                <tr className="border-b">
+                  <th className="py-1 px-1 text-left text-muted-foreground">Hole</th>
+                  {round.holes.slice(9, 18).map((_, i) => (
+                    <th key={i} className="py-1 px-1">{i + 10}</th>
+                  ))}
+                  <th className="py-1 px-1 font-bold">In</th>
+                  <th className="py-1 px-1 font-bold">Tot</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b text-muted-foreground">
+                  <td className="py-1 px-1 text-left">Par</td>
+                  {round.holes.slice(9, 18).map((h, i) => (
+                    <td key={i} className="py-1 px-1">{h.par}</td>
+                  ))}
+                  <td className="py-1 px-1 font-medium">
+                    {round.holes.slice(9, 18).reduce((s, h) => s + h.par, 0)}
+                  </td>
+                  <td className="py-1 px-1 font-medium">
+                    {round.holes.reduce((s, h) => s + h.par, 0)}
+                  </td>
+                </tr>
+                <tr className="border-b font-medium">
+                  <td className="py-1 px-1 text-left">Score</td>
+                  {round.holes.slice(9, 18).map((h, i) => (
+                    <td
+                      key={i}
+                      className={cn(
+                        "py-1 px-1",
+                        h.score < h.par && "text-green-600",
+                        h.score > h.par && "text-red-500"
+                      )}
+                    >
+                      {h.score}
+                    </td>
+                  ))}
+                  <td className="py-1 px-1 font-bold">
+                    {round.holes.slice(9, 18).reduce((s, h) => s + h.score, 0)}
+                  </td>
+                  <td className="py-1 px-1 font-bold">{stats.totalScore}</td>
+                </tr>
+                <tr className="border-b text-muted-foreground">
+                  <td className="py-1 px-1 text-left">Putts</td>
+                  {round.holes.slice(9, 18).map((h, i) => (
+                    <td key={i} className="py-1 px-1">{h.putts}</td>
+                  ))}
+                  <td className="py-1 px-1 font-medium">
+                    {round.holes.slice(9, 18).reduce((s, h) => s + h.putts, 0)}
+                  </td>
+                  <td className="py-1 px-1 font-medium">{stats.totalPutts}</td>
+                </tr>
+              </tbody>
+            </table>
+          </CardContent>
+        </Card>
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 gap-4">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm text-muted-foreground">Fairways</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold">
+                {stats.fairwaysHit}/{stats.fairwaysAttempted}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {stats.fairwayPercentage.toFixed(1)}%
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm text-muted-foreground">Greens in Reg</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold">
+                {stats.greensInRegulation}/18
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {stats.girPercentage.toFixed(1)}%
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm text-muted-foreground">Total Putts</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold">{stats.totalPutts}</p>
+              <p className="text-sm text-muted-foreground">
+                {stats.puttsPerGir.toFixed(2)} per GIR
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm text-muted-foreground">Scrambling</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold">
+                {stats.scramblingPercentage.toFixed(0)}%
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {stats.upAndDownConversions}/{stats.upAndDownAttempts} up & down
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Strokes Gained */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Strokes Gained vs PGA Tour</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {[
+              { label: "Off the Tee", value: sg.sgOffTheTee },
+              { label: "Approach", value: sg.sgApproach },
+              { label: "Around the Green", value: sg.sgAroundTheGreen },
+              { label: "Putting", value: sg.sgPutting },
+              { label: "Total", value: sg.sgTotal },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center justify-between">
+                <span className="text-sm">{item.label}</span>
+                <span
+                  className={cn(
+                    "font-bold tabular-nums",
+                    item.value >= 0 ? "text-green-600" : "text-red-500"
+                  )}
+                >
+                  {item.value >= 0 ? "+" : ""}
+                  {item.value.toFixed(2)}
+                </span>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        {round.notes && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Notes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                {round.notes}
+              </p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    </>
+  );
+}
