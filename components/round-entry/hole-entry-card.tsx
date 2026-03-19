@@ -30,27 +30,27 @@ function NumberStepper({
 }) {
   return (
     <div className="flex items-center gap-2">
-      <Label className="text-xs text-muted-foreground w-14">{label}</Label>
+      <Label className="text-xs text-muted-foreground w-12 shrink-0">{label}</Label>
       <Button
         type="button"
         variant="outline"
         size="icon"
-        className="h-8 w-8"
+        className="h-9 w-9 shrink-0"
         onClick={() => onChange(Math.max(min, value - 1))}
         disabled={value <= min}
       >
-        <Minus className="h-3 w-3" />
+        <Minus className="h-3.5 w-3.5" />
       </Button>
-      <span className="w-8 text-center font-bold tabular-nums">{value}</span>
+      <span className="w-8 text-center font-bold tabular-nums text-base">{value}</span>
       <Button
         type="button"
         variant="outline"
         size="icon"
-        className="h-8 w-8"
+        className="h-9 w-9 shrink-0"
         onClick={() => onChange(Math.min(max, value + 1))}
         disabled={value >= max}
       >
-        <Plus className="h-3 w-3" />
+        <Plus className="h-3.5 w-3.5" />
       </Button>
     </div>
   );
@@ -78,11 +78,11 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
 
   return (
     <Card className={cn("transition-shadow", expanded && "shadow-md")}>
-      <CardContent className="pt-4 pb-3 px-4 space-y-3">
+      <CardContent className="pt-3 pb-3 px-3 sm:px-4 space-y-3">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold bg-primary text-primary-foreground rounded-full w-7 h-7 flex items-center justify-center">
+            <span className="text-sm font-bold bg-primary text-primary-foreground rounded-full w-7 h-7 flex items-center justify-center shrink-0">
               {hole.holeNumber}
             </span>
             <span className="text-sm text-muted-foreground">
@@ -130,8 +130,8 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
 
         {/* Fairway */}
         <div className="flex items-center gap-2">
-          <Label className="text-xs text-muted-foreground w-14">Fairway</Label>
-          <div className="flex gap-1">
+          <Label className="text-xs text-muted-foreground w-12 shrink-0">Fairway</Label>
+          <div className="flex gap-1.5">
             {(["yes", "no", "na"] as const).map((val) => (
               <Button
                 key={val}
@@ -139,7 +139,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                 variant="outline"
                 size="sm"
                 className={cn(
-                  "h-8 px-3 text-xs",
+                  "h-9 px-3.5 text-xs",
                   hole.fairwayHit === val && val === "yes" && "bg-green-600 text-white border-green-600 hover:bg-green-700",
                   hole.fairwayHit === val && val === "no" && "bg-red-500 text-white border-red-500 hover:bg-red-600",
                   hole.fairwayHit === val && val === "na" && "bg-muted border-muted",
@@ -155,14 +155,14 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
 
         {/* GIR */}
         <div className="flex items-center gap-2">
-          <Label className="text-xs text-muted-foreground w-14">GIR</Label>
-          <div className="flex gap-1">
+          <Label className="text-xs text-muted-foreground w-12 shrink-0">GIR</Label>
+          <div className="flex gap-1.5">
             <Button
               type="button"
               variant="outline"
               size="sm"
               className={cn(
-                "h-8 px-3 text-xs",
+                "h-9 px-3.5 text-xs",
                 hole.greenInRegulation && "bg-green-600 text-white border-green-600 hover:bg-green-700"
               )}
               onClick={() => update({ greenInRegulation: true })}
@@ -174,7 +174,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
               variant="outline"
               size="sm"
               className={cn(
-                "h-8 px-3 text-xs",
+                "h-9 px-3.5 text-xs",
                 !hole.greenInRegulation && "bg-red-500 text-white border-red-500 hover:bg-red-600"
               )}
               onClick={() => update({ greenInRegulation: false })}
@@ -184,8 +184,8 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
           </div>
         </div>
 
-        {/* Putts */}
-        <div className="flex items-center gap-4">
+        {/* Putts - stacked on mobile */}
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <NumberStepper
             label="Putts"
             value={hole.putts}
@@ -193,8 +193,8 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
             min={0}
             max={10}
           />
-          <div className="flex items-center gap-1">
-            <Label className="text-xs text-muted-foreground">1st putt</Label>
+          <div className="flex items-center gap-1.5">
+            <Label className="text-xs text-muted-foreground shrink-0">1st putt</Label>
             <Input
               type="number"
               value={hole.firstPuttDistance || ""}
@@ -203,7 +203,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                   firstPuttDistance: parseInt(e.target.value) || 0,
                 })
               }
-              className="w-16 h-8 text-xs"
+              className="w-16 h-9 text-xs"
               placeholder="ft"
               min={0}
               max={120}
@@ -216,18 +216,18 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
         <button
           type="button"
           onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors w-full"
+          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors w-full py-1"
         >
           {expanded ? (
-            <ChevronUp className="h-3 w-3" />
+            <ChevronUp className="h-3.5 w-3.5" />
           ) : (
-            <ChevronDown className="h-3 w-3" />
+            <ChevronDown className="h-3.5 w-3.5" />
           )}
           {expanded ? "Less" : "More"} (penalties, up & down, sand)
         </button>
 
         {expanded && (
-          <div className="space-y-3 pt-1 border-t border-border">
+          <div className="space-y-3 pt-2 border-t border-border">
             <NumberStepper
               label="Penalty"
               value={hole.penaltyStrokes}
@@ -236,7 +236,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
               max={5}
             />
 
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               <div className="flex items-center gap-2">
                 <Label className="text-xs text-muted-foreground">
                   Up & Down
@@ -261,7 +261,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
               )}
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               <div className="flex items-center gap-2">
                 <Label className="text-xs text-muted-foreground">
                   Sand Save

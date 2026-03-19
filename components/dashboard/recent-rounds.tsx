@@ -30,7 +30,7 @@ export function RecentRounds({ rounds }: RecentRoundsProps) {
           </Link>
         </div>
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className="space-y-1">
         {recent.map((round) => {
           const stats = calculateRoundStats(round);
           const scoreToPar = stats.scoreToPar;
@@ -38,16 +38,16 @@ export function RecentRounds({ rounds }: RecentRoundsProps) {
             <Link
               key={round.id}
               href={`/rounds/${round.id}`}
-              className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-accent transition-colors"
+              className="flex items-center justify-between gap-2 py-2 px-2 sm:px-3 rounded-lg hover:bg-accent transition-colors"
             >
-              <div>
-                <p className="font-medium text-sm">{round.course.name}</p>
+              <div className="min-w-0">
+                <p className="font-medium text-sm truncate">{round.course.name}</p>
                 <p className="text-xs text-muted-foreground">
                   {format(new Date(round.date), "MMM d, yyyy")}
                 </p>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-bold tabular-nums">
+              <div className="flex items-center gap-1.5 shrink-0">
+                <span className="text-base sm:text-lg font-bold tabular-nums">
                   {stats.totalScore}
                 </span>
                 <Badge

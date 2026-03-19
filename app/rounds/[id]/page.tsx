@@ -45,21 +45,21 @@ export default function RoundDetailPage({
 
   return (
     <>
-      <Link href="/rounds" className={buttonVariants({ variant: "ghost" }) + " mb-4"}>
+      <Link href="/rounds" className={buttonVariants({ variant: "ghost" }) + " mb-3"}>
         <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to Rounds
+        Back
       </Link>
 
       <PageHeader
         title={round.course.name}
-        description={`${format(new Date(round.date), "MMMM d, yyyy")} ${round.course.tees ? `| ${round.course.tees} tees` : ""}`}
+        description={`${format(new Date(round.date), "MMM d, yyyy")} ${round.course.tees ? `| ${round.course.tees} tees` : ""}`}
       />
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Score header */}
         <Card>
-          <CardContent className="py-6 text-center">
-            <p className="text-5xl font-bold">{stats.totalScore}</p>
+          <CardContent className="py-4 sm:py-6 text-center">
+            <p className="text-4xl sm:text-5xl font-bold">{stats.totalScore}</p>
             <Badge
               className={cn(
                 "mt-2 text-sm",
@@ -79,37 +79,37 @@ export default function RoundDetailPage({
 
         {/* Scorecard */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Scorecard</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base sm:text-lg">Scorecard</CardTitle>
           </CardHeader>
-          <CardContent className="overflow-x-auto">
-            <table className="w-full text-xs text-center">
+          <CardContent className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-6">
+            <table className="w-full text-xs text-center tabular-nums" style={{ minWidth: "340px" }}>
               <thead>
                 <tr className="border-b">
-                  <th className="py-1 px-1 text-left text-muted-foreground">Hole</th>
+                  <th className="py-1.5 px-1 text-left text-muted-foreground">Hole</th>
                   {round.holes.slice(0, 9).map((_, i) => (
-                    <th key={i} className="py-1 px-1">{i + 1}</th>
+                    <th key={i} className="py-1.5 px-0.5 w-7">{i + 1}</th>
                   ))}
-                  <th className="py-1 px-1 font-bold">Out</th>
+                  <th className="py-1.5 px-1 font-bold">Out</th>
                 </tr>
               </thead>
               <tbody>
                 <tr className="border-b text-muted-foreground">
-                  <td className="py-1 px-1 text-left">Par</td>
+                  <td className="py-1.5 px-1 text-left">Par</td>
                   {round.holes.slice(0, 9).map((h, i) => (
-                    <td key={i} className="py-1 px-1">{h.par}</td>
+                    <td key={i} className="py-1.5 px-0.5">{h.par}</td>
                   ))}
-                  <td className="py-1 px-1 font-medium">
+                  <td className="py-1.5 px-1 font-medium">
                     {round.holes.slice(0, 9).reduce((s, h) => s + h.par, 0)}
                   </td>
                 </tr>
                 <tr className="border-b font-medium">
-                  <td className="py-1 px-1 text-left">Score</td>
+                  <td className="py-1.5 px-1 text-left">Score</td>
                   {round.holes.slice(0, 9).map((h, i) => (
                     <td
                       key={i}
                       className={cn(
-                        "py-1 px-1",
+                        "py-1.5 px-0.5",
                         h.score < h.par && "text-green-600",
                         h.score > h.par && "text-red-500"
                       )}
@@ -117,53 +117,53 @@ export default function RoundDetailPage({
                       {h.score}
                     </td>
                   ))}
-                  <td className="py-1 px-1 font-bold">
+                  <td className="py-1.5 px-1 font-bold">
                     {round.holes.slice(0, 9).reduce((s, h) => s + h.score, 0)}
                   </td>
                 </tr>
                 <tr className="border-b text-muted-foreground">
-                  <td className="py-1 px-1 text-left">Putts</td>
+                  <td className="py-1.5 px-1 text-left">Putts</td>
                   {round.holes.slice(0, 9).map((h, i) => (
-                    <td key={i} className="py-1 px-1">{h.putts}</td>
+                    <td key={i} className="py-1.5 px-0.5">{h.putts}</td>
                   ))}
-                  <td className="py-1 px-1 font-medium">
+                  <td className="py-1.5 px-1 font-medium">
                     {round.holes.slice(0, 9).reduce((s, h) => s + h.putts, 0)}
                   </td>
                 </tr>
               </tbody>
             </table>
 
-            <table className="w-full text-xs text-center mt-3">
+            <table className="w-full text-xs text-center tabular-nums mt-3" style={{ minWidth: "380px" }}>
               <thead>
                 <tr className="border-b">
-                  <th className="py-1 px-1 text-left text-muted-foreground">Hole</th>
+                  <th className="py-1.5 px-1 text-left text-muted-foreground">Hole</th>
                   {round.holes.slice(9, 18).map((_, i) => (
-                    <th key={i} className="py-1 px-1">{i + 10}</th>
+                    <th key={i} className="py-1.5 px-0.5 w-7">{i + 10}</th>
                   ))}
-                  <th className="py-1 px-1 font-bold">In</th>
-                  <th className="py-1 px-1 font-bold">Tot</th>
+                  <th className="py-1.5 px-1 font-bold">In</th>
+                  <th className="py-1.5 px-1 font-bold">Tot</th>
                 </tr>
               </thead>
               <tbody>
                 <tr className="border-b text-muted-foreground">
-                  <td className="py-1 px-1 text-left">Par</td>
+                  <td className="py-1.5 px-1 text-left">Par</td>
                   {round.holes.slice(9, 18).map((h, i) => (
-                    <td key={i} className="py-1 px-1">{h.par}</td>
+                    <td key={i} className="py-1.5 px-0.5">{h.par}</td>
                   ))}
-                  <td className="py-1 px-1 font-medium">
+                  <td className="py-1.5 px-1 font-medium">
                     {round.holes.slice(9, 18).reduce((s, h) => s + h.par, 0)}
                   </td>
-                  <td className="py-1 px-1 font-medium">
+                  <td className="py-1.5 px-1 font-medium">
                     {round.holes.reduce((s, h) => s + h.par, 0)}
                   </td>
                 </tr>
                 <tr className="border-b font-medium">
-                  <td className="py-1 px-1 text-left">Score</td>
+                  <td className="py-1.5 px-1 text-left">Score</td>
                   {round.holes.slice(9, 18).map((h, i) => (
                     <td
                       key={i}
                       className={cn(
-                        "py-1 px-1",
+                        "py-1.5 px-0.5",
                         h.score < h.par && "text-green-600",
                         h.score > h.par && "text-red-500"
                       )}
@@ -171,20 +171,20 @@ export default function RoundDetailPage({
                       {h.score}
                     </td>
                   ))}
-                  <td className="py-1 px-1 font-bold">
+                  <td className="py-1.5 px-1 font-bold">
                     {round.holes.slice(9, 18).reduce((s, h) => s + h.score, 0)}
                   </td>
-                  <td className="py-1 px-1 font-bold">{stats.totalScore}</td>
+                  <td className="py-1.5 px-1 font-bold">{stats.totalScore}</td>
                 </tr>
                 <tr className="border-b text-muted-foreground">
-                  <td className="py-1 px-1 text-left">Putts</td>
+                  <td className="py-1.5 px-1 text-left">Putts</td>
                   {round.holes.slice(9, 18).map((h, i) => (
-                    <td key={i} className="py-1 px-1">{h.putts}</td>
+                    <td key={i} className="py-1.5 px-0.5">{h.putts}</td>
                   ))}
-                  <td className="py-1 px-1 font-medium">
+                  <td className="py-1.5 px-1 font-medium">
                     {round.holes.slice(9, 18).reduce((s, h) => s + h.putts, 0)}
                   </td>
-                  <td className="py-1 px-1 font-medium">{stats.totalPutts}</td>
+                  <td className="py-1.5 px-1 font-medium">{stats.totalPutts}</td>
                 </tr>
               </tbody>
             </table>
@@ -192,53 +192,53 @@ export default function RoundDetailPage({
         </Card>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Fairways</CardTitle>
+            <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
+              <CardTitle className="text-xs sm:text-sm text-muted-foreground">Fairways</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-bold">
+            <CardContent className="pb-3 px-3 sm:px-6">
+              <p className="text-xl sm:text-2xl font-bold">
                 {stats.fairwaysHit}/{stats.fairwaysAttempted}
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {stats.fairwayPercentage.toFixed(1)}%
               </p>
             </CardContent>
           </Card>
           <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Greens in Reg</CardTitle>
+            <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
+              <CardTitle className="text-xs sm:text-sm text-muted-foreground">Greens in Reg</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-bold">
+            <CardContent className="pb-3 px-3 sm:px-6">
+              <p className="text-xl sm:text-2xl font-bold">
                 {stats.greensInRegulation}/18
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {stats.girPercentage.toFixed(1)}%
               </p>
             </CardContent>
           </Card>
           <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Total Putts</CardTitle>
+            <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
+              <CardTitle className="text-xs sm:text-sm text-muted-foreground">Total Putts</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-bold">{stats.totalPutts}</p>
-              <p className="text-sm text-muted-foreground">
+            <CardContent className="pb-3 px-3 sm:px-6">
+              <p className="text-xl sm:text-2xl font-bold">{stats.totalPutts}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {stats.puttsPerGir.toFixed(2)} per GIR
               </p>
             </CardContent>
           </Card>
           <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-muted-foreground">Scrambling</CardTitle>
+            <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
+              <CardTitle className="text-xs sm:text-sm text-muted-foreground">Scrambling</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-bold">
+            <CardContent className="pb-3 px-3 sm:px-6">
+              <p className="text-xl sm:text-2xl font-bold">
                 {stats.scramblingPercentage.toFixed(0)}%
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {stats.upAndDownConversions}/{stats.upAndDownAttempts} up & down
               </p>
             </CardContent>
@@ -247,10 +247,10 @@ export default function RoundDetailPage({
 
         {/* Strokes Gained */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Strokes Gained vs PGA Tour</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base sm:text-lg">Strokes Gained vs PGA Tour</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-2.5">
             {[
               { label: "Off the Tee", value: sg.sgOffTheTee },
               { label: "Approach", value: sg.sgApproach },
@@ -258,7 +258,7 @@ export default function RoundDetailPage({
               { label: "Putting", value: sg.sgPutting },
               { label: "Total", value: sg.sgTotal },
             ].map((item) => (
-              <div key={item.label} className="flex items-center justify-between">
+              <div key={item.label} className="flex items-center justify-between py-0.5">
                 <span className="text-sm">{item.label}</span>
                 <span
                   className={cn(
@@ -276,8 +276,8 @@ export default function RoundDetailPage({
 
         {round.notes && (
           <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Notes</CardTitle>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base sm:text-lg">Notes</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground whitespace-pre-wrap">

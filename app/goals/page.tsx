@@ -48,26 +48,26 @@ function GoalCard({ goal }: { goal: Goal }) {
 
   return (
     <Card className={cn(goal.isCompleted && "border-green-500/50 bg-green-50/50")}>
-      <CardContent className="pt-4 pb-3 px-4 space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
+      <CardContent className="pt-3 pb-3 px-3 sm:px-4 space-y-3">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
             <p className="font-medium text-sm">
               {STAT_LABELS[goal.statCategory]}
             </p>
             <p className="text-xs text-muted-foreground">
               Target: {formatStat(goal.targetValue, goal.statCategory)} by{" "}
-              {format(new Date(goal.targetDate), "MMM d, yyyy")}
+              {format(new Date(goal.targetDate), "MMM d")}
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 shrink-0">
             {goal.isCompleted ? (
-              <Badge className="bg-green-600">Achieved!</Badge>
+              <Badge className="bg-green-600 text-xs">Done</Badge>
             ) : daysLeft < 0 ? (
-              <Badge variant="secondary" className="bg-red-100 text-red-700">
+              <Badge variant="secondary" className="bg-red-100 text-red-700 text-xs">
                 Overdue
               </Badge>
             ) : (
-              <Badge variant="secondary">{daysLeft}d left</Badge>
+              <Badge variant="secondary" className="text-xs">{daysLeft}d</Badge>
             )}
             <Button
               variant="ghost"

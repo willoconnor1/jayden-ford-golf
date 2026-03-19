@@ -29,9 +29,12 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+      </head>
       <body className="min-h-full bg-background">
         <NavBar />
-        <main className="md:ml-60 pb-20 md:pb-6 px-4 md:px-8 pt-6">
+        <main className="md:ml-60 pb-24 md:pb-6 px-4 md:px-8 pt-4 md:pt-6">
           {children}
         </main>
         <Toaster richColors />

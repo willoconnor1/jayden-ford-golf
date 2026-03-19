@@ -24,12 +24,12 @@ export function StatCard({
 
   return (
     <Card>
-      <CardContent className="pt-4 pb-3 px-4">
-        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+      <CardContent className="pt-3 pb-2.5 px-3 sm:pt-4 sm:pb-3 sm:px-4">
+        <p className="text-[10px] sm:text-xs font-medium text-muted-foreground uppercase tracking-wide leading-tight">
           {label}
         </p>
         <div className="flex items-end justify-between mt-1">
-          <p className="text-2xl font-bold tabular-nums">{value}</p>
+          <p className="text-xl sm:text-2xl font-bold tabular-nums">{value}</p>
           {trend && (
             <div
               className={cn(
@@ -43,8 +43,8 @@ export function StatCard({
           )}
         </div>
         {comparison && (
-          <p className="text-xs text-muted-foreground mt-1">
-            PGA Tour: {comparison}
+          <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5">
+            PGA: {comparison}
           </p>
         )}
       </CardContent>

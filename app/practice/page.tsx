@@ -39,14 +39,14 @@ const DIFFICULTY_COLORS: Record<string, string> = {
 function DrillCard({ drill }: { drill: Drill }) {
   return (
     <Card>
-      <CardContent className="pt-4 pb-3 px-4">
-        <div className="flex items-start justify-between mb-2">
+      <CardContent className="pt-3 pb-3 px-3 sm:px-4">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1.5 mb-2">
           <h3 className="font-medium text-sm">{drill.name}</h3>
-          <div className="flex gap-1">
-            <Badge variant="secondary" className={cn("text-xs", CATEGORY_COLORS[drill.category])}>
+          <div className="flex gap-1 shrink-0">
+            <Badge variant="secondary" className={cn("text-[10px] sm:text-xs", CATEGORY_COLORS[drill.category])}>
               {CATEGORY_LABELS[drill.category]}
             </Badge>
-            <Badge variant="secondary" className={cn("text-xs", DIFFICULTY_COLORS[drill.difficulty])}>
+            <Badge variant="secondary" className={cn("text-[10px] sm:text-xs", DIFFICULTY_COLORS[drill.difficulty])}>
               {drill.difficulty}
             </Badge>
           </div>
@@ -74,12 +74,12 @@ function WeaknessSummary({ focuses }: { focuses: PracticeFocus[] }) {
             focus.severity === "moderate" && "border-yellow-300"
           )}
         >
-          <CardContent className="pt-4 pb-3 px-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+          <CardContent className="pt-3 pb-3 px-3 sm:px-4 space-y-3">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5 flex-wrap">
                 <Badge
                   variant="secondary"
-                  className={cn(CATEGORY_COLORS[focus.category])}
+                  className={cn("text-xs", CATEGORY_COLORS[focus.category])}
                 >
                   {CATEGORY_LABELS[focus.category]}
                 </Badge>
@@ -89,7 +89,7 @@ function WeaknessSummary({ focuses }: { focuses: PracticeFocus[] }) {
               </div>
               <span
                 className={cn(
-                  "font-bold tabular-nums text-sm",
+                  "font-bold tabular-nums text-sm shrink-0",
                   focus.sgValue >= 0 ? "text-green-600" : "text-red-500"
                 )}
               >

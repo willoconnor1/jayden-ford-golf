@@ -54,21 +54,22 @@ export default function StrokesGainedPage() {
     );
   }
 
+  // Shorter labels for mobile bar chart
   const barData = sgAverages
     ? [
-        { category: "Off the Tee", value: sgAverages.sgOffTheTee, fill: sgAverages.sgOffTheTee >= 0 ? "#22c55e" : "#ef4444" },
+        { category: "Tee", value: sgAverages.sgOffTheTee, fill: sgAverages.sgOffTheTee >= 0 ? "#22c55e" : "#ef4444" },
         { category: "Approach", value: sgAverages.sgApproach, fill: sgAverages.sgApproach >= 0 ? "#22c55e" : "#ef4444" },
-        { category: "Around Green", value: sgAverages.sgAroundTheGreen, fill: sgAverages.sgAroundTheGreen >= 0 ? "#22c55e" : "#ef4444" },
+        { category: "Short Game", value: sgAverages.sgAroundTheGreen, fill: sgAverages.sgAroundTheGreen >= 0 ? "#22c55e" : "#ef4444" },
         { category: "Putting", value: sgAverages.sgPutting, fill: sgAverages.sgPutting >= 0 ? "#22c55e" : "#ef4444" },
       ]
     : [];
 
   const trendData = [...sgByRound].reverse().map((r) => ({
     date: format(new Date(r.date), "MM/dd"),
-    "Off the Tee": Number(r.sg.sgOffTheTee.toFixed(2)),
-    Approach: Number(r.sg.sgApproach.toFixed(2)),
-    "Around Green": Number(r.sg.sgAroundTheGreen.toFixed(2)),
-    Putting: Number(r.sg.sgPutting.toFixed(2)),
+    Tee: Number(r.sg.sgOffTheTee.toFixed(2)),
+    App: Number(r.sg.sgApproach.toFixed(2)),
+    Short: Number(r.sg.sgAroundTheGreen.toFixed(2)),
+    Putt: Number(r.sg.sgPutting.toFixed(2)),
   }));
 
   const radarData = sgAverages
@@ -87,23 +88,23 @@ export default function StrokesGainedPage() {
         description="Your performance vs PGA Tour average"
       />
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Summary cards */}
         {sgAverages && (
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
             {[
               { label: "Off the Tee", value: sgAverages.sgOffTheTee },
               { label: "Approach", value: sgAverages.sgApproach },
-              { label: "Around Green", value: sgAverages.sgAroundTheGreen },
+              { label: "Short Game", value: sgAverages.sgAroundTheGreen },
               { label: "Putting", value: sgAverages.sgPutting },
               { label: "Total", value: sgAverages.sgTotal },
             ].map((item) => (
-              <Card key={item.label}>
-                <CardContent className="pt-4 pb-3 px-4">
-                  <p className="text-xs text-muted-foreground">{item.label}</p>
+              <Card key={item.label} className={cn(item.label === "Total" && "col-span-2 sm:col-span-1")}>
+                <CardContent className="pt-3 pb-2 px-3 sm:pt-4 sm:pb-3 sm:px-4">
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">{item.label}</p>
                   <p
                     className={cn(
-                      "text-2xl font-bold tabular-nums",
+                      "text-xl sm:text-2xl font-bold tabular-nums",
                       item.value >= 0 ? "text-green-600" : "text-red-500"
                     )}
                   >
@@ -118,18 +119,18 @@ export default function StrokesGainedPage() {
 
         {/* Bar chart */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">
-              Strokes Gained Breakdown (Average)
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base sm:text-lg">
+              SG Breakdown (Average)
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-64">
+            <div className="h-48 sm:h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={barData} layout="vertical" margin={{ left: 10, right: 20 }}>
+                <BarChart data={barData} layout="vertical" margin={{ left: 0, right: 10, top: 5, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                  <XAxis type="number" domain={["auto", "auto"]} />
-                  <YAxis type="category" dataKey="category" width={100} tick={{ fontSize: 12 }} />
+                  <XAxis type="number" domain={["auto", "auto"]} tick={{ fontSize: 11 }} />
+                  <YAxis type="category" dataKey="category" width={75} tick={{ fontSize: 11 }} />
                   <Tooltip
                     formatter={(value: number) => [
                       `${value >= 0 ? "+" : ""}${value.toFixed(2)}`,
@@ -141,33 +142,33 @@ export default function StrokesGainedPage() {
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            <p className="text-xs text-muted-foreground mt-2 text-center">
-              Green = gaining strokes vs PGA Tour average, Red = losing strokes
+            <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 text-center">
+              Green = gaining vs PGA Tour, Red = losing
             </p>
           </CardContent>
         </Card>
 
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
           {/* Trend chart */}
           {trendData.length > 1 && (
             <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Trends Over Time</CardTitle>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base sm:text-lg">Trends Over Time</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="h-64">
+                <div className="h-52 sm:h-64">
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={trendData}>
+                    <LineChart data={trendData} margin={{ left: -10, right: 5, top: 5, bottom: 5 }}>
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-                      <YAxis tick={{ fontSize: 11 }} />
+                      <XAxis dataKey="date" tick={{ fontSize: 10 }} />
+                      <YAxis tick={{ fontSize: 10 }} width={35} />
                       <Tooltip />
-                      <Legend />
+                      <Legend wrapperStyle={{ fontSize: 11 }} />
                       <ReferenceLine y={0} stroke="#666" strokeDasharray="3 3" />
-                      <Line type="monotone" dataKey="Off the Tee" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3 }} />
-                      <Line type="monotone" dataKey="Approach" stroke="#f97316" strokeWidth={2} dot={{ r: 3 }} />
-                      <Line type="monotone" dataKey="Around Green" stroke="#10b981" strokeWidth={2} dot={{ r: 3 }} />
-                      <Line type="monotone" dataKey="Putting" stroke="#8b5cf6" strokeWidth={2} dot={{ r: 3 }} />
+                      <Line type="monotone" dataKey="Tee" stroke="#3b82f6" strokeWidth={2} dot={{ r: 2 }} />
+                      <Line type="monotone" dataKey="App" stroke="#f97316" strokeWidth={2} dot={{ r: 2 }} />
+                      <Line type="monotone" dataKey="Short" stroke="#10b981" strokeWidth={2} dot={{ r: 2 }} />
+                      <Line type="monotone" dataKey="Putt" stroke="#8b5cf6" strokeWidth={2} dot={{ r: 2 }} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -178,16 +179,16 @@ export default function StrokesGainedPage() {
           {/* Radar chart */}
           {radarData.length > 0 && (
             <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Game Profile</CardTitle>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base sm:text-lg">Game Profile</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="h-64">
+                <div className="h-52 sm:h-64">
                   <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart data={radarData}>
+                    <RadarChart data={radarData} cx="50%" cy="50%" outerRadius="70%">
                       <PolarGrid />
-                      <PolarAngleAxis dataKey="stat" tick={{ fontSize: 12 }} />
-                      <PolarRadiusAxis tick={{ fontSize: 10 }} />
+                      <PolarAngleAxis dataKey="stat" tick={{ fontSize: 11 }} />
+                      <PolarRadiusAxis tick={{ fontSize: 9 }} />
                       <Radar
                         dataKey="value"
                         stroke="#16a34a"
@@ -204,8 +205,8 @@ export default function StrokesGainedPage() {
 
         {/* What is Strokes Gained */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Understanding Strokes Gained</CardTitle>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base sm:text-lg">Understanding Strokes Gained</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground space-y-2">
             <p>
@@ -215,16 +216,16 @@ export default function StrokesGainedPage() {
               means you underperformed.
             </p>
             <p>
-              <strong>Off the Tee:</strong> Driving performance on par 4s and 5s (distance and accuracy).
+              <strong>Off the Tee:</strong> Driving performance on par 4s and 5s.
             </p>
             <p>
               <strong>Approach:</strong> All approach shots to the green, including par 3 tee shots.
             </p>
             <p>
-              <strong>Around the Green:</strong> Short game shots within ~30 yards of the green.
+              <strong>Around the Green:</strong> Short game shots within ~30 yards.
             </p>
             <p>
-              <strong>Putting:</strong> All putts on the green, measured from your first putt distance.
+              <strong>Putting:</strong> All putts, measured from your first putt distance.
             </p>
           </CardContent>
         </Card>

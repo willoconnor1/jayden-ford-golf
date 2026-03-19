@@ -15,6 +15,7 @@ import { DEFAULT_HOLE_PARS } from "@/lib/constants";
 import { calculateRoundStats } from "@/lib/stats/calculate-stats";
 import { ArrowLeft, ArrowRight, Save } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 const STEPS = ["Course Info", "Front 9", "Back 9", "Summary"];
 
@@ -34,6 +35,63 @@ function createDefaultHoles(pars: number[], distances: number[]): HoleData[] {
     sandSaveAttempt: false,
     sandSaveConverted: false,
   }));
+}
+
+function HoleParDistanceRow({
+  holeIndex,
+  course,
+  setCourse,
+  holes,
+  setHoles,
+}: {
+  holeIndex: number;
+  course: CourseInfo;
+  setCourse: (c: CourseInfo) => void;
+  holes: HoleData[];
+  setHoles: (h: HoleData[]) => void;
+}) {
+  return (
+    <div className="flex items-center gap-2 py-1.5 border-b border-border/50 last:border-0">
+      <span className="text-xs text-muted-foreground font-medium w-6 text-center shrink-0">
+        {holeIndex + 1}
+      </span>
+      <select
+        value={course.holePars[holeIndex]}
+        onChange={(e) => {
+          const pars = [...course.holePars];
+          pars[holeIndex] = parseInt(e.target.value);
+          setCourse({ ...course, holePars: pars });
+          const updated = [...holes];
+          updated[holeIndex] = {
+            ...updated[holeIndex],
+            par: pars[holeIndex],
+            fairwayHit: pars[holeIndex] === 3 ? "na" : updated[holeIndex].fairwayHit,
+          };
+          setHoles(updated);
+        }}
+        className="border rounded text-center bg-background h-8 w-14 text-sm shrink-0"
+      >
+        <option value={3}>3</option>
+        <option value={4}>4</option>
+        <option value={5}>5</option>
+      </select>
+      <Input
+        type="number"
+        value={course.holeDistances[holeIndex] || ""}
+        onChange={(e) => {
+          const dists = [...course.holeDistances];
+          dists[holeIndex] = parseInt(e.target.value) || 0;
+          setCourse({ ...course, holeDistances: dists });
+          const updated = [...holes];
+          updated[holeIndex] = { ...updated[holeIndex], distance: dists[holeIndex] };
+          setHoles(updated);
+        }}
+        className="flex-1 h-8 text-sm"
+        placeholder="Yards"
+        min={0}
+      />
+    </div>
+  );
 }
 
 export function RoundEntryWizard() {
@@ -108,25 +166,33 @@ export function RoundEntryWizard() {
   const stats = calculateRoundStats(tempRound);
 
   return (
-    <div className="max-w-2xl mx-auto space-y-4">
+    <div className="max-w-2xl mx-auto space-y-3">
       {/* Progress */}
       <div className="space-y-2">
-        <div className="flex justify-between text-sm text-muted-foreground">
+        <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
           {STEPS.map((s, i) => (
             <button
               key={s}
               onClick={() => setStep(i)}
-              className={`${i === step ? "text-primary font-medium" : ""} hover:text-foreground transition-colors`}
+              className={cn(
+                "px-1 py-1 rounded transition-colors",
+                i === step
+                  ? "text-primary font-medium"
+                  : "hover:text-foreground"
+              )}
             >
-              {s}
+              <span className="hidden sm:inline">{s}</span>
+              <span className="sm:hidden">
+                {i === 0 ? "Course" : i === 3 ? "Summary" : s}
+              </span>
             </button>
           ))}
         </div>
-        <Progress value={progress} className="h-2" />
+        <Progress value={progress} className="h-1.5" />
       </div>
 
       {/* Running total */}
-      <div className="flex items-center justify-between text-sm bg-card rounded-lg px-4 py-2 border">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-sm bg-card rounded-lg px-3 py-2 border">
         <span>
           Score: <strong className="tabular-nums">{stats.totalScore}</strong>{" "}
           ({stats.scoreToPar === 0
@@ -136,7 +202,7 @@ export function RoundEntryWizard() {
               : stats.scoreToPar}
           )
         </span>
-        <span>
+        <span className="text-xs sm:text-sm text-muted-foreground sm:text-foreground">
           FW: {stats.fairwayPercentage.toFixed(0)}% | GIR:{" "}
           {stats.girPercentage.toFixed(0)}% | Putts: {stats.totalPutts}
         </span>
@@ -145,8 +211,8 @@ export function RoundEntryWizard() {
       {/* Step 0: Course Info */}
       {step === 0 && (
         <Card>
-          <CardHeader>
-            <CardTitle>Course Information</CardTitle>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">Course Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -156,7 +222,7 @@ export function RoundEntryWizard() {
                 onChange={(e) =>
                   setCourse({ ...course, name: e.target.value })
                 }
-                placeholder="e.g., Pebble Beach"
+                placeholder="e.g., Royal Wellington"
                 list="course-names"
               />
               {courseNames.length > 0 && (
@@ -177,7 +243,7 @@ export function RoundEntryWizard() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-3">
               <div className="space-y-2">
                 <Label>Tees</Label>
                 <Input
@@ -185,11 +251,11 @@ export function RoundEntryWizard() {
                   onChange={(e) =>
                     setCourse({ ...course, tees: e.target.value })
                   }
-                  placeholder="e.g., Blue"
+                  placeholder="Blue"
                 />
               </div>
               <div className="space-y-2">
-                <Label>Course Rating</Label>
+                <Label>Rating</Label>
                 <Input
                   type="number"
                   value={course.rating}
@@ -202,9 +268,6 @@ export function RoundEntryWizard() {
                   step={0.1}
                 />
               </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Slope</Label>
                 <Input
@@ -220,94 +283,48 @@ export function RoundEntryWizard() {
               </div>
             </div>
 
-            {/* Hole pars and distances */}
+            {/* Hole pars and distances - mobile-friendly list layout */}
             <div className="space-y-2">
               <Label>Hole Pars & Distances (optional)</Label>
-              <div className="grid grid-cols-9 gap-1 text-center text-xs">
-                {holes.slice(0, 9).map((h, i) => (
-                  <div key={i} className="space-y-1">
-                    <div className="text-muted-foreground font-medium">
-                      {i + 1}
-                    </div>
-                    <select
-                      value={course.holePars[i]}
-                      onChange={(e) => {
-                        const pars = [...course.holePars];
-                        pars[i] = parseInt(e.target.value);
-                        setCourse({ ...course, holePars: pars });
-                        const updated = [...holes];
-                        updated[i] = {
-                          ...updated[i],
-                          par: pars[i],
-                          fairwayHit: pars[i] === 3 ? "na" : updated[i].fairwayHit,
-                        };
-                        setHoles(updated);
-                      }}
-                      className="w-full border rounded text-center bg-background h-7"
-                    >
-                      <option value={3}>3</option>
-                      <option value={4}>4</option>
-                      <option value={5}>5</option>
-                    </select>
-                    <Input
-                      type="number"
-                      value={course.holeDistances[i] || ""}
-                      onChange={(e) => {
-                        const dists = [...course.holeDistances];
-                        dists[i] = parseInt(e.target.value) || 0;
-                        setCourse({ ...course, holeDistances: dists });
-                        const updated = [...holes];
-                        updated[i] = { ...updated[i], distance: dists[i] };
-                        setHoles(updated);
-                      }}
-                      className="w-full h-7 text-xs px-1"
-                      placeholder="yds"
-                    />
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
+                {/* Front 9 */}
+                <div>
+                  <div className="flex items-center gap-2 py-1 text-xs text-muted-foreground font-medium border-b">
+                    <span className="w-6 text-center">Hole</span>
+                    <span className="w-14 text-center">Par</span>
+                    <span className="flex-1">Distance</span>
                   </div>
-                ))}
-              </div>
-              <div className="grid grid-cols-9 gap-1 text-center text-xs mt-2">
-                {holes.slice(9, 18).map((h, i) => (
-                  <div key={i + 9} className="space-y-1">
-                    <div className="text-muted-foreground font-medium">
-                      {i + 10}
-                    </div>
-                    <select
-                      value={course.holePars[i + 9]}
-                      onChange={(e) => {
-                        const pars = [...course.holePars];
-                        pars[i + 9] = parseInt(e.target.value);
-                        setCourse({ ...course, holePars: pars });
-                        const updated = [...holes];
-                        updated[i + 9] = {
-                          ...updated[i + 9],
-                          par: pars[i + 9],
-                          fairwayHit: pars[i + 9] === 3 ? "na" : updated[i + 9].fairwayHit,
-                        };
-                        setHoles(updated);
-                      }}
-                      className="w-full border rounded text-center bg-background h-7"
-                    >
-                      <option value={3}>3</option>
-                      <option value={4}>4</option>
-                      <option value={5}>5</option>
-                    </select>
-                    <Input
-                      type="number"
-                      value={course.holeDistances[i + 9] || ""}
-                      onChange={(e) => {
-                        const dists = [...course.holeDistances];
-                        dists[i + 9] = parseInt(e.target.value) || 0;
-                        setCourse({ ...course, holeDistances: dists });
-                        const updated = [...holes];
-                        updated[i + 9] = { ...updated[i + 9], distance: dists[i + 9] };
-                        setHoles(updated);
-                      }}
-                      className="w-full h-7 text-xs px-1"
-                      placeholder="yds"
+                  {Array.from({ length: 9 }).map((_, i) => (
+                    <HoleParDistanceRow
+                      key={i}
+                      holeIndex={i}
+                      course={course}
+                      setCourse={setCourse}
+                      holes={holes}
+                      setHoles={setHoles}
                     />
+                  ))}
+                </div>
+
+                {/* Back 9 */}
+                <div>
+                  <div className="flex items-center gap-2 py-1 text-xs text-muted-foreground font-medium border-b mt-3 sm:mt-0">
+                    <span className="w-6 text-center">Hole</span>
+                    <span className="w-14 text-center">Par</span>
+                    <span className="flex-1">Distance</span>
                   </div>
-                ))}
+                  {Array.from({ length: 9 }).map((_, i) => (
+                    <HoleParDistanceRow
+                      key={i + 9}
+                      holeIndex={i + 9}
+                      course={course}
+                      setCourse={setCourse}
+                      holes={holes}
+                      setHoles={setHoles}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </CardContent>
@@ -346,14 +363,14 @@ export function RoundEntryWizard() {
       {step === 3 && (
         <div className="space-y-4">
           <Card>
-            <CardHeader>
-              <CardTitle>Round Summary</CardTitle>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Round Summary</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="text-center">
                   <p className="text-4xl font-bold">{stats.totalScore}</p>
-                  <p className="text-lg text-muted-foreground">
+                  <p className="text-sm sm:text-lg text-muted-foreground">
                     {course.name} &middot;{" "}
                     {stats.scoreToPar === 0
                       ? "Even"
@@ -364,94 +381,90 @@ export function RoundEntryWizard() {
                 </div>
 
                 {/* Scorecard */}
-                <div className="overflow-x-auto">
-                  <table className="w-full text-xs text-center">
+                <div className="overflow-x-auto -mx-4 px-4">
+                  <table className="w-full text-xs text-center" style={{ minWidth: "360px" }}>
                     <thead>
                       <tr className="border-b">
-                        <th className="py-1 px-1 text-muted-foreground">Hole</th>
+                        <th className="py-1.5 px-1 text-muted-foreground text-left">Hole</th>
                         {holes.slice(0, 9).map((_, i) => (
-                          <th key={i} className="py-1 px-1">{i + 1}</th>
+                          <th key={i} className="py-1.5 px-0.5 w-7">{i + 1}</th>
                         ))}
-                        <th className="py-1 px-1 font-bold">Out</th>
+                        <th className="py-1.5 px-1 font-bold">Out</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr className="border-b text-muted-foreground">
-                        <td className="py-1 px-1">Par</td>
+                        <td className="py-1.5 px-1 text-left">Par</td>
                         {holes.slice(0, 9).map((h, i) => (
-                          <td key={i} className="py-1 px-1">{h.par}</td>
+                          <td key={i} className="py-1.5 px-0.5">{h.par}</td>
                         ))}
-                        <td className="py-1 px-1 font-medium">
+                        <td className="py-1.5 px-1 font-medium">
                           {holes.slice(0, 9).reduce((s, h) => s + h.par, 0)}
                         </td>
                       </tr>
                       <tr className="border-b font-medium">
-                        <td className="py-1 px-1">Score</td>
+                        <td className="py-1.5 px-1 text-left">Score</td>
                         {holes.slice(0, 9).map((h, i) => (
                           <td
                             key={i}
-                            className={`py-1 px-1 ${
-                              h.score < h.par
-                                ? "text-green-600"
-                                : h.score > h.par
-                                  ? "text-red-500"
-                                  : ""
-                            }`}
+                            className={cn(
+                              "py-1.5 px-0.5",
+                              h.score < h.par && "text-green-600",
+                              h.score > h.par && "text-red-500"
+                            )}
                           >
                             {h.score}
                           </td>
                         ))}
-                        <td className="py-1 px-1 font-bold">
+                        <td className="py-1.5 px-1 font-bold">
                           {holes.slice(0, 9).reduce((s, h) => s + h.score, 0)}
                         </td>
                       </tr>
                     </tbody>
                   </table>
 
-                  <table className="w-full text-xs text-center mt-2">
+                  <table className="w-full text-xs text-center mt-2" style={{ minWidth: "360px" }}>
                     <thead>
                       <tr className="border-b">
-                        <th className="py-1 px-1 text-muted-foreground">Hole</th>
+                        <th className="py-1.5 px-1 text-muted-foreground text-left">Hole</th>
                         {holes.slice(9, 18).map((_, i) => (
-                          <th key={i} className="py-1 px-1">{i + 10}</th>
+                          <th key={i} className="py-1.5 px-0.5 w-7">{i + 10}</th>
                         ))}
-                        <th className="py-1 px-1 font-bold">In</th>
-                        <th className="py-1 px-1 font-bold">Tot</th>
+                        <th className="py-1.5 px-1 font-bold">In</th>
+                        <th className="py-1.5 px-1 font-bold">Tot</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr className="border-b text-muted-foreground">
-                        <td className="py-1 px-1">Par</td>
+                        <td className="py-1.5 px-1 text-left">Par</td>
                         {holes.slice(9, 18).map((h, i) => (
-                          <td key={i} className="py-1 px-1">{h.par}</td>
+                          <td key={i} className="py-1.5 px-0.5">{h.par}</td>
                         ))}
-                        <td className="py-1 px-1 font-medium">
+                        <td className="py-1.5 px-1 font-medium">
                           {holes.slice(9, 18).reduce((s, h) => s + h.par, 0)}
                         </td>
-                        <td className="py-1 px-1 font-medium">
+                        <td className="py-1.5 px-1 font-medium">
                           {holes.reduce((s, h) => s + h.par, 0)}
                         </td>
                       </tr>
                       <tr className="border-b font-medium">
-                        <td className="py-1 px-1">Score</td>
+                        <td className="py-1.5 px-1 text-left">Score</td>
                         {holes.slice(9, 18).map((h, i) => (
                           <td
                             key={i}
-                            className={`py-1 px-1 ${
-                              h.score < h.par
-                                ? "text-green-600"
-                                : h.score > h.par
-                                  ? "text-red-500"
-                                  : ""
-                            }`}
+                            className={cn(
+                              "py-1.5 px-0.5",
+                              h.score < h.par && "text-green-600",
+                              h.score > h.par && "text-red-500"
+                            )}
                           >
                             {h.score}
                           </td>
                         ))}
-                        <td className="py-1 px-1 font-bold">
+                        <td className="py-1.5 px-1 font-bold">
                           {holes.slice(9, 18).reduce((s, h) => s + h.score, 0)}
                         </td>
-                        <td className="py-1 px-1 font-bold">
+                        <td className="py-1.5 px-1 font-bold">
                           {stats.totalScore}
                         </td>
                       </tr>
@@ -460,40 +473,40 @@ export function RoundEntryWizard() {
                 </div>
 
                 {/* Stats summary */}
-                <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Fairways</span>
-                    <span className="font-medium">
+                    <span className="font-medium tabular-nums">
                       {stats.fairwaysHit}/{stats.fairwaysAttempted} (
                       {stats.fairwayPercentage.toFixed(0)}%)
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">GIR</span>
-                    <span className="font-medium">
+                    <span className="font-medium tabular-nums">
                       {stats.greensInRegulation}/18 (
                       {stats.girPercentage.toFixed(0)}%)
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Total Putts</span>
-                    <span className="font-medium">{stats.totalPutts}</span>
+                    <span className="font-medium tabular-nums">{stats.totalPutts}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Putts/GIR</span>
-                    <span className="font-medium">
+                    <span className="font-medium tabular-nums">
                       {stats.puttsPerGir.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Up & Down</span>
-                    <span className="font-medium">
+                    <span className="font-medium tabular-nums">
                       {stats.upAndDownConversions}/{stats.upAndDownAttempts}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Penalties</span>
-                    <span className="font-medium">{stats.penalties}</span>
+                    <span className="font-medium tabular-nums">{stats.penalties}</span>
                   </div>
                 </div>
 
@@ -512,24 +525,25 @@ export function RoundEntryWizard() {
         </div>
       )}
 
-      {/* Navigation buttons */}
-      <div className="flex justify-between pt-2">
+      {/* Navigation buttons - sticky on mobile for easy access */}
+      <div className="flex justify-between pt-2 pb-2 sticky bottom-16 md:bottom-0 bg-background/95 backdrop-blur-sm z-10 -mx-4 px-4 md:mx-0 md:px-0 md:static md:bg-transparent md:backdrop-blur-none">
         <Button
           variant="outline"
           onClick={() => setStep(step - 1)}
           disabled={step === 0}
+          className="h-11 px-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Button>
 
         {step < 3 ? (
-          <Button onClick={() => setStep(step + 1)}>
+          <Button onClick={() => setStep(step + 1)} className="h-11 px-6">
             Next
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         ) : (
-          <Button onClick={handleSave}>
+          <Button onClick={handleSave} className="h-11 px-6">
             <Save className="mr-2 h-4 w-4" />
             Save Round
           </Button>

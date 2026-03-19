@@ -13,12 +13,12 @@ import {
 import { cn } from "@/lib/utils";
 
 const links = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/rounds/new", label: "New Round", icon: PlusCircle },
-  { href: "/rounds", label: "Rounds", icon: ClipboardList },
-  { href: "/strokes-gained", label: "Strokes Gained", icon: TrendingUp },
-  { href: "/goals", label: "Goals", icon: Target },
-  { href: "/practice", label: "Practice", icon: Dumbbell },
+  { href: "/", label: "Dashboard", mobileLabel: "Home", icon: LayoutDashboard },
+  { href: "/rounds/new", label: "New Round", mobileLabel: "New", icon: PlusCircle },
+  { href: "/rounds", label: "Rounds", mobileLabel: "Rounds", icon: ClipboardList },
+  { href: "/strokes-gained", label: "Strokes Gained", mobileLabel: "SG", icon: TrendingUp },
+  { href: "/goals", label: "Goals", mobileLabel: "Goals", icon: Target },
+  { href: "/practice", label: "Practice", mobileLabel: "Practice", icon: Dumbbell },
 ];
 
 export function NavBar() {
@@ -65,8 +65,8 @@ export function NavBar() {
       </aside>
 
       {/* Mobile bottom navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border">
-        <div className="flex items-center justify-around h-16">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-sm border-t border-border pb-[env(safe-area-inset-bottom)]">
+        <div className="flex items-center justify-around h-14">
           {links.map((link) => {
             const isActive =
               link.href === "/"
@@ -77,14 +77,14 @@ export function NavBar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "flex flex-col items-center gap-1 px-2 py-1 text-xs",
+                  "flex flex-col items-center justify-center gap-0.5 min-w-[2.75rem] py-1.5 text-[10px] transition-colors",
                   isActive
                     ? "text-primary font-medium"
                     : "text-muted-foreground"
                 )}
               >
                 <link.icon className="h-5 w-5" />
-                <span className="truncate max-w-[60px]">{link.label}</span>
+                <span>{link.mobileLabel}</span>
               </Link>
             );
           })}

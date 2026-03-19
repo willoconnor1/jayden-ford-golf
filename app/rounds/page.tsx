@@ -47,41 +47,41 @@ export default function RoundsPage() {
           <p>No rounds yet. Log your first round to get started.</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2">
           {sorted.map((round) => {
             const stats = calculateRoundStats(round);
             const scoreToPar = stats.scoreToPar;
             return (
               <Card key={round.id}>
-                <CardContent className="py-4 px-4">
-                  <div className="flex items-center justify-between">
+                <CardContent className="py-3 px-3 sm:px-4">
+                  <div className="flex items-center gap-2">
                     <Link
                       href={`/rounds/${round.id}`}
-                      className="flex-1 hover:opacity-80 transition-opacity"
+                      className="flex-1 min-w-0 hover:opacity-80 transition-opacity"
                     >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-semibold">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="min-w-0">
+                          <p className="font-semibold text-sm sm:text-base truncate">
                             {round.course.name}
                           </p>
-                          <p className="text-sm text-muted-foreground">
-                            {format(new Date(round.date), "MMMM d, yyyy")}{" "}
-                            {round.course.tees && `| ${round.course.tees} tees`}
+                          <p className="text-xs sm:text-sm text-muted-foreground">
+                            {format(new Date(round.date), "MMM d, yyyy")}{" "}
+                            {round.course.tees && `| ${round.course.tees}`}
                           </p>
-                          <div className="flex gap-3 mt-1 text-xs text-muted-foreground">
+                          <div className="flex gap-2 sm:gap-3 mt-0.5 text-xs text-muted-foreground">
                             <span>FW {stats.fairwayPercentage.toFixed(0)}%</span>
                             <span>GIR {stats.girPercentage.toFixed(0)}%</span>
                             <span>{stats.totalPutts} putts</span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-2xl font-bold tabular-nums">
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <span className="text-xl sm:text-2xl font-bold tabular-nums">
                             {stats.totalScore}
                           </span>
                           <Badge
                             variant={scoreToPar <= 0 ? "default" : "secondary"}
                             className={cn(
-                              "tabular-nums",
+                              "tabular-nums text-xs",
                               scoreToPar < 0 && "bg-green-600",
                               scoreToPar === 0 && "bg-blue-600",
                               scoreToPar > 0 && "bg-muted text-muted-foreground"
@@ -95,7 +95,7 @@ export default function RoundsPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="ml-2 text-muted-foreground hover:text-destructive"
+                      className="shrink-0 h-9 w-9 text-muted-foreground hover:text-destructive"
                       onClick={() => {
                         deleteRound(round.id);
                         toast.success("Round deleted");
