@@ -13,6 +13,7 @@ import { calculateRoundStats } from "@/lib/stats/calculate-stats";
 import { calculateRoundStrokesGained } from "@/lib/stats/strokes-gained";
 import { format } from "date-fns";
 import { cn, holeScoreColor, roundBadgeColor } from "@/lib/utils";
+import { ScoreIndicator } from "@/components/ui/score-indicator";
 
 export default function RoundDetailPage({
   params,
@@ -104,14 +105,8 @@ export default function RoundDetailPage({
                 <tr className="border-b font-medium">
                   <td className="py-1.5 px-1 text-left">Score</td>
                   {round.holes.slice(0, 9).map((h, i) => (
-                    <td
-                      key={i}
-                      className={cn(
-                        "py-1.5 px-0.5",
-                        holeScoreColor(h.score - h.par)
-                      )}
-                    >
-                      {h.score}
+                    <td key={i} className="py-1.5 px-0.5">
+                      <ScoreIndicator score={h.score} par={h.par} />
                     </td>
                   ))}
                   <td className="py-1.5 px-1 font-bold">
@@ -157,14 +152,8 @@ export default function RoundDetailPage({
                 <tr className="border-b font-medium">
                   <td className="py-1.5 px-1 text-left">Score</td>
                   {round.holes.slice(9, 18).map((h, i) => (
-                    <td
-                      key={i}
-                      className={cn(
-                        "py-1.5 px-0.5",
-                        holeScoreColor(h.score - h.par)
-                      )}
-                    >
-                      {h.score}
+                    <td key={i} className="py-1.5 px-0.5">
+                      <ScoreIndicator score={h.score} par={h.par} />
                     </td>
                   ))}
                   <td className="py-1.5 px-1 font-bold">

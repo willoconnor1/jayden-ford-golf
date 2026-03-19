@@ -16,6 +16,7 @@ import { calculateRoundStats } from "@/lib/stats/calculate-stats";
 import { ArrowLeft, ArrowRight, Save } from "lucide-react";
 import { toast } from "sonner";
 import { cn, holeScoreColor } from "@/lib/utils";
+import { ScoreIndicator } from "@/components/ui/score-indicator";
 
 const STEPS = ["Course Info", "Front 9", "Back 9", "Summary"];
 
@@ -405,14 +406,8 @@ export function RoundEntryWizard() {
                       <tr className="border-b font-medium">
                         <td className="py-1.5 px-1 text-left">Score</td>
                         {holes.slice(0, 9).map((h, i) => (
-                          <td
-                            key={i}
-                            className={cn(
-                              "py-1.5 px-0.5",
-                              holeScoreColor(h.score - h.par)
-                            )}
-                          >
-                            {h.score}
+                          <td key={i} className="py-1.5 px-0.5">
+                            <ScoreIndicator score={h.score} par={h.par} />
                           </td>
                         ))}
                         <td className="py-1.5 px-1 font-bold">
@@ -449,14 +444,8 @@ export function RoundEntryWizard() {
                       <tr className="border-b font-medium">
                         <td className="py-1.5 px-1 text-left">Score</td>
                         {holes.slice(9, 18).map((h, i) => (
-                          <td
-                            key={i}
-                            className={cn(
-                              "py-1.5 px-0.5",
-                              holeScoreColor(h.score - h.par)
-                            )}
-                          >
-                            {h.score}
+                          <td key={i} className="py-1.5 px-0.5">
+                            <ScoreIndicator score={h.score} par={h.par} />
                           </td>
                         ))}
                         <td className="py-1.5 px-1 font-bold">
