@@ -2,6 +2,11 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { Round, HoleData } from "@/lib/types";
 import { getSeedRounds } from "@/lib/seed-data";
+import {
+  syncAddRound,
+  syncUpdateRound,
+  syncDeleteRound,
+} from "@/lib/sync";
 
 /** Migrate old firstPuttDistance to puttDistances array */
 function migratePuttDistances(hole: HoleData & { firstPuttDistance?: number }): HoleData {
@@ -36,20 +41,28 @@ export const useRoundStore = create<RoundStore>()(
     (set, get) => ({
       rounds: [],
       seeded: false,
-      addRound: (round) =>
-        set((state) => ({ rounds: [...state.rounds, round] })),
-      updateRound: (id, updates) =>
+      addRound: (round) => {
+        set((state) => ({ rounds: [...state.rounds, round] }));
+        syncAddRound(round);
+      },
+      updateRound: (id, updates) => {
         set((state) => ({
           rounds: state.rounds.map((r) =>
             r.id === id
               ? { ...r, ...updates, updatedAt: new Date().toISOString() }
               : r
           ),
-        })),
-      deleteRound: (id) =>
+        }));
+        // Sync the updated round
+        const updated = get().rounds.find((r) => r.id === id);
+        if (updated) syncUpdateRound(updated);
+      },
+      deleteRound: (id) => {
         set((state) => ({
           rounds: state.rounds.filter((r) => r.id !== id),
-        })),
+        }));
+        syncDeleteRound(id);
+      },
       getRound: (id) => get().rounds.find((r) => r.id === id),
       clearSeedData: () =>
         set((state) => ({

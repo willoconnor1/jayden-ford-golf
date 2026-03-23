@@ -1,6 +1,11 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { Goal } from "@/lib/types";
+import {
+  syncAddGoal,
+  syncUpdateGoal,
+  syncDeleteGoal,
+} from "@/lib/sync";
 
 interface GoalStore {
   goals: Goal[];
@@ -12,26 +17,36 @@ interface GoalStore {
 
 export const useGoalStore = create<GoalStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       goals: [],
-      addGoal: (goal) =>
-        set((state) => ({ goals: [...state.goals, goal] })),
-      updateGoal: (id, updates) =>
+      addGoal: (goal) => {
+        set((state) => ({ goals: [...state.goals, goal] }));
+        syncAddGoal(goal);
+      },
+      updateGoal: (id, updates) => {
         set((state) => ({
           goals: state.goals.map((g) => (g.id === id ? { ...g, ...updates } : g)),
-        })),
-      deleteGoal: (id) =>
+        }));
+        const updated = get().goals.find((g) => g.id === id);
+        if (updated) syncUpdateGoal(updated);
+      },
+      deleteGoal: (id) => {
         set((state) => ({
           goals: state.goals.filter((g) => g.id !== id),
-        })),
-      completeGoal: (id) =>
+        }));
+        syncDeleteGoal(id);
+      },
+      completeGoal: (id) => {
         set((state) => ({
           goals: state.goals.map((g) =>
             g.id === id
               ? { ...g, isCompleted: true, completedAt: new Date().toISOString() }
               : g
           ),
-        })),
+        }));
+        const updated = get().goals.find((g) => g.id === id);
+        if (updated) syncUpdateGoal(updated);
+      },
     }),
     {
       name: "golf-goals-storage",
