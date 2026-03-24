@@ -1,6 +1,6 @@
 "use client";
 
-import { HoleData, FairwayHit, ShotData, ShotResult } from "@/lib/types";
+import { HoleData, FairwayHit, ShotData, ShotResult, PuttMissDirection, PuttSpeed, PuttBreak } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -331,18 +331,101 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                         <span className="text-xs text-green-600 font-medium">made</span>
                       )}
                     </div>
-                    {isMiss && (
-                      <PuttMissInput
-                        missX={(hole.puttMisses || [])[i]?.missX ?? 0}
-                        missY={(hole.puttMisses || [])[i]?.missY ?? 0}
-                        onChange={(missX, missY) => {
-                          const newMisses = [...(hole.puttMisses || [])];
-                          while (newMisses.length <= i) newMisses.push({ missX: 0, missY: 0 });
-                          newMisses[i] = { missX, missY };
-                          update({ puttMisses: newMisses });
-                        }}
-                      />
-                    )}
+                    {isMiss && (() => {
+                      const miss = (hole.puttMisses || [])[i];
+                      const updateMissField = (fields: Partial<typeof miss>) => {
+                        const newMisses = [...(hole.puttMisses || [])];
+                        while (newMisses.length <= i) newMisses.push({ missX: 0, missY: 0 });
+                        newMisses[i] = { ...newMisses[i], ...fields };
+                        update({ puttMisses: newMisses });
+                      };
+                      return (
+                        <>
+                          <PuttMissInput
+                            missX={miss?.missX ?? 0}
+                            missY={miss?.missY ?? 0}
+                            onChange={(missX, missY) => updateMissField({ missX, missY })}
+                          />
+                          {/* Miss direction */}
+                          <div className="flex items-center gap-1.5">
+                            <Label className="text-xs text-muted-foreground shrink-0">Miss</Label>
+                            <div className="flex gap-1">
+                              {([
+                                { value: "left" as PuttMissDirection, label: "Left" },
+                                { value: "right" as PuttMissDirection, label: "Right" },
+                              ]).map((opt) => (
+                                <button
+                                  key={opt.value}
+                                  type="button"
+                                  onClick={() => updateMissField({
+                                    missDirection: miss?.missDirection === opt.value ? undefined : opt.value,
+                                  })}
+                                  className={cn(
+                                    "px-2.5 py-1 text-xs rounded-full border transition-colors",
+                                    miss?.missDirection === opt.value
+                                      ? "bg-amber-600 text-white border-amber-600"
+                                      : "bg-background border-border text-muted-foreground hover:text-foreground"
+                                  )}
+                                >
+                                  {opt.label}
+                                </button>
+                              ))}
+                            </div>
+                            <span className="text-muted-foreground/40 text-xs px-1">|</span>
+                            <div className="flex gap-1">
+                              {([
+                                { value: "too-firm" as PuttSpeed, label: "Too Firm" },
+                                { value: "too-soft" as PuttSpeed, label: "Too Soft" },
+                              ]).map((opt) => (
+                                <button
+                                  key={opt.value}
+                                  type="button"
+                                  onClick={() => updateMissField({
+                                    speed: miss?.speed === opt.value ? undefined : opt.value,
+                                  })}
+                                  className={cn(
+                                    "px-2.5 py-1 text-xs rounded-full border transition-colors",
+                                    miss?.speed === opt.value
+                                      ? "bg-blue-600 text-white border-blue-600"
+                                      : "bg-background border-border text-muted-foreground hover:text-foreground"
+                                  )}
+                                >
+                                  {opt.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                          {/* Putt break */}
+                          <div className="flex items-center gap-1.5">
+                            <Label className="text-xs text-muted-foreground shrink-0">Break</Label>
+                            <div className="flex gap-1 flex-wrap">
+                              {([
+                                { value: "straight" as PuttBreak, label: "Straight" },
+                                { value: "left-to-right" as PuttBreak, label: "L-to-R" },
+                                { value: "right-to-left" as PuttBreak, label: "R-to-L" },
+                                { value: "multiple" as PuttBreak, label: "Multiple" },
+                              ]).map((opt) => (
+                                <button
+                                  key={opt.value}
+                                  type="button"
+                                  onClick={() => updateMissField({
+                                    puttBreak: miss?.puttBreak === opt.value ? undefined : opt.value,
+                                  })}
+                                  className={cn(
+                                    "px-2.5 py-1 text-xs rounded-full border transition-colors",
+                                    miss?.puttBreak === opt.value
+                                      ? "bg-emerald-600 text-white border-emerald-600"
+                                      : "bg-background border-border text-muted-foreground hover:text-foreground"
+                                  )}
+                                >
+                                  {opt.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </>
+                      );
+                    })()}
                   </div>
                 );
               })}

@@ -10,7 +10,13 @@ export interface HoleData {
   greenInRegulation: boolean;
   putts: number;
   puttDistances: number[]; // distance in feet for each putt (index 0 = 1st putt)
-  puttMisses?: Array<{ missX: number; missY: number }>; // miss direction for each missed putt (all except last)
+  puttMisses?: Array<{
+    missX: number;
+    missY: number;
+    missDirection?: PuttMissDirection;
+    speed?: PuttSpeed;
+    puttBreak?: PuttBreak;
+  }>;
   penaltyStrokes: number;
   upAndDownAttempt: boolean;
   upAndDownConverted: boolean;
@@ -118,6 +124,12 @@ export interface Drill {
   difficulty: "beginner" | "intermediate" | "advanced";
   targetStat: string;
 }
+
+// ── Putt Metadata ───────────────────────────────────────────────
+
+export type PuttMissDirection = "left" | "right";
+export type PuttSpeed = "too-firm" | "too-soft";
+export type PuttBreak = "straight" | "right-to-left" | "left-to-right" | "multiple";
 
 // ── Shot Dispersion ──────────────────────────────────────────────
 
