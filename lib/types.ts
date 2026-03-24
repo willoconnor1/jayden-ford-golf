@@ -16,6 +16,7 @@ export interface HoleData {
     missDirection?: PuttMissDirection;
     speed?: PuttSpeed;
     puttBreak?: PuttBreak;
+    puttSlope?: PuttSlope;
   }>;
   penaltyStrokes: number;
   upAndDownAttempt: boolean;
@@ -23,6 +24,7 @@ export interface HoleData {
   sandSaveAttempt: boolean;
   sandSaveConverted: boolean;
   shots?: ShotData[];
+  holeShape?: HoleShape;
 }
 
 export interface CourseInfo {
@@ -44,6 +46,7 @@ export interface Round {
   notes: string;
   createdAt: string;
   updatedAt: string;
+  entryMode?: EntryMode;
 }
 
 export interface RoundStats {
@@ -125,17 +128,25 @@ export interface Drill {
   targetStat: string;
 }
 
+// ── Entry Modes ─────────────────────────────────────────────────
+
+export type EntryMode = "simple" | "standard" | "detailed";
+export type HoleShape = "straight" | "dogleg-left" | "dogleg-right";
+export type ShotDirection = "left" | "straight" | "right";
+export type ShotIntent = "green" | "lay-up" | "recovery";
+export type PuttSlope = "uphill" | "downhill" | "flat" | "multiple";
+
 // ── Putt Metadata ───────────────────────────────────────────────
 
 export type PuttMissDirection = "left" | "right";
-export type PuttSpeed = "too-firm" | "too-soft";
+export type PuttSpeed = "short" | "too-firm" | "good-speed";
 export type PuttBreak = "straight" | "right-to-left" | "left-to-right" | "multiple";
 
 // ── Shot Dispersion ──────────────────────────────────────────────
 
 export type ShotLie = "tee" | "fairway" | "rough" | "sand" | "penalty-area" | "abnormal";
 
-export type ShotResult = "fairway" | "rough" | "penalty-area" | "out-of-bounds" | "tree-trouble" | "abnormal";
+export type ShotResult = "fairway" | "rough" | "sand" | "green" | "holed" | "penalty-area" | "out-of-bounds" | "tree-trouble" | "abnormal";
 
 export type AbnormalLieDetail =
   | "pine-straw"
@@ -162,8 +173,11 @@ export interface ShotData {
   abnormalDetail?: AbnormalLieDetail;
   missX: number;                   // feet — negative = left, positive = right
   missY: number;                   // feet — negative = short, positive = long
-  result?: ShotResult;             // where ball ended up (driver/tee shots)
+  result?: ShotResult;             // where ball ended up
   penaltyDrop?: boolean;           // took a penalty drop
+  direction?: ShotDirection;       // left / straight / right
+  intent?: ShotIntent;             // green / lay-up / recovery
+  distanceRemaining?: number;      // yards remaining after shot
 }
 
 export interface PracticeFocus {

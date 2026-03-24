@@ -71,7 +71,7 @@ export const useRoundStore = create<RoundStore>()(
     }),
     {
       name: "golf-rounds-storage",
-      version: 2,
+      version: 3,
       storage: createJSONStorage(() => localStorage),
       migrate: (persisted: unknown, version: number) => {
         const state = persisted as RoundStore;
@@ -79,6 +79,19 @@ export const useRoundStore = create<RoundStore>()(
           state.rounds = state.rounds.map((round) => ({
             ...round,
             holes: round.holes.map((hole) => migratePuttDistances(hole as HoleData & { firstPuttDistance?: number })),
+          }));
+        }
+        if (version < 3 && state.rounds) {
+          // Migrate PuttSpeed "too-soft" → "short"
+          state.rounds = state.rounds.map((round) => ({
+            ...round,
+            holes: round.holes.map((hole) => ({
+              ...hole,
+              puttMisses: hole.puttMisses?.map((m) => ({
+                ...m,
+                speed: (m.speed as string) === "too-soft" ? ("short" as const) : m.speed,
+              })),
+            })),
           }));
         }
         return state;

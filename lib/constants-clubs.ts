@@ -1,4 +1,7 @@
-import { Club, ShotLie, ShotResult, AbnormalLieDetail } from "./types";
+import {
+  Club, ShotLie, ShotResult, AbnormalLieDetail,
+  HoleShape, ShotDirection, ShotIntent, PuttSlope, PuttSpeed, PuttBreak,
+} from "./types";
 
 export const CLUBS: { value: Club; label: string }[] = [
   { value: "driver", label: "Driver" },
@@ -27,7 +30,7 @@ export const SHOT_LIES: { value: ShotLie; label: string }[] = [
   { value: "tee", label: "Tee" },
   { value: "fairway", label: "Fairway" },
   { value: "rough", label: "Rough" },
-  { value: "sand", label: "Sand" },
+  { value: "sand", label: "Bunker" },
   { value: "penalty-area", label: "Penalty Area" },
   { value: "abnormal", label: "Abnormal Lie" },
 ];
@@ -35,10 +38,46 @@ export const SHOT_LIES: { value: ShotLie; label: string }[] = [
 export const SHOT_RESULTS: { value: ShotResult; label: string }[] = [
   { value: "fairway", label: "Fairway" },
   { value: "rough", label: "Rough" },
+  { value: "sand", label: "Bunker" },
+  { value: "green", label: "Green" },
+  { value: "holed", label: "Holed" },
   { value: "penalty-area", label: "Penalty Area" },
-  { value: "out-of-bounds", label: "Out of Bounds" },
-  { value: "tree-trouble", label: "Tree Trouble" },
-  { value: "abnormal", label: "Abnormal Lie" },
+  { value: "out-of-bounds", label: "OB" },
+  { value: "tree-trouble", label: "Trees" },
+  { value: "abnormal", label: "Abnormal" },
+];
+
+// ── Context-specific result arrays for pill selectors ───────────
+
+export const TEE_SHOT_RESULTS_PAR45: { value: ShotResult; label: string }[] = [
+  { value: "fairway", label: "Fairway" },
+  { value: "rough", label: "Rough" },
+  { value: "sand", label: "Bunker" },
+  { value: "tree-trouble", label: "Trees" },
+  { value: "penalty-area", label: "Penalty" },
+  { value: "out-of-bounds", label: "OB" },
+  { value: "abnormal", label: "Abnormal" },
+];
+
+export const TEE_SHOT_RESULTS_PAR3: { value: ShotResult; label: string }[] = [
+  { value: "green", label: "Green" },
+  { value: "rough", label: "Rough" },
+  { value: "sand", label: "Bunker" },
+  { value: "fairway", label: "Fairway" },
+  { value: "penalty-area", label: "Penalty" },
+  { value: "out-of-bounds", label: "OB" },
+  { value: "tree-trouble", label: "Trees" },
+];
+
+export const APPROACH_SHOT_RESULTS: { value: ShotResult; label: string }[] = [
+  { value: "green", label: "Green" },
+  { value: "rough", label: "Rough" },
+  { value: "sand", label: "Bunker" },
+  { value: "fairway", label: "Fairway" },
+  { value: "penalty-area", label: "Penalty" },
+  { value: "out-of-bounds", label: "OB" },
+  { value: "tree-trouble", label: "Trees" },
+  { value: "holed", label: "Holed" },
 ];
 
 export const ABNORMAL_DETAILS: { value: AbnormalLieDetail; label: string }[] = [
@@ -51,4 +90,44 @@ export const ABNORMAL_DETAILS: { value: AbnormalLieDetail; label: string }[] = [
   { value: "downhill", label: "Downhill Lie" },
   { value: "sidehill", label: "Sidehill Lie" },
   { value: "other", label: "Other" },
+];
+
+// ── New arrays for Standard/Detailed modes ──────────────────────
+
+export const HOLE_SHAPES: { value: HoleShape; label: string }[] = [
+  { value: "straight", label: "Straight" },
+  { value: "dogleg-left", label: "Dogleg L" },
+  { value: "dogleg-right", label: "Dogleg R" },
+];
+
+export const SHOT_DIRECTIONS: { value: ShotDirection; label: string }[] = [
+  { value: "left", label: "Left" },
+  { value: "straight", label: "Straight" },
+  { value: "right", label: "Right" },
+];
+
+export const SHOT_INTENTS: { value: ShotIntent; label: string }[] = [
+  { value: "green", label: "Hit Green" },
+  { value: "lay-up", label: "Lay Up" },
+  { value: "recovery", label: "Recovery" },
+];
+
+export const PUTT_SLOPES: { value: PuttSlope; label: string }[] = [
+  { value: "uphill", label: "Uphill" },
+  { value: "downhill", label: "Downhill" },
+  { value: "flat", label: "Flat" },
+  { value: "multiple", label: "Multiple" },
+];
+
+export const PUTT_SPEEDS: { value: PuttSpeed; label: string }[] = [
+  { value: "short", label: "Short" },
+  { value: "too-firm", label: "Too Firm" },
+  { value: "good-speed", label: "Good Speed" },
+];
+
+export const PUTT_BREAKS: { value: PuttBreak; label: string }[] = [
+  { value: "straight", label: "Straight" },
+  { value: "left-to-right", label: "L-to-R" },
+  { value: "right-to-left", label: "R-to-L" },
+  { value: "multiple", label: "Multiple" },
 ];

@@ -10,15 +10,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { HoleEntryCard } from "./hole-entry-card";
 import { useRoundStore } from "@/stores/round-store";
-import { HoleData, CourseInfo, Round } from "@/lib/types";
+import { HoleData, CourseInfo, Round, EntryMode } from "@/lib/types";
 import { DEFAULT_HOLE_PARS } from "@/lib/constants";
+import { EntryModeSelector } from "./entry-mode-selector";
+import { ShotFlowWizard } from "./shot-flow-wizard";
 import { calculateRoundStats } from "@/lib/stats/calculate-stats";
 import { ArrowLeft, ArrowRight, Save } from "lucide-react";
 import { toast } from "sonner";
 import { cn, holeScoreColor } from "@/lib/utils";
 import { ScoreIndicator } from "@/components/ui/score-indicator";
 
-const STEPS = ["Course Info", "Front 9", "Back 9", "Summary"];
+const SIMPLE_STEPS = ["Course Info", "Front 9", "Back 9", "Summary"];
+const FLOW_STEPS = ["Course Info", "Shot Flow", "Summary"];
 
 function createDefaultHoles(pars: number[], distances: number[]): HoleData[] {
   return pars.map((par, i) => ({
@@ -102,6 +105,12 @@ export function RoundEntryWizard() {
   const rounds = useRoundStore((s) => s.rounds);
   const [step, setStep] = useState(0);
   const [notes, setNotes] = useState("");
+  const [entryMode, setEntryMode] = useState<EntryMode>("simple");
+
+  const isSimple = entryMode === "simple";
+  const STEPS = isSimple ? SIMPLE_STEPS : FLOW_STEPS;
+  const summaryStep = STEPS.length - 1;
+  const isShotFlowStep = !isSimple && step === 1;
 
   const [course, setCourse] = useState<CourseInfo>({
     name: "",
@@ -145,6 +154,7 @@ export function RoundEntryWizard() {
       notes,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      entryMode,
     };
 
     addRound(round);
@@ -285,6 +295,9 @@ export function RoundEntryWizard() {
               </div>
             </div>
 
+            {/* Entry Mode */}
+            <EntryModeSelector value={entryMode} onChange={setEntryMode} />
+
             {/* Hole pars and distances - mobile-friendly list layout */}
             <div className="space-y-2">
               <Label>Hole Pars & Distances (optional)</Label>
@@ -333,8 +346,8 @@ export function RoundEntryWizard() {
         </Card>
       )}
 
-      {/* Step 1: Front 9 */}
-      {step === 1 && (
+      {/* Step 1: Front 9 (Simple mode) */}
+      {isSimple && step === 1 && (
         <div className="space-y-3">
           <h2 className="font-semibold text-lg">Front 9</h2>
           {holes.slice(0, 9).map((hole, i) => (
@@ -347,8 +360,8 @@ export function RoundEntryWizard() {
         </div>
       )}
 
-      {/* Step 2: Back 9 */}
-      {step === 2 && (
+      {/* Step 2: Back 9 (Simple mode) */}
+      {isSimple && step === 2 && (
         <div className="space-y-3">
           <h2 className="font-semibold text-lg">Back 9</h2>
           {holes.slice(9, 18).map((hole, i) => (
@@ -361,8 +374,21 @@ export function RoundEntryWizard() {
         </div>
       )}
 
-      {/* Step 3: Summary */}
-      {step === 3 && (
+      {/* Step 1: Shot Flow (Standard/Detailed mode) */}
+      {isShotFlowStep && (
+        <ShotFlowWizard
+          holePars={course.holePars}
+          holeDistances={course.holeDistances}
+          entryMode={entryMode}
+          onComplete={(flowHoles) => {
+            setHoles(flowHoles);
+            setStep(summaryStep);
+          }}
+        />
+      )}
+
+      {/* Summary */}
+      {step === summaryStep && (
         <div className="space-y-4">
           <Card>
             <CardHeader className="pb-3">
@@ -513,30 +539,32 @@ export function RoundEntryWizard() {
         </div>
       )}
 
-      {/* Navigation buttons - sticky on mobile for easy access */}
-      <div className="flex justify-between pt-2 pb-2 sticky bottom-16 md:bottom-0 bg-background/95 backdrop-blur-sm z-10 -mx-4 px-4 md:mx-0 md:px-0 md:static md:bg-transparent md:backdrop-blur-none">
-        <Button
-          variant="outline"
-          onClick={() => setStep(step - 1)}
-          disabled={step === 0}
-          className="h-11 px-4"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back
-        </Button>
+      {/* Navigation buttons - hidden during shot flow (it has its own nav) */}
+      {!isShotFlowStep && (
+        <div className="flex justify-between pt-2 pb-2 sticky bottom-16 md:bottom-0 bg-background/95 backdrop-blur-sm z-10 -mx-4 px-4 md:mx-0 md:px-0 md:static md:bg-transparent md:backdrop-blur-none">
+          <Button
+            variant="outline"
+            onClick={() => setStep(step - 1)}
+            disabled={step === 0}
+            className="h-11 px-4"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Button>
 
-        {step < 3 ? (
-          <Button onClick={() => setStep(step + 1)} className="h-11 px-6">
-            Next
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        ) : (
-          <Button onClick={handleSave} className="h-11 px-6">
-            <Save className="mr-2 h-4 w-4" />
-            Save Round
-          </Button>
-        )}
-      </div>
+          {step < summaryStep ? (
+            <Button onClick={() => setStep(step + 1)} className="h-11 px-6">
+              Next
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          ) : (
+            <Button onClick={handleSave} className="h-11 px-6">
+              <Save className="mr-2 h-4 w-4" />
+              Save Round
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

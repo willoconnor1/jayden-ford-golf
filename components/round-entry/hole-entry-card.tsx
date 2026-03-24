@@ -74,6 +74,9 @@ function resultToLie(result: ShotResult, currentLie: ShotData["lie"]): { lie: Sh
     case "tree-trouble": return { lie: "abnormal", abnormalDetail: "in-trees" };
     case "abnormal": return { lie: "abnormal" };
     case "out-of-bounds": return { lie: currentLie }; // re-hit from same spot
+    case "sand": return { lie: "sand" };
+    case "green": return { lie: "fairway" }; // on green, no more shots needed
+    case "holed": return { lie: "fairway" }; // holed out
   }
 }
 
@@ -374,8 +377,9 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                             <span className="text-muted-foreground/40 text-xs px-1">|</span>
                             <div className="flex gap-1">
                               {([
+                                { value: "short" as PuttSpeed, label: "Short" },
                                 { value: "too-firm" as PuttSpeed, label: "Too Firm" },
-                                { value: "too-soft" as PuttSpeed, label: "Too Soft" },
+                                { value: "good-speed" as PuttSpeed, label: "Good Speed" },
                               ]).map((opt) => (
                                 <button
                                   key={opt.value}
