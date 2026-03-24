@@ -30,6 +30,7 @@ function createDefaultHoles(pars: number[], distances: number[]): HoleData[] {
     greenInRegulation: false,
     putts: 2,
     puttDistances: [20, 3],
+    puttMisses: [{ missX: 0, missY: 0 }],
     penaltyStrokes: 0,
     upAndDownAttempt: false,
     upAndDownConverted: false,

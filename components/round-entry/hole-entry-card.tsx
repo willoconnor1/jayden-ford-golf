@@ -10,6 +10,7 @@ import { Minus, Plus, ChevronDown, ChevronUp, Crosshair } from "lucide-react";
 import { useState } from "react";
 import { cn, holeScoreColor } from "@/lib/utils";
 import { ShotEntryCard } from "./shot-entry-card";
+import { PuttMissInput } from "./putt-miss-input";
 
 interface HoleEntryCardProps {
   hole: HoleData;
@@ -260,36 +261,64 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                 v > prev.length
                   ? [...prev, ...Array(v - prev.length).fill(0)]
                   : prev.slice(0, v);
-              update({ putts: v, puttDistances });
+              // Sync puttMisses: misses are for putts 0..n-2, so max length is v-1
+              const prevMisses = hole.puttMisses || [];
+              const missCount = Math.max(0, v - 1);
+              const puttMisses =
+                missCount > prevMisses.length
+                  ? [...prevMisses, ...Array.from({ length: missCount - prevMisses.length }, () => ({ missX: 0, missY: 0 }))]
+                  : prevMisses.slice(0, missCount);
+              update({ putts: v, puttDistances, puttMisses });
             }}
             min={0}
             max={10}
           />
           {hole.putts > 0 && (
-            <div className="space-y-1.5 pl-14">
+            <div className="space-y-2 pl-14">
               {Array.from({ length: hole.putts }).map((_, i) => {
                 const ordinal =
                   i === 0 ? "1st" : i === 1 ? "2nd" : i === 2 ? "3rd" : `${i + 1}th`;
+                const isMiss = i < hole.putts - 1;
                 return (
-                  <div key={i} className="flex items-center gap-1.5">
-                    <Label className="text-xs text-muted-foreground shrink-0 w-14">
-                      {ordinal} putt
-                    </Label>
-                    <Input
-                      type="number"
-                      value={(hole.puttDistances || [])[i] || ""}
-                      onChange={(e) => {
-                        const newDists = [...(hole.puttDistances || [])];
-                        while (newDists.length <= i) newDists.push(0);
-                        newDists[i] = parseInt(e.target.value) || 0;
-                        update({ puttDistances: newDists });
-                      }}
-                      className="w-16 h-8 text-xs"
-                      placeholder="ft"
-                      min={0}
-                      max={120}
-                    />
-                    <span className="text-xs text-muted-foreground">ft</span>
+                  <div key={i} className="space-y-2">
+                    <div className="flex items-center gap-1.5">
+                      <Label className="text-xs text-muted-foreground shrink-0 w-14">
+                        {ordinal} putt
+                      </Label>
+                      <Input
+                        type="number"
+                        value={(hole.puttDistances || [])[i] || ""}
+                        onChange={(e) => {
+                          const newDists = [...(hole.puttDistances || [])];
+                          while (newDists.length <= i) newDists.push(0);
+                          newDists[i] = parseInt(e.target.value) || 0;
+                          update({ puttDistances: newDists });
+                        }}
+                        className="w-16 h-8 text-xs"
+                        placeholder="ft"
+                        min={0}
+                        max={120}
+                      />
+                      <span className="text-xs text-muted-foreground">ft</span>
+                      {isMiss && (
+                        <span className="text-xs text-amber-600 font-medium">miss</span>
+                      )}
+                      {!isMiss && hole.putts > 1 && (
+                        <span className="text-xs text-green-600 font-medium">made</span>
+                      )}
+                    </div>
+                    {isMiss && (
+                      <PuttMissInput
+                        missX={(hole.puttMisses || [])[i]?.missX ?? 0}
+                        missY={(hole.puttMisses || [])[i]?.missY ?? 0}
+                        onChange={(missX, missY) => {
+                          const newMisses = [...(hole.puttMisses || [])];
+                          while (newMisses.length <= i) newMisses.push({ missX: 0, missY: 0 });
+                          newMisses[i] = { missX, missY };
+                          update({ puttMisses: newMisses });
+                        }}
+                      />
+                    )}
                   </div>
                 );
               })}

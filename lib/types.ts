@@ -10,6 +10,7 @@ export interface HoleData {
   greenInRegulation: boolean;
   putts: number;
   puttDistances: number[]; // distance in feet for each putt (index 0 = 1st putt)
+  puttMisses?: Array<{ missX: number; missY: number }>; // miss direction for each missed putt (all except last)
   penaltyStrokes: number;
   upAndDownAttempt: boolean;
   upAndDownConverted: boolean;
