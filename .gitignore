@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# golf-mobile (Expo)
+golf-mobile/node_modules/
+golf-mobile/.expo/
+golf-mobile/dist/
+golf-mobile/web-build/
+golf-mobile/expo-env.d.ts
+golf-mobile/ios/
+golf-mobile/android/
+golf-mobile/.kotlin/
