@@ -1,6 +1,6 @@
 "use client";
 
-import { HoleData, FairwayHit, ShotData } from "@/lib/types";
+import { HoleData, FairwayHit, ShotData, ShotResult } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -58,8 +58,23 @@ function NumberStepper({
   );
 }
 
-function defaultShot(): ShotData {
+function defaultShot(isFirst = false, par = 4): ShotData {
+  if (isFirst && par !== 3) {
+    return { club: "driver", targetDistance: 250, lie: "tee", missX: 0, missY: 0 };
+  }
   return { club: "7-iron", targetDistance: 150, lie: "fairway", missX: 0, missY: 0 };
+}
+
+/** Map a shot result to the next shot's lie */
+function resultToLie(result: ShotResult, currentLie: ShotData["lie"]): { lie: ShotData["lie"]; abnormalDetail?: ShotData["abnormalDetail"] } {
+  switch (result) {
+    case "fairway": return { lie: "fairway" };
+    case "rough": return { lie: "rough" };
+    case "penalty-area": return { lie: "penalty-area" };
+    case "tree-trouble": return { lie: "abnormal", abnormalDetail: "in-trees" };
+    case "abnormal": return { lie: "abnormal" };
+    case "out-of-bounds": return { lie: currentLie }; // re-hit from same spot
+  }
 }
 
 function ShotTrackingSection({
@@ -78,7 +93,9 @@ function ShotTrackingSection({
       update({ shots: undefined });
       setShowShots(false);
     } else {
-      const newShots = Array.from({ length: nonPuttShots }, () => defaultShot());
+      const newShots = Array.from({ length: nonPuttShots }, (_, i) =>
+        defaultShot(i === 0, hole.par)
+      );
       update({ shots: newShots });
       setShowShots(true);
     }
@@ -87,6 +104,13 @@ function ShotTrackingSection({
   const updateShot = (index: number, shot: ShotData) => {
     const newShots = [...shots];
     newShots[index] = shot;
+
+    // Auto-populate next shot's lie from this shot's result
+    if (shot.result && index + 1 < newShots.length) {
+      const { lie, abnormalDetail } = resultToLie(shot.result, shot.lie);
+      newShots[index + 1] = { ...newShots[index + 1], lie, abnormalDetail };
+    }
+
     update({ shots: newShots });
   };
 

@@ -1,4 +1,4 @@
-import { Club, ShotLie, AbnormalLieDetail } from "./types";
+import { Club, ShotLie, ShotResult, AbnormalLieDetail } from "./types";
 
 export const CLUBS: { value: Club; label: string }[] = [
   { value: "driver", label: "Driver" },
@@ -24,10 +24,20 @@ export const CLUBS: { value: Club; label: string }[] = [
 ];
 
 export const SHOT_LIES: { value: ShotLie; label: string }[] = [
+  { value: "tee", label: "Tee" },
   { value: "fairway", label: "Fairway" },
   { value: "rough", label: "Rough" },
   { value: "sand", label: "Sand" },
   { value: "penalty-area", label: "Penalty Area" },
+  { value: "abnormal", label: "Abnormal Lie" },
+];
+
+export const SHOT_RESULTS: { value: ShotResult; label: string }[] = [
+  { value: "fairway", label: "Fairway" },
+  { value: "rough", label: "Rough" },
+  { value: "penalty-area", label: "Penalty Area" },
+  { value: "out-of-bounds", label: "Out of Bounds" },
+  { value: "tree-trouble", label: "Tree Trouble" },
   { value: "abnormal", label: "Abnormal Lie" },
 ];
 

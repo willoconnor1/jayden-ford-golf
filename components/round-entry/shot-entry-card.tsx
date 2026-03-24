@@ -1,10 +1,12 @@
 "use client";
 
-import { ShotData, Club, ShotLie, AbnormalLieDetail } from "@/lib/types";
+import { ShotData, Club, ShotLie, ShotResult, AbnormalLieDetail } from "@/lib/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CLUBS, SHOT_LIES, ABNORMAL_DETAILS } from "@/lib/constants-clubs";
+import { Switch } from "@/components/ui/switch";
+import { CLUBS, SHOT_LIES, SHOT_RESULTS, ABNORMAL_DETAILS } from "@/lib/constants-clubs";
 import { ShotMissInput } from "./shot-miss-input";
+import { DriverMissInput } from "./driver-miss-input";
 
 interface ShotEntryCardProps {
   shotIndex: number;
@@ -12,9 +14,19 @@ interface ShotEntryCardProps {
   onChange: (shot: ShotData) => void;
 }
 
+const PENALTY_RESULTS: ShotResult[] = ["out-of-bounds", "penalty-area", "tree-trouble", "abnormal"];
+
 export function ShotEntryCard({ shotIndex, shot, onChange }: ShotEntryCardProps) {
+  const isDriver = shot.club === "driver";
+
   const update = (partial: Partial<ShotData>) => {
-    onChange({ ...shot, ...partial });
+    const updated = { ...shot, ...partial };
+    // Auto-set lie to tee when driver is selected
+    if (partial.club === "driver") {
+      updated.lie = "tee";
+      updated.missY = 0; // driver is L/R only
+    }
+    onChange(updated);
   };
 
   return (
@@ -58,25 +70,31 @@ export function ShotEntryCard({ shotIndex, shot, onChange }: ShotEntryCardProps)
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        {/* Lie */}
+        {/* Lie — auto-set for driver, dropdown for others */}
         <div className="space-y-1">
           <Label className="text-xs">Lie</Label>
-          <select
-            value={shot.lie}
-            onChange={(e) =>
-              update({
-                lie: e.target.value as ShotLie,
-                abnormalDetail: e.target.value === "abnormal" ? "other" : undefined,
-              })
-            }
-            className="w-full border rounded bg-background h-8 text-xs px-2"
-          >
-            {SHOT_LIES.map((l) => (
-              <option key={l.value} value={l.value}>
-                {l.label}
-              </option>
-            ))}
-          </select>
+          {isDriver ? (
+            <div className="flex items-center h-8 text-xs text-muted-foreground px-2 border rounded bg-muted/50">
+              Tee
+            </div>
+          ) : (
+            <select
+              value={shot.lie}
+              onChange={(e) =>
+                update({
+                  lie: e.target.value as ShotLie,
+                  abnormalDetail: e.target.value === "abnormal" ? "other" : undefined,
+                })
+              }
+              className="w-full border rounded bg-background h-8 text-xs px-2"
+            >
+              {SHOT_LIES.map((l) => (
+                <option key={l.value} value={l.value}>
+                  {l.label}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
 
         {/* Abnormal detail */}
@@ -100,12 +118,54 @@ export function ShotEntryCard({ shotIndex, shot, onChange }: ShotEntryCardProps)
         )}
       </div>
 
-      {/* Drag-to-miss */}
-      <ShotMissInput
-        missX={shot.missX}
-        missY={shot.missY}
-        onChange={(missX, missY) => update({ missX, missY })}
-      />
+      {/* Result dropdown (for driver / tee shots) */}
+      {isDriver && (
+        <div className="space-y-2">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <Label className="text-xs">Result</Label>
+              <select
+                value={shot.result || "fairway"}
+                onChange={(e) => update({ result: e.target.value as ShotResult })}
+                className="w-full border rounded bg-background h-8 text-xs px-2"
+              >
+                {SHOT_RESULTS.map((r) => (
+                  <option key={r.value} value={r.value}>
+                    {r.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Penalty drop toggle for certain results */}
+            {shot.result && PENALTY_RESULTS.includes(shot.result) && (
+              <div className="space-y-1">
+                <Label className="text-xs">Penalty Drop</Label>
+                <div className="flex items-center h-8">
+                  <Switch
+                    checked={shot.penaltyDrop || false}
+                    onCheckedChange={(v) => update({ penaltyDrop: v })}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Drag-to-miss — horizontal bar for driver, circular for others */}
+      {isDriver ? (
+        <DriverMissInput
+          missX={shot.missX}
+          onChange={(missX) => update({ missX, missY: 0 })}
+        />
+      ) : (
+        <ShotMissInput
+          missX={shot.missX}
+          missY={shot.missY}
+          onChange={(missX, missY) => update({ missX, missY })}
+        />
+      )}
     </div>
   );
 }

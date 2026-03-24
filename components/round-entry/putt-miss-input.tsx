@@ -10,21 +10,33 @@ interface PuttMissInputProps {
 
 const SIZE = 200;
 const CENTER = SIZE / 2;
-const MAX_FEET = 5;
-const PX_PER_FOOT = (SIZE / 2 - 10) / MAX_FEET;
-const RINGS = [1, 2, 3, 4, 5];
+const ZOOM_STEPS = [3, 5, 8, 12, 15];
+const DEFAULT_ZOOM_INDEX = 1; // 5ft
+
+function getRings(maxFeet: number): number[] {
+  const step = maxFeet <= 5 ? 1 : maxFeet <= 12 ? 2 : 3;
+  const rings: number[] = [];
+  for (let r = step; r <= maxFeet; r += step) rings.push(r);
+  return rings;
+}
 
 export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [dragging, setDragging] = useState(false);
+  const [zoomIndex, setZoomIndex] = useState(DEFAULT_ZOOM_INDEX);
+  const dragStart = useRef<{ pointerX: number; pointerY: number; ballX: number; ballY: number } | null>(null);
+  const pinchRef = useRef<{ startDist: number; startZoom: number } | null>(null);
+  const pointersRef = useRef<Map<number, { x: number; y: number }>>(new Map());
 
-  const toPixel = (feet: number) => feet * PX_PER_FOOT;
+  const maxFeet = ZOOM_STEPS[zoomIndex];
+  const pxPerFoot = (SIZE / 2 - 10) / maxFeet;
+  const rings = getRings(maxFeet);
+
+  const toPixel = (feet: number) => feet * pxPerFoot;
   const dotX = CENTER + toPixel(missX);
-  const dotY = CENTER - toPixel(missY); // invert Y: positive = up (past hole)
-
+  const dotY = CENTER - toPixel(missY);
   const distanceFt = Math.sqrt(missX * missX + missY * missY);
 
-  // Direction label
   const dirParts: string[] = [];
   if (missY > 0.25) dirParts.push("past");
   if (missY < -0.25) dirParts.push("short");
@@ -32,47 +44,70 @@ export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
   if (missX > 0.25) dirParts.push("right");
   const dirLabel = dirParts.join(", ") || "on line";
 
-  const getCoords = useCallback(
-    (e: React.PointerEvent<SVGSVGElement>) => {
-      const svg = svgRef.current;
-      if (!svg) return { x: 0, y: 0 };
-      const rect = svg.getBoundingClientRect();
-      const px = e.clientX - rect.left;
-      const py = e.clientY - rect.top;
-      // Snap to 0.5ft
-      const feetX = Math.round(((px - CENTER) / PX_PER_FOOT) * 2) / 2;
-      const feetY = Math.round((-(py - CENTER) / PX_PER_FOOT) * 2) / 2;
-      const clampedX = Math.max(-MAX_FEET, Math.min(MAX_FEET, feetX));
-      const clampedY = Math.max(-MAX_FEET, Math.min(MAX_FEET, feetY));
-      return { x: clampedX, y: clampedY };
-    },
-    []
-  );
+  const snap = useCallback((v: number) => Math.round(v * 2) / 2, []);
 
   const handlePointerDown = (e: React.PointerEvent<SVGSVGElement>) => {
-    setDragging(true);
     (e.target as Element).setPointerCapture?.(e.pointerId);
-    const { x, y } = getCoords(e);
-    onChange(x, y);
+    pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+    if (pointersRef.current.size === 2) {
+      const pts = Array.from(pointersRef.current.values());
+      const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+      pinchRef.current = { startDist: dist, startZoom: zoomIndex };
+      setDragging(false);
+      return;
+    }
+
+    setDragging(true);
+    dragStart.current = { pointerX: e.clientX, pointerY: e.clientY, ballX: missX, ballY: missY };
   };
 
   const handlePointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
-    if (!dragging) return;
-    const { x, y } = getCoords(e);
-    onChange(x, y);
+    pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+    if (pointersRef.current.size === 2 && pinchRef.current) {
+      const pts = Array.from(pointersRef.current.values());
+      const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+      const ratio = dist / pinchRef.current.startDist;
+      let newIndex = pinchRef.current.startZoom;
+      if (ratio < 0.7) newIndex = Math.min(ZOOM_STEPS.length - 1, pinchRef.current.startZoom + 1);
+      else if (ratio > 1.4) newIndex = Math.max(0, pinchRef.current.startZoom - 1);
+      if (newIndex !== zoomIndex) setZoomIndex(newIndex);
+      return;
+    }
+
+    if (!dragging || !dragStart.current) return;
+    const dx = e.clientX - dragStart.current.pointerX;
+    const dy = e.clientY - dragStart.current.pointerY;
+    const feetDx = dx / pxPerFoot;
+    const feetDy = -dy / pxPerFoot;
+    const newX = snap(Math.max(-maxFeet, Math.min(maxFeet, dragStart.current.ballX + feetDx)));
+    const newY = snap(Math.max(-maxFeet, Math.min(maxFeet, dragStart.current.ballY + feetDy)));
+    onChange(newX, newY);
   };
 
-  const handlePointerUp = () => {
-    setDragging(false);
+  const handlePointerUp = (e: React.PointerEvent<SVGSVGElement>) => {
+    pointersRef.current.delete(e.pointerId);
+    if (pointersRef.current.size < 2) pinchRef.current = null;
+    if (pointersRef.current.size === 0) {
+      setDragging(false);
+      dragStart.current = null;
+    }
+  };
+
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (e.deltaY > 0) setZoomIndex((i) => Math.min(ZOOM_STEPS.length - 1, i + 1));
+    else if (e.deltaY < 0) setZoomIndex((i) => Math.max(0, i - 1));
   };
 
   const labelX = (CENTER + dotX) / 2;
   const labelY = (CENTER + dotY) / 2 - 8;
 
   return (
-    <div className="flex flex-col items-center gap-1">
+    <div className="flex flex-col items-center gap-1" onWheel={handleWheel}>
       <div className="text-xs text-muted-foreground">
-        Drag ball to miss position ({distanceFt.toFixed(1)}ft, {dirLabel})
+        Drag ball to miss position ({distanceFt.toFixed(1)}ft, {dirLabel}) · ±{maxFeet}ft
       </div>
       <svg
         ref={svgRef}
@@ -85,105 +120,42 @@ export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
       >
-        {/* Concentric rings at 1ft intervals */}
-        {RINGS.map((r) => (
-          <circle
-            key={r}
-            cx={CENTER}
-            cy={CENTER}
-            r={toPixel(r)}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={0.5}
-            opacity={0.15}
-            strokeDasharray="3 3"
-          />
+        {rings.map((r) => (
+          <circle key={r} cx={CENTER} cy={CENTER} r={toPixel(r)}
+            fill="none" stroke="currentColor" strokeWidth={0.5} opacity={0.15} strokeDasharray="3 3" />
+        ))}
+        {rings.map((r) => (
+          <text key={r} x={CENTER + toPixel(r) + 2} y={CENTER - 2}
+            fontSize={8} fill="currentColor" opacity={0.3}>{r}ft</text>
         ))}
 
-        {/* Ring labels */}
-        {RINGS.map((r) => (
-          <text
-            key={r}
-            x={CENTER + toPixel(r) + 2}
-            y={CENTER - 2}
-            fontSize={8}
-            fill="currentColor"
-            opacity={0.3}
-          >
-            {r}ft
-          </text>
-        ))}
-
-        {/* Putt approach line from bottom to center */}
-        <line
-          x1={CENTER}
-          y1={SIZE - 10}
-          x2={CENTER}
-          y2={CENTER}
-          stroke="currentColor"
-          strokeWidth={1}
-          opacity={0.2}
-        />
-        {/* Approach arrow */}
+        <line x1={CENTER} y1={SIZE - 10} x2={CENTER} y2={CENTER}
+          stroke="currentColor" strokeWidth={1} opacity={0.2} />
         <polygon
           points={`${CENTER},${CENTER + 2} ${CENTER - 3},${CENTER + 8} ${CENTER + 3},${CENTER + 8}`}
-          fill="currentColor"
-          opacity={0.2}
-        />
+          fill="currentColor" opacity={0.2} />
 
-        {/* Direction labels */}
-        <text x={CENTER} y={14} textAnchor="middle" fontSize={9} fill="currentColor" opacity={0.35}>
-          Past
-        </text>
-        <text x={CENTER} y={SIZE - 4} textAnchor="middle" fontSize={9} fill="currentColor" opacity={0.35}>
-          Putt
-        </text>
-        <text x={8} y={CENTER + 3} textAnchor="start" fontSize={9} fill="currentColor" opacity={0.35}>
-          L
-        </text>
-        <text x={SIZE - 8} y={CENTER + 3} textAnchor="end" fontSize={9} fill="currentColor" opacity={0.35}>
-          R
-        </text>
+        <text x={CENTER} y={14} textAnchor="middle" fontSize={9} fill="currentColor" opacity={0.35}>Past</text>
+        <text x={CENTER} y={SIZE - 4} textAnchor="middle" fontSize={9} fill="currentColor" opacity={0.35}>Putt</text>
+        <text x={8} y={CENTER + 3} textAnchor="start" fontSize={9} fill="currentColor" opacity={0.35}>L</text>
+        <text x={SIZE - 8} y={CENTER + 3} textAnchor="end" fontSize={9} fill="currentColor" opacity={0.35}>R</text>
 
-        {/* Hole (cup) at center */}
         <circle cx={CENTER} cy={CENTER} r={5} fill="oklch(0.25 0.02 155)" opacity={0.5} />
         <circle cx={CENTER} cy={CENTER} r={3} fill="oklch(0.15 0.01 155)" opacity={0.7} />
 
-        {/* Miss line */}
         {(missX !== 0 || missY !== 0) && (
           <>
-            <line
-              x1={CENTER}
-              y1={CENTER}
-              x2={dotX}
-              y2={dotY}
-              stroke="hsl(var(--destructive))"
-              strokeWidth={1.5}
-              strokeDasharray="4 2"
-            />
-            <text
-              x={labelX}
-              y={labelY}
-              textAnchor="middle"
-              fontSize={10}
-              fontWeight="bold"
-              fill="hsl(var(--destructive))"
-            >
+            <line x1={CENTER} y1={CENTER} x2={dotX} y2={dotY}
+              stroke="hsl(var(--destructive))" strokeWidth={1.5} strokeDasharray="4 2" />
+            <text x={labelX} y={labelY} textAnchor="middle"
+              fontSize={10} fontWeight="bold" fill="hsl(var(--destructive))">
               {distanceFt.toFixed(1)}ft
             </text>
           </>
         )}
 
-        {/* Golf ball (draggable) */}
-        <circle
-          cx={dotX}
-          cy={dotY}
-          r={8}
-          fill="white"
-          stroke="oklch(0.4 0 0)"
-          strokeWidth={1.5}
-          className="drop-shadow-sm"
-        />
+        <circle cx={dotX} cy={dotY} r={8}
+          fill="white" stroke="oklch(0.4 0 0)" strokeWidth={1.5} className="drop-shadow-sm" />
       </svg>
     </div>
   );

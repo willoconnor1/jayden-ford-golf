@@ -121,7 +121,9 @@ export interface Drill {
 
 // ── Shot Dispersion ──────────────────────────────────────────────
 
-export type ShotLie = "fairway" | "rough" | "sand" | "penalty-area" | "abnormal";
+export type ShotLie = "tee" | "fairway" | "rough" | "sand" | "penalty-area" | "abnormal";
+
+export type ShotResult = "fairway" | "rough" | "penalty-area" | "out-of-bounds" | "tree-trouble" | "abnormal";
 
 export type AbnormalLieDetail =
   | "pine-straw"
@@ -148,6 +150,8 @@ export interface ShotData {
   abnormalDetail?: AbnormalLieDetail;
   missX: number;                   // feet — negative = left, positive = right
   missY: number;                   // feet — negative = short, positive = long
+  result?: ShotResult;             // where ball ended up (driver/tee shots)
+  penaltyDrop?: boolean;           // took a penalty drop
 }
 
 export interface PracticeFocus {
