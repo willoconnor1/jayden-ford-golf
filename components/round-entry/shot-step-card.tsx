@@ -112,16 +112,6 @@ export function ShotStepCard({
         />
       )}
 
-      {/* Direction */}
-      <PillSelector
-        label="Direction"
-        options={SHOT_DIRECTIONS}
-        value={shot.direction}
-        onChange={(v) => update({ direction: v as ShotDirection })}
-        columns={3}
-        activeColor="bg-blue-600"
-      />
-
       {/* Result */}
       <PillSelector
         label="Result"
@@ -131,6 +121,18 @@ export function ShotStepCard({
         columns={3}
         activeColor="bg-emerald-600"
       />
+
+      {/* Miss Direction — only for non-green/holed results */}
+      {shot.result && shot.result !== "green" && shot.result !== "holed" && (
+        <PillSelector
+          label="Miss Direction"
+          options={SHOT_DIRECTIONS}
+          value={shot.direction}
+          onChange={(v) => update({ direction: v as ShotDirection })}
+          columns={4}
+          activeColor="bg-blue-600"
+        />
+      )}
 
       {/* Distance remaining */}
       {shot.result && shot.result !== "green" && shot.result !== "holed" && (
@@ -153,9 +155,10 @@ export function ShotStepCard({
       )}
 
       {/* Visual miss tracker — Detailed mode only */}
+      {/* Par 4/5 tee shots always use horizontal L/R tracker */}
       {isDetailed && (
         <div className="pt-1">
-          {isDriver ? (
+          {isPar45Tee ? (
             <DriverMissInput
               missX={shot.missX}
               onChange={(missX) => update({ missX, missY: 0 })}

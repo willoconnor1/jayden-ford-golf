@@ -108,7 +108,7 @@ export default function StrokesGainedPage() {
                       item.value >= 0 ? "text-green-600" : "text-red-500"
                     )}
                   >
-                    {item.value >= 0 ? "+" : ""}
+                    {item.value > 0 ? "+" : ""}
                     {item.value.toFixed(2)}
                   </p>
                 </CardContent>
@@ -133,7 +133,7 @@ export default function StrokesGainedPage() {
                   <YAxis type="category" dataKey="category" width={75} tick={{ fontSize: 11 }} />
                   <Tooltip
                     formatter={(value: number) => [
-                      `${value >= 0 ? "+" : ""}${value.toFixed(2)}`,
+                      `${value > 0 ? "+" : ""}${value.toFixed(2)}`,
                       "Strokes Gained",
                     ]}
                   />

@@ -355,6 +355,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                             <div className="flex gap-1">
                               {([
                                 { value: "left" as PuttMissDirection, label: "Left" },
+                                { value: "good-line" as PuttMissDirection, label: "Good Line" },
                                 { value: "right" as PuttMissDirection, label: "Right" },
                               ]).map((opt) => (
                                 <button

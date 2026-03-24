@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -41,10 +41,12 @@ function GoalCard({ goal }: { goal: Goal }) {
   const completeGoal = useGoalStore((s) => s.completeGoal);
   const daysLeft = differenceInDays(new Date(goal.targetDate), new Date());
 
-  if (isAchieved && !goal.isCompleted) {
-    completeGoal(goal.id);
-    toast.success(`Goal achieved: ${STAT_LABELS[goal.statCategory]}!`);
-  }
+  useEffect(() => {
+    if (isAchieved && !goal.isCompleted) {
+      completeGoal(goal.id);
+      toast.success(`Goal achieved: ${STAT_LABELS[goal.statCategory]}!`);
+    }
+  }, [isAchieved, goal.isCompleted, goal.id, goal.statCategory, completeGoal]);
 
   return (
     <Card className={cn(goal.isCompleted && "border-green-500/50 bg-green-50/50")}>

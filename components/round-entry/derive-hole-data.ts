@@ -27,11 +27,10 @@ export function deriveHoleData(
   putts: PuttEntry[],
   holeShape?: HoleShape,
 ): HoleData {
-  // Count penalties
+  // Count penalties (result-based only — penaltyDrop is redundant and would double-count)
   let penalties = 0;
   for (const s of shots) {
-    if (s.result && (s.result === "out-of-bounds" || s.result === "penalty-area")) penalties++;
-    if (s.penaltyDrop) penalties++;
+    if (s.result === "out-of-bounds" || s.result === "penalty-area") penalties++;
   }
 
   const puttCount = putts.length;

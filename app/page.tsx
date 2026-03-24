@@ -147,7 +147,7 @@ export default function DashboardPage() {
                           item.value >= 0 ? "text-green-600" : "text-red-500"
                         )}
                       >
-                        {item.value >= 0 ? "+" : ""}
+                        {item.value > 0 ? "+" : ""}
                         {item.value.toFixed(2)}
                       </span>
                     </div>

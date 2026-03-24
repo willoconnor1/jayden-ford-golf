@@ -52,6 +52,7 @@ export const SHOT_RESULTS: { value: ShotResult; label: string }[] = [
 export const TEE_SHOT_RESULTS_PAR45: { value: ShotResult; label: string }[] = [
   { value: "fairway", label: "Fairway" },
   { value: "rough", label: "Rough" },
+  { value: "green", label: "Green" },
   { value: "sand", label: "Bunker" },
   { value: "tree-trouble", label: "Trees" },
   { value: "penalty-area", label: "Penalty" },
@@ -102,8 +103,9 @@ export const HOLE_SHAPES: { value: HoleShape; label: string }[] = [
 
 export const SHOT_DIRECTIONS: { value: ShotDirection; label: string }[] = [
   { value: "left", label: "Left" },
-  { value: "straight", label: "Straight" },
   { value: "right", label: "Right" },
+  { value: "short", label: "Short" },
+  { value: "long", label: "Long" },
 ];
 
 export const SHOT_INTENTS: { value: ShotIntent; label: string }[] = [

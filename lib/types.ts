@@ -91,6 +91,23 @@ export interface StrokesGainedResult {
   sgTotal: number;
 }
 
+// ── Per-Shot Strokes Gained ─────────────────────────────────────
+
+export type SGCategory = "offTheTee" | "approach" | "aroundTheGreen" | "putting";
+
+export interface ShotStrokesGained {
+  shotIndex: number;
+  category: SGCategory;
+  sg: number;
+  expectedBefore: number;
+  expectedAfter: number;
+  penaltyIncluded: boolean;
+}
+
+export interface StrokesGainedDetail extends StrokesGainedResult {
+  shotSG?: ShotStrokesGained[];
+}
+
 export type StatCategory =
   | "scoringAverage"
   | "fairwayPercentage"
@@ -132,13 +149,13 @@ export interface Drill {
 
 export type EntryMode = "simple" | "standard" | "detailed";
 export type HoleShape = "straight" | "dogleg-left" | "dogleg-right";
-export type ShotDirection = "left" | "straight" | "right";
+export type ShotDirection = "left" | "right" | "short" | "long";
 export type ShotIntent = "green" | "lay-up" | "recovery";
 export type PuttSlope = "uphill" | "downhill" | "flat" | "multiple";
 
 // ── Putt Metadata ───────────────────────────────────────────────
 
-export type PuttMissDirection = "left" | "right";
+export type PuttMissDirection = "left" | "good-line" | "right";
 export type PuttSpeed = "short" | "too-firm" | "good-speed";
 export type PuttBreak = "straight" | "right-to-left" | "left-to-right" | "multiple";
 
@@ -175,7 +192,7 @@ export interface ShotData {
   missY: number;                   // feet — negative = short, positive = long
   result?: ShotResult;             // where ball ended up
   penaltyDrop?: boolean;           // took a penalty drop
-  direction?: ShotDirection;       // left / straight / right
+  direction?: ShotDirection;       // left / right / short / long
   intent?: ShotIntent;             // green / lay-up / recovery
   distanceRemaining?: number;      // yards remaining after shot
 }

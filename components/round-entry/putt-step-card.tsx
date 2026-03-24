@@ -34,6 +34,7 @@ interface PuttStepCardProps {
 
 const MISS_DIRECTIONS: { value: PuttMissDirection; label: string }[] = [
   { value: "left", label: "Left" },
+  { value: "good-line", label: "Good Line" },
   { value: "right", label: "Right" },
 ];
 
@@ -136,7 +137,7 @@ export function PuttStepCard({
             options={MISS_DIRECTIONS}
             value={putt.missDirection}
             onChange={(v) => update({ missDirection: v as PuttMissDirection })}
-            columns={2}
+            columns={3}
             activeColor="bg-amber-600"
             allowDeselect
           />

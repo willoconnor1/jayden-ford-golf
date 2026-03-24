@@ -4,8 +4,9 @@ export function calculateRoundStats(round: Round): RoundStats {
   const holes = round.holes;
 
   const fairwayHoles = holes.filter((h) => h.par >= 4);
-  const fairwaysHit = fairwayHoles.filter((h) => h.fairwayHit === "yes").length;
-  const fairwaysAttempted = fairwayHoles.length;
+  const trackableFairways = fairwayHoles.filter((h) => h.fairwayHit !== "na");
+  const fairwaysHit = trackableFairways.filter((h) => h.fairwayHit === "yes").length;
+  const fairwaysAttempted = trackableFairways.length;
 
   const girs = holes.filter((h) => h.greenInRegulation).length;
 
