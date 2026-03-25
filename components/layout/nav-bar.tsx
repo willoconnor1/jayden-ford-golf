@@ -10,6 +10,7 @@ import {
   Target,
   Dumbbell,
   Crosshair,
+  Radio,
   Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -22,6 +23,7 @@ const links = [
   { href: "/goals", label: "Goals", mobileLabel: "Goals", icon: Target },
   { href: "/practice", label: "Practice", mobileLabel: "Practice", icon: Dumbbell },
   { href: "/dispersion", label: "Dispersion", mobileLabel: "Shots", icon: Crosshair },
+  { href: "/live", label: "Live", mobileLabel: "Live", icon: Radio },
   { href: "/settings", label: "Settings", mobileLabel: "Settings", icon: Settings },
 ];
 

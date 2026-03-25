@@ -5,6 +5,7 @@ import {
   real,
   boolean,
   jsonb,
+  unique,
 } from "drizzle-orm/pg-core";
 
 // ── Rounds ────────────────────────────────────────────────────────
@@ -30,6 +31,29 @@ export const rounds = pgTable("rounds", {
   updatedAt: text("updated_at").notNull(),
 });
 
+// ── Courses (API cache + saved) ───────────────────────────────────
+export const courses = pgTable("courses", {
+  id: text("id").primaryKey(),
+  externalId: text("external_id"),
+  apiSource: text("api_source"),
+
+  name: text("name").notNull(),
+  clubName: text("club_name"),
+  city: text("city"),
+  state: text("state"),
+  country: text("country"),
+  latitude: real("latitude"),
+  longitude: real("longitude"),
+  numberOfHoles: integer("number_of_holes").default(18),
+
+  tees: jsonb("tees").$type<import("@/lib/types").CourseTeeData[]>().notNull(),
+
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+  lastFetchedAt: text("last_fetched_at"),
+  isFavorite: boolean("is_favorite").default(false),
+});
+
 // ── Goals ─────────────────────────────────────────────────────────
 export const goals = pgTable("goals", {
   id: text("id").primaryKey(),
@@ -42,3 +66,36 @@ export const goals = pgTable("goals", {
   isCompleted: boolean("is_completed").notNull().default(false),
   completedAt: text("completed_at"),
 });
+
+// ── Live Events ──────────────────────────────────────────────────
+export const liveEvents = pgTable("live_events", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  courseName: text("course_name").notNull(),
+  joinCode: text("join_code").notNull().unique(),
+  organizerSecret: text("organizer_secret").notNull(),
+  holePars: jsonb("hole_pars").$type<number[]>().notNull(),
+  status: text("status").notNull().default("lobby"), // "lobby" | "active" | "completed"
+  createdAt: text("created_at").notNull(),
+});
+
+// ── Live Players ─────────────────────────────────────────────────
+export const livePlayers = pgTable("live_players", {
+  id: text("id").primaryKey(),
+  eventId: text("event_id").notNull(),
+  name: text("name").notNull(),
+  groupNumber: integer("group_number"),
+  createdAt: text("created_at").notNull(),
+});
+
+// ── Live Scores ──────────────────────────────────────────────────
+export const liveScores = pgTable("live_scores", {
+  id: text("id").primaryKey(),
+  eventId: text("event_id").notNull(),
+  playerId: text("player_id").notNull(),
+  holeNumber: integer("hole_number").notNull(),
+  strokes: integer("strokes").notNull(),
+  createdAt: text("created_at").notNull(),
+}, (table) => [
+  unique("live_scores_player_hole").on(table.eventId, table.playerId, table.holeNumber),
+]);

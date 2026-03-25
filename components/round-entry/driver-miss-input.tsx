@@ -67,7 +67,7 @@ export function DriverMissInput({ missX, onChange }: DriverMissInputProps) {
   return (
     <div className="flex flex-col items-center gap-1">
       <div className="text-xs text-muted-foreground">
-        Drag to mark miss ({absMiss}yds {dirLabel}) · ±{maxYards}yds
+        Drag to mark miss ({Math.round(absMiss)}yds {dirLabel}) · ±{maxYards}yds
       </div>
       <div className="flex items-center gap-2">
         <button

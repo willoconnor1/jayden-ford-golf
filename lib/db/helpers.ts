@@ -1,4 +1,4 @@
-import type { Round, Goal, HoleData } from "@/lib/types";
+import type { Round, Goal, HoleData, SavedCourse, CourseTeeData } from "@/lib/types";
 
 // ── Round: DB row ↔ App type ──────────────────────────────────────
 
@@ -94,5 +94,66 @@ export function rowToGoal(row: {
     createdAt: row.createdAt,
     isCompleted: row.isCompleted,
     completedAt: row.completedAt,
+  };
+}
+
+// ── Course: DB row ↔ App type ─────────────────────────────────────
+
+export function courseToRow(course: SavedCourse) {
+  return {
+    id: course.id,
+    externalId: course.externalId ?? null,
+    apiSource: course.apiSource ?? null,
+    name: course.name,
+    clubName: course.clubName ?? null,
+    city: course.city ?? null,
+    state: course.state ?? null,
+    country: course.country ?? null,
+    latitude: course.latitude ?? null,
+    longitude: course.longitude ?? null,
+    numberOfHoles: course.numberOfHoles,
+    tees: course.tees,
+    createdAt: course.createdAt,
+    updatedAt: course.updatedAt,
+    lastFetchedAt: course.lastFetchedAt ?? null,
+    isFavorite: course.isFavorite,
+  };
+}
+
+export function rowToCourse(row: {
+  id: string;
+  externalId: string | null;
+  apiSource: string | null;
+  name: string;
+  clubName: string | null;
+  city: string | null;
+  state: string | null;
+  country: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  numberOfHoles: number | null;
+  tees: CourseTeeData[];
+  createdAt: string;
+  updatedAt: string;
+  lastFetchedAt: string | null;
+  isFavorite: boolean | null;
+}): SavedCourse {
+  return {
+    id: row.id,
+    externalId: row.externalId ?? undefined,
+    apiSource: row.apiSource ?? undefined,
+    name: row.name,
+    clubName: row.clubName ?? undefined,
+    city: row.city ?? undefined,
+    state: row.state ?? undefined,
+    country: row.country ?? undefined,
+    latitude: row.latitude ?? undefined,
+    longitude: row.longitude ?? undefined,
+    numberOfHoles: row.numberOfHoles ?? 18,
+    tees: row.tees,
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+    lastFetchedAt: row.lastFetchedAt ?? undefined,
+    isFavorite: row.isFavorite ?? false,
   };
 }

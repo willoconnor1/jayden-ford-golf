@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { rounds, goals } from "@/lib/db/schema";
+import { rounds, goals, courses } from "@/lib/db/schema";
 import {
   roundToRow,
   rowToRound,
   goalToRow,
   rowToGoal,
+  courseToRow,
+  rowToCourse,
 } from "@/lib/db/helpers";
-import type { Round, Goal } from "@/lib/types";
+import type { Round, Goal, SavedCourse } from "@/lib/types";
 import { eq } from "drizzle-orm";
 
 /**
@@ -15,13 +17,15 @@ import { eq } from "drizzle-orm";
  */
 export async function GET() {
   try {
-    const [dbRounds, dbGoals] = await Promise.all([
+    const [dbRounds, dbGoals, dbCourses] = await Promise.all([
       db.select().from(rounds),
       db.select().from(goals),
+      db.select().from(courses),
     ]);
     return NextResponse.json({
       rounds: dbRounds.map(rowToRound),
       goals: dbGoals.map(rowToGoal),
+      courses: dbCourses.map(rowToCourse),
     });
   } catch (error) {
     console.error("Sync pull failed:", error);
@@ -32,14 +36,15 @@ export async function GET() {
 /**
  * POST /api/sync — upsert local-only items into the database
  *
- * Body: { rounds: Round[], goals: Goal[] }
+ * Body: { rounds: Round[], goals: Goal[], courses?: SavedCourse[] }
  *
  * Multi-user safe: only inserts/updates, NEVER deletes.
  * Items already in DB are updated; new items are inserted.
  */
 export async function POST(request: Request) {
   try {
-    const body: { rounds: Round[]; goals: Goal[] } = await request.json();
+    const body: { rounds: Round[]; goals: Goal[]; courses?: SavedCourse[] } =
+      await request.json();
 
     // ── Upsert rounds ────────────────────────────────────────
     const dbRounds = await db.select({ id: rounds.id }).from(rounds);
@@ -64,6 +69,21 @@ export async function POST(request: Request) {
         await db.update(goals).set(row).where(eq(goals.id, goal.id));
       } else {
         await db.insert(goals).values(row);
+      }
+    }
+
+    // ── Upsert courses ───────────────────────────────────────
+    if (body.courses?.length) {
+      const dbCourses = await db.select({ id: courses.id }).from(courses);
+      const dbCourseIds = new Set(dbCourses.map((c) => c.id));
+
+      for (const course of body.courses) {
+        const row = courseToRow(course);
+        if (dbCourseIds.has(course.id)) {
+          await db.update(courses).set(row).where(eq(courses.id, course.id));
+        } else {
+          await db.insert(courses).values(row);
+        }
       }
     }
 

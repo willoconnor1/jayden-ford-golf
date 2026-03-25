@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useRoundStore } from "@/stores/round-store";
 import { useGoalStore } from "@/stores/goal-store";
+import { useCourseStore } from "@/stores/course-store";
 import { pullFromDb, pushToDb } from "@/lib/sync";
 
 const RESYNC_INTERVAL = 30_000; // Re-pull from DB every 30 seconds
@@ -23,10 +24,10 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
 
       const localRounds = useRoundStore.getState().rounds;
       const localGoals = useGoalStore.getState().goals;
+      const localCourses = useCourseStore.getState().courses;
 
       // ── Merge rounds (DB is source of truth) ──────────────
       const remoteRoundMap = new Map(remote.rounds.map((r) => [r.id, r]));
-      const localRoundMap = new Map(localRounds.map((r) => [r.id, r]));
 
       // Start with all remote rounds (DB wins)
       const mergedRounds = [...remote.rounds];
@@ -50,13 +51,28 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
       );
       mergedGoals.push(...localOnlyGoals);
 
+      // ── Merge courses (DB is source of truth) ──────────────
+      const remoteCourses = remote.courses ?? [];
+      const remoteCourseMap = new Map(remoteCourses.map((c) => [c.id, c]));
+
+      const mergedCourses = [...remoteCourses];
+      const localOnlyCourses = localCourses.filter(
+        (c) => !remoteCourseMap.has(c.id)
+      );
+      mergedCourses.push(...localOnlyCourses);
+
       // Update local stores with merged data
       useRoundStore.setState({ rounds: mergedRounds });
       useGoalStore.setState({ goals: mergedGoals });
+      useCourseStore.setState({ courses: mergedCourses });
 
       // Push any local-only items up to DB (no deletes)
-      if (localOnlyRounds.length > 0 || localOnlyGoals.length > 0) {
-        pushToDb(localOnlyRounds, localOnlyGoals);
+      if (
+        localOnlyRounds.length > 0 ||
+        localOnlyGoals.length > 0 ||
+        localOnlyCourses.length > 0
+      ) {
+        pushToDb(localOnlyRounds, localOnlyGoals, localOnlyCourses);
       }
     }
 

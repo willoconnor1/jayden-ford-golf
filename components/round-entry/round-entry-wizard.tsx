@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { HoleEntryCard } from "./hole-entry-card";
+import { CourseSearchInput } from "./course-search-input";
 import { useRoundStore } from "@/stores/round-store";
 import { HoleData, CourseInfo, Round, EntryMode } from "@/lib/types";
 import { DEFAULT_HOLE_PARS } from "@/lib/constants";
@@ -127,9 +128,7 @@ export function RoundEntryWizard() {
   );
 
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
-
-  // Get unique course names for autocomplete
-  const courseNames = [...new Set(rounds.map((r) => r.course.name))];
+  const [isManualEntry, setIsManualEntry] = useState(false);
 
   const updateHole = (index: number, hole: HoleData) => {
     const updated = [...holes];
@@ -227,24 +226,16 @@ export function RoundEntryWizard() {
             <CardTitle className="text-lg">Course Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label>Course Name</Label>
-              <Input
-                value={course.name}
-                onChange={(e) =>
-                  setCourse({ ...course, name: e.target.value })
-                }
-                placeholder="e.g., Royal Wellington"
-                list="course-names"
-              />
-              {courseNames.length > 0 && (
-                <datalist id="course-names">
-                  {courseNames.map((name) => (
-                    <option key={name} value={name} />
-                  ))}
-                </datalist>
-              )}
-            </div>
+            {/* Course search or manual entry */}
+            <CourseSearchInput
+              course={course}
+              onCourseSelect={(info) => {
+                setCourse(info);
+                setHoles(createDefaultHoles(info.holePars, info.holeDistances));
+                setIsManualEntry(false);
+              }}
+              onManualEntry={() => setIsManualEntry(true)}
+            />
 
             <div className="space-y-2">
               <Label>Date</Label>
@@ -255,45 +246,60 @@ export function RoundEntryWizard() {
               />
             </div>
 
-            <div className="grid grid-cols-3 gap-3">
-              <div className="space-y-2">
-                <Label>Tees</Label>
-                <Input
-                  value={course.tees}
-                  onChange={(e) =>
-                    setCourse({ ...course, tees: e.target.value })
-                  }
-                  placeholder="Blue"
-                />
+            {/* Manual tees/rating/slope — shown when entering manually or to allow overrides */}
+            {isManualEntry && (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Course Name</Label>
+                  <Input
+                    value={course.name}
+                    onChange={(e) =>
+                      setCourse({ ...course, name: e.target.value })
+                    }
+                    placeholder="e.g., Royal Wellington"
+                  />
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="space-y-2">
+                    <Label>Tees</Label>
+                    <Input
+                      value={course.tees}
+                      onChange={(e) =>
+                        setCourse({ ...course, tees: e.target.value })
+                      }
+                      placeholder="Blue"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Rating</Label>
+                    <Input
+                      type="number"
+                      value={course.rating}
+                      onChange={(e) =>
+                        setCourse({
+                          ...course,
+                          rating: parseFloat(e.target.value) || 72,
+                        })
+                      }
+                      step={0.1}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Slope</Label>
+                    <Input
+                      type="number"
+                      value={course.slope}
+                      onChange={(e) =>
+                        setCourse({
+                          ...course,
+                          slope: parseInt(e.target.value) || 113,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label>Rating</Label>
-                <Input
-                  type="number"
-                  value={course.rating}
-                  onChange={(e) =>
-                    setCourse({
-                      ...course,
-                      rating: parseFloat(e.target.value) || 72,
-                    })
-                  }
-                  step={0.1}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Slope</Label>
-                <Input
-                  type="number"
-                  value={course.slope}
-                  onChange={(e) =>
-                    setCourse({
-                      ...course,
-                      slope: parseInt(e.target.value) || 113,
-                    })
-                  }
-                />
-              </div>
-            </div>
+            )}
 
             {/* Entry Mode */}
             <EntryModeSelector value={entryMode} onChange={setEntryMode} />

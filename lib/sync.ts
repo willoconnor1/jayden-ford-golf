@@ -1,4 +1,4 @@
-import type { Round, Goal } from "@/lib/types";
+import type { Round, Goal, SavedCourse } from "@/lib/types";
 
 const API_BASE = "/api";
 
@@ -66,11 +66,21 @@ export function syncDeleteGoal(id: string) {
   );
 }
 
+// ── Course sync ──────────────────────────────────────────────────
+
+export function syncSaveCourse(course: SavedCourse) {
+  if (!isDbConfigured()) return;
+  api("/courses", { method: "POST", body: JSON.stringify(course) }).catch((e) =>
+    console.warn("Background sync (save course) failed:", e)
+  );
+}
+
 // ── Full sync (pull from DB → merge into local state) ─────────────
 
 export async function pullFromDb(): Promise<{
   rounds: Round[];
   goals: Goal[];
+  courses: SavedCourse[];
 } | null> {
   try {
     return await api("/sync");
@@ -80,11 +90,15 @@ export async function pullFromDb(): Promise<{
   }
 }
 
-export async function pushToDb(rounds: Round[], goals: Goal[]) {
+export async function pushToDb(
+  rounds: Round[],
+  goals: Goal[],
+  courses?: SavedCourse[]
+) {
   try {
     await api("/sync", {
       method: "POST",
-      body: JSON.stringify({ rounds, goals }),
+      body: JSON.stringify({ rounds, goals, courses }),
     });
   } catch (e) {
     console.warn("Push to DB failed:", e);
