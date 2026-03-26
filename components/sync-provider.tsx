@@ -4,20 +4,30 @@ import { useEffect, useRef } from "react";
 import { useRoundStore } from "@/stores/round-store";
 import { useGoalStore } from "@/stores/goal-store";
 import { useCourseStore } from "@/stores/course-store";
+import { useAuth } from "@/components/auth-provider";
 import { pullFromDb, pushToDb } from "@/lib/sync";
 
-const RESYNC_INTERVAL = 30_000; // Re-pull from DB every 30 seconds
+const RESYNC_INTERVAL = 30_000;
 
-/**
- * SyncProvider — multi-user safe sync:
- * 1. Pull all data from Postgres (source of truth)
- * 2. Merge: DB wins for conflicts, local-only items get pushed up
- * 3. Re-syncs periodically so both users see each other's changes
- */
 export function SyncProvider({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
   const hasInitialSync = useRef(false);
+  const lastUserId = useRef<string | null>(null);
 
   useEffect(() => {
+    if (!user) {
+      hasInitialSync.current = false;
+      return;
+    }
+
+    // If user changed, clear local stores and re-sync
+    if (lastUserId.current !== user.userId) {
+      lastUserId.current = user.userId;
+      hasInitialSync.current = false;
+      useRoundStore.setState({ rounds: [] });
+      useGoalStore.setState({ goals: [] });
+    }
+
     async function sync() {
       const remote = await pullFromDb();
       if (!remote) return; // DB not available, stay local-only
@@ -76,16 +86,14 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
       }
     }
 
-    // Initial sync
     if (!hasInitialSync.current) {
       hasInitialSync.current = true;
       sync();
     }
 
-    // Periodic re-sync so both users see each other's updates
     const interval = setInterval(sync, RESYNC_INTERVAL);
     return () => clearInterval(interval);
-  }, []);
+  }, [user]);
 
   return <>{children}</>;
 }

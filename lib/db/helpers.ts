@@ -2,9 +2,10 @@ import type { Round, Goal, HoleData, SavedCourse, CourseTeeData } from "@/lib/ty
 
 // ── Round: DB row ↔ App type ──────────────────────────────────────
 
-export function roundToRow(round: Round) {
+export function roundToRow(round: Round, userId: string) {
   return {
     id: round.id,
+    userId,
     date: round.date,
     courseName: round.course.name,
     courseTees: round.course.tees,
@@ -59,9 +60,10 @@ export function rowToRound(row: {
 
 // ── Goal: DB row ↔ App type ───────────────────────────────────────
 
-export function goalToRow(goal: Goal) {
+export function goalToRow(goal: Goal, userId: string) {
   return {
     id: goal.id,
+    userId,
     statCategory: goal.statCategory,
     targetValue: goal.targetValue,
     startValue: goal.startValue,

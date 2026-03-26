@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { rounds, goals, courses } from "@/lib/db/schema";
 import {
@@ -9,18 +10,21 @@ import {
   courseToRow,
   rowToCourse,
 } from "@/lib/db/helpers";
+import { getAuthUser } from "@/lib/auth";
 import type { Round, Goal, SavedCourse } from "@/lib/types";
-import { eq } from "drizzle-orm";
 
 /**
- * GET /api/sync — pull all data from the database
+ * GET /api/sync — pull all data from the database (scoped to current user)
  */
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const user = await getAuthUser(request);
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
     const [dbRounds, dbGoals, dbCourses] = await Promise.all([
-      db.select().from(rounds),
-      db.select().from(goals),
-      db.select().from(courses),
+      db.select().from(rounds).where(eq(rounds.userId, user.userId)),
+      db.select().from(goals).where(eq(goals.userId, user.userId)),
+      db.select().from(courses), // courses are shared
     ]);
     return NextResponse.json({
       rounds: dbRounds.map(rowToRound),
@@ -35,23 +39,24 @@ export async function GET() {
 
 /**
  * POST /api/sync — upsert local-only items into the database
- *
- * Body: { rounds: Round[], goals: Goal[], courses?: SavedCourse[] }
- *
- * Multi-user safe: only inserts/updates, NEVER deletes.
- * Items already in DB are updated; new items are inserted.
  */
 export async function POST(request: Request) {
   try {
+    const user = await getAuthUser(request);
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
     const body: { rounds: Round[]; goals: Goal[]; courses?: SavedCourse[] } =
       await request.json();
 
-    // ── Upsert rounds ────────────────────────────────────────
-    const dbRounds = await db.select({ id: rounds.id }).from(rounds);
+    // ── Upsert rounds (scoped to user) ─────────────────────
+    const dbRounds = await db
+      .select({ id: rounds.id })
+      .from(rounds)
+      .where(eq(rounds.userId, user.userId));
     const dbRoundIds = new Set(dbRounds.map((r) => r.id));
 
     for (const round of body.rounds) {
-      const row = roundToRow(round);
+      const row = roundToRow(round, user.userId);
       if (dbRoundIds.has(round.id)) {
         await db.update(rounds).set(row).where(eq(rounds.id, round.id));
       } else {
@@ -59,12 +64,15 @@ export async function POST(request: Request) {
       }
     }
 
-    // ── Upsert goals ─────────────────────────────────────────
-    const dbGoals = await db.select({ id: goals.id }).from(goals);
+    // ── Upsert goals (scoped to user) ──────────────────────
+    const dbGoals = await db
+      .select({ id: goals.id })
+      .from(goals)
+      .where(eq(goals.userId, user.userId));
     const dbGoalIds = new Set(dbGoals.map((g) => g.id));
 
     for (const goal of body.goals) {
-      const row = goalToRow(goal);
+      const row = goalToRow(goal, user.userId);
       if (dbGoalIds.has(goal.id)) {
         await db.update(goals).set(row).where(eq(goals.id, goal.id));
       } else {
@@ -72,7 +80,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // ── Upsert courses ───────────────────────────────────────
+    // ── Upsert courses (shared, no user scoping) ───────────
     if (body.courses?.length) {
       const dbCourses = await db.select({ id: courses.id }).from(courses);
       const dbCourseIds = new Set(dbCourses.map((c) => c.id));

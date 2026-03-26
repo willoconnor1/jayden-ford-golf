@@ -12,8 +12,10 @@ import {
   Crosshair,
   Radio,
   Settings,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/components/auth-provider";
 
 const links = [
   { href: "/", label: "Dashboard", mobileLabel: "Home", icon: LayoutDashboard },
@@ -29,6 +31,16 @@ const links = [
 
 export function NavBar() {
   const pathname = usePathname();
+  const { user, logout } = useAuth();
+
+  const initials = user?.name
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : "??";
 
   return (
     <>
@@ -37,10 +49,10 @@ export function NavBar() {
         <div className="flex h-14 items-center px-4 border-b border-border">
           <Link href="/" className="flex items-center gap-2 font-bold text-primary">
             <span className="bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
-              JF
+              {initials}
             </span>
             <div className="flex flex-col leading-tight">
-              <span className="text-sm">Jayden Ford</span>
+              <span className="text-sm">{user?.name ?? "Golf Dashboard"}</span>
               <span className="text-[10px] text-muted-foreground font-normal">Golf Performance</span>
             </div>
           </Link>
@@ -68,6 +80,15 @@ export function NavBar() {
             );
           })}
         </nav>
+        <div className="px-3 py-4 border-t border-border">
+          <button
+            onClick={logout}
+            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign out
+          </button>
+        </div>
       </aside>
 
       {/* Mobile bottom navigation */}

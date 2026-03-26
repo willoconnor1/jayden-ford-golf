@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
-import { NavBar } from "@/components/layout/nav-bar";
-import { SyncProvider } from "@/components/sync-provider";
+import { AuthProvider } from "@/components/auth-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -16,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jayden Ford | Golf Performance",
-  description: "Professional golf performance tracking and strokes gained analysis for Jayden Ford",
+  title: "Golf Performance Dashboard",
+  description: "Professional golf performance tracking and strokes gained analysis",
 };
 
 export default function RootLayout({
@@ -34,13 +33,10 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </head>
       <body className="min-h-full bg-background">
-        <SyncProvider>
-          <NavBar />
-          <main className="md:ml-60 pb-24 md:pb-6 px-4 md:px-8 pt-4 md:pt-6">
-            {children}
-          </main>
+        <AuthProvider>
+          {children}
           <Toaster richColors />
-        </SyncProvider>
+        </AuthProvider>
       </body>
     </html>
   );

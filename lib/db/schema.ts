@@ -8,9 +8,20 @@ import {
   unique,
 } from "drizzle-orm/pg-core";
 
+// ── Users ─────────────────────────────────────────────────────────
+export const users = pgTable("users", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  name: text("name").notNull(),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+
 // ── Rounds ────────────────────────────────────────────────────────
 export const rounds = pgTable("rounds", {
   id: text("id").primaryKey(),
+  userId: text("user_id").notNull(),
   date: text("date").notNull(),
 
   // Course info (flattened for queryability)
@@ -57,6 +68,7 @@ export const courses = pgTable("courses", {
 // ── Goals ─────────────────────────────────────────────────────────
 export const goals = pgTable("goals", {
   id: text("id").primaryKey(),
+  userId: text("user_id").notNull(),
   statCategory: text("stat_category").notNull(),
   targetValue: real("target_value").notNull(),
   startValue: real("start_value").notNull(),
