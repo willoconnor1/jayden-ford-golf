@@ -934,7 +934,7 @@ const roundDefs: RoundDef[] = [
     courseKey: "clearwater",
     date: "2026-02-08",
     scores: scores6,
-    notes: "NZ PGA Pro-Am round. Disaster on 13 — OB left, penalty drop, couldn't save it. Rest of the round was solid.",
+    notes: "Pro-Am round. Disaster on 13 — OB left, penalty drop, couldn't save it. Rest of the round was solid.",
     seed: 1006,
   },
   {
@@ -955,7 +955,7 @@ const roundDefs: RoundDef[] = [
     courseKey: "royalQueensland",
     date: "2026-03-08",
     scores: scores9,
-    notes: "Australasian Tour qualifier. Kept it in play, just couldn't convert enough birdie putts.",
+    notes: "Tour qualifier. Kept it in play, just couldn't convert enough birdie putts.",
     seed: 1009,
   },
   {
@@ -1217,13 +1217,13 @@ function generateLiveScores(
 export function getSeedLiveEvents(): LiveEventData[] {
   // Tournament 1: Summer Stroke Play at Royal Wellington
   const event1Players: LivePlayer[] = [
-    { id: "seed-lp-1", eventId: "seed-event-1", name: "Jayden Ford", groupNumber: 1, createdAt: "2026-02-01T08:00:00Z" },
+    { id: "seed-lp-1", eventId: "seed-event-1", name: "Alex Morgan", groupNumber: 1, createdAt: "2026-02-01T08:00:00Z" },
     { id: "seed-lp-2", eventId: "seed-event-1", name: "Tom Blackwell", groupNumber: 1, createdAt: "2026-02-01T08:05:00Z" },
     { id: "seed-lp-3", eventId: "seed-event-1", name: "Sam Richards", groupNumber: 2, createdAt: "2026-02-01T08:10:00Z" },
     { id: "seed-lp-4", eventId: "seed-event-1", name: "Jake Nguyen", groupNumber: 2, createdAt: "2026-02-01T08:15:00Z" },
   ];
 
-  // Jayden: 70 (-2), Tom: 73 (+1), Sam: 72 (E), Jake: 71 (-1)
+  // Alex: 70 (-2), Tom: 73 (+1), Sam: 72 (E), Jake: 71 (-1)
   const event1Scores = [
     ...generateLiveScores("seed-event-1", "seed-lp-1",
       [4, 4, 4, 3, 3, 4, 3, 5, 5, 4, 3, 3, 5, 5, 4, 4, 3, 4], "2026-02-01T09:00:00Z"),
@@ -1237,13 +1237,13 @@ export function getSeedLiveEvents(): LiveEventData[] {
 
   // Tournament 2: Queenstown Pro-Am at Millbrook
   const event2Players: LivePlayer[] = [
-    { id: "seed-lp-5", eventId: "seed-event-2", name: "Jayden Ford", groupNumber: 1, createdAt: "2026-03-01T08:00:00Z" },
+    { id: "seed-lp-5", eventId: "seed-event-2", name: "Alex Morgan", groupNumber: 1, createdAt: "2026-03-01T08:00:00Z" },
     { id: "seed-lp-6", eventId: "seed-event-2", name: "Will O'Connor", groupNumber: 1, createdAt: "2026-03-01T08:05:00Z" },
     { id: "seed-lp-7", eventId: "seed-event-2", name: "Chris Palmer", groupNumber: 2, createdAt: "2026-03-01T08:10:00Z" },
     { id: "seed-lp-8", eventId: "seed-event-2", name: "Ethan Lee", groupNumber: 2, createdAt: "2026-03-01T08:15:00Z" },
   ];
 
-  // Jayden: 69 (-3), Will: 74 (+2), Chris: 71 (-1), Ethan: 72 (E)
+  // Alex: 69 (-3), Will: 74 (+2), Chris: 71 (-1), Ethan: 72 (E)
   const event2Scores = [
     ...generateLiveScores("seed-event-2", "seed-lp-5",
       [4, 4, 3, 3, 4, 4, 2, 4, 5, 4, 4, 3, 5, 4, 4, 4, 3, 4], "2026-03-01T09:00:00Z"),

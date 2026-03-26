@@ -18,6 +18,7 @@ import { STAT_LABELS, formatStat } from "@/lib/constants";
 import { Goal } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { differenceInDays } from "date-fns";
+import { useAuth } from "@/components/auth-provider";
 
 function DashboardGoalCard({ goal }: { goal: Goal }) {
   const { currentValue, progress } = useGoalProgress(goal);
@@ -46,11 +47,13 @@ function DashboardGoalCard({ goal }: { goal: Goal }) {
 
 export default function DashboardPage() {
   const hydrated = useHydration();
+  const { user } = useAuth();
   const rounds = useRoundStore((s) => s.rounds);
   const { aggregateStats, sortedRounds } = useStats();
   const { sgAverages } = useStrokesGained();
   const goals = useGoalStore((s) => s.goals);
   const activeGoals = goals.filter((g) => !g.isCompleted);
+  const firstName = user?.name?.split(" ")[0] ?? "Golfer";
 
   if (!hydrated) {
     return (
@@ -69,10 +72,9 @@ export default function DashboardPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
         <div className="text-6xl mb-4">&#9971;</div>
-        <h1 className="text-2xl font-bold mb-2">Welcome, Jayden</h1>
+        <h1 className="text-2xl font-bold mb-2">Welcome, {firstName}</h1>
         <p className="text-muted-foreground mb-6 max-w-md">
-          Track your rounds across the NZ PGA and Australasian tours, analyze
-          your strokes gained vs PGA Tour averages, and get personalized
+          Track your rounds, analyze your strokes gained, and get personalized
           practice plans to sharpen your game.
         </p>
         <Link href="/rounds/new" className={buttonVariants({ size: "lg" })}>
@@ -96,8 +98,8 @@ export default function DashboardPage() {
   return (
     <>
       <PageHeader
-        title="Jayden's Dashboard"
-        description={`${rounds.length} round${rounds.length === 1 ? "" : "s"} tracked | NZ PGA & Australasian Tour`}
+        title={`${firstName}'s Dashboard`}
+        description={`${rounds.length} round${rounds.length === 1 ? "" : "s"} tracked`}
       >
         <Link href="/rounds/new" className={buttonVariants()}>
           <PlusCircle className="mr-2 h-4 w-4" />

@@ -16,7 +16,7 @@ export function holeScoreColor(scoreToPar: number): string {
 
 /**
  * Round-level score-to-par badge classes (bg + text).
- * Gradient is smooth across Jayden's typical range (+8 to -10).
+ * Gradient is smooth across a typical range (+8 to -10).
  * -1/-2 are light, -6 is solid, -9+ is dark. Same idea for over par.
  */
 export function roundBadgeColor(scoreToPar: number): string {
