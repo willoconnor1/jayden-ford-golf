@@ -152,7 +152,7 @@ export function ShotStepCard({
         />
       )}
 
-      {/* Distance remaining */}
+      {/* Distance remaining — yards to green for non-green results */}
       {shot.result && shot.result !== "green" && shot.result !== "holed" && (
         <div className="space-y-1">
           <div className="text-xs font-medium text-white/60">
@@ -168,6 +168,26 @@ export function ShotStepCard({
             placeholder="150"
             min={0}
             max={600}
+          />
+        </div>
+      )}
+
+      {/* Distance to hole — feet, shown when result is green (carries to first putt) */}
+      {shot.result === "green" && (
+        <div className="space-y-1">
+          <div className="text-xs font-medium text-white/60">
+            Distance to Hole (ft)
+          </div>
+          <Input
+            type="number"
+            value={shot.distanceRemaining || ""}
+            onChange={(e) =>
+              update({ distanceRemaining: parseInt(e.target.value) || 0 })
+            }
+            className="h-10 text-sm"
+            placeholder="20"
+            min={0}
+            max={200}
           />
         </div>
       )}

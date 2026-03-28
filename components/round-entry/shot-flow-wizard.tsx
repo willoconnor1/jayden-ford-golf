@@ -125,8 +125,9 @@ export function ShotFlowWizard({
     }
 
     if (currentShot.result === "green") {
-      // Reached green — start putting
-      setPutts([defaultPutt()]);
+      // Reached green — start putting, carry over distance to hole as putt distance
+      const puttDist = currentShot.distanceRemaining || 0;
+      setPutts([{ ...defaultPutt(), distance: puttDist }]);
       setPhase("putt");
       return;
     }

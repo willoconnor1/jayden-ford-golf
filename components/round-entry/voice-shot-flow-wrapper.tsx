@@ -168,7 +168,8 @@ export function VoiceShotFlowWrapper({
     }
 
     if (currentShot.result === "green") {
-      setPutts([defaultPutt()]);
+      const puttDist = currentShot.distanceRemaining || 0;
+      setPutts([{ ...defaultPutt(), distance: puttDist }]);
       setPhase("putt");
       return;
     }
@@ -256,9 +257,11 @@ export function VoiceShotFlowWrapper({
   let subtitle = "";
   if (phase === "shot") {
     const lieLabel = shots[currentShotIndex]?.lie.replace("-", " ") || "";
-    subtitle = `Shot ${currentShotIndex + 1}${currentShotIndex > 0 ? ` · ${lieLabel}` : ""}`;
+    const targetDist = shots[currentShotIndex]?.targetDistance;
+    subtitle = `Shot ${currentShotIndex + 1}${currentShotIndex > 0 ? ` · ${lieLabel}` : ""}${targetDist > 0 ? ` · ${targetDist} yds` : ""}`;
   } else if (phase === "putt") {
-    subtitle = `Putt ${currentPuttIndex + 1}`;
+    const puttDist = putts[currentPuttIndex]?.distance;
+    subtitle = `Putt ${currentPuttIndex + 1}${puttDist > 0 ? ` · ${puttDist} ft` : ""}`;
   } else {
     subtitle = "Summary";
   }
@@ -303,7 +306,7 @@ export function VoiceShotFlowWrapper({
               onChange={handleShotChange}
               onComplete={handleShotComplete}
               onBack={history.length > 0 ? goBack : undefined}
-              isDetailed={false}
+              isDetailed={true}
             />
           )}
 
@@ -314,7 +317,7 @@ export function VoiceShotFlowWrapper({
               onChange={handlePuttChange}
               onComplete={handlePuttComplete}
               onBack={goBack}
-              isDetailed={false}
+              isDetailed={true}
             />
           )}
 

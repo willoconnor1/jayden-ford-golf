@@ -60,7 +60,7 @@ function getSystemPrompt(templateType: TemplateType, phase: "shot" | "putt"): st
         `- club: one of ${CLUBS_LIST}\n` +
         `- result: one of ${RESULTS_LIST}\n` +
         '- direction: array of "left" | "right" — shot direction(s). Infer from "left rough", "right bunker", etc.\n' +
-        '- missX: number (feet, negative=left, positive=right) — convert yards to feet by multiplying by 3. E.g. "20 yards left" = -60\n' +
+        '- missX: number (yards, negative=left, positive=right) — lateral miss in yards. E.g. "20 yards left" = -20\n' +
         '- distanceRemaining: number (yards) — distance to green after shot\n' +
         '- holeShape: one of "straight", "dogleg-left", "dogleg-right"'
       );
@@ -71,8 +71,9 @@ function getSystemPrompt(templateType: TemplateType, phase: "shot" | "putt"): st
         `- club: one of ${CLUBS_LIST}\n` +
         `- result: one of ${RESULTS_LIST}\n` +
         '- direction: array of "left" | "right" | "short" | "long"\n' +
-        '- missX: number (feet, negative=left, positive=right) — miss distance laterally\n' +
-        '- missY: number (feet, negative=short, positive=long) — miss distance in depth'
+        '- missX: number (yards, negative=left, positive=right) — lateral miss in yards\n' +
+        '- missY: number (yards, negative=short, positive=long) — depth miss in yards\n' +
+        '- distanceRemaining: number — if result is "green", return feet to hole; otherwise return yards to green'
       );
     case "approach":
       return (
@@ -82,9 +83,9 @@ function getSystemPrompt(templateType: TemplateType, phase: "shot" | "putt"): st
         `- result: one of ${RESULTS_LIST}\n` +
         '- intent: one of "green", "lay-up", "recovery"\n' +
         '- direction: array of "left" | "right" | "short" | "long"\n' +
-        '- missX: number (feet, negative=left, positive=right)\n' +
-        '- missY: number (feet, negative=short, positive=long)\n' +
-        '- distanceRemaining: number (yards or feet from hole — use feet if < 50, else yards)'
+        '- missX: number (yards, negative=left, positive=right) — lateral miss in yards\n' +
+        '- missY: number (yards, negative=short, positive=long) — depth miss in yards\n' +
+        '- distanceRemaining: number — if result is "green", return feet to hole (e.g. "8 feet from the hole" = 8); otherwise return yards to green'
       );
     case "chip":
       return (
