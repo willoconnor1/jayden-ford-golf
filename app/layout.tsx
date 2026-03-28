@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Great_Vibes } from "next/font/google";
+import { Inter, JetBrains_Mono, Cormorant_Garamond } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/components/auth-provider";
 import "./globals.css";
@@ -14,9 +14,9 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
-const greatVibes = Great_Vibes({
+const cormorantGaramond = Cormorant_Garamond({
   variable: "--font-script",
-  weight: "400",
+  weight: ["300", "400", "600"],
   subsets: ["latin"],
 });
 
@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} ${greatVibes.variable} dark h-full antialiased`}
+      className={`${inter.variable} ${jetbrainsMono.variable} ${cormorantGaramond.variable} dark h-full antialiased`}
     >
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
