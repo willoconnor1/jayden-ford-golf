@@ -102,14 +102,14 @@ export default function AdminPage() {
               <div className="flex justify-between items-start">
                 <div>
                   <p className="font-semibold">{u.name}</p>
-                  <p className="text-xs text-muted-foreground">{u.email}</p>
+                  <p className="text-xs text-white/60">{u.email}</p>
                 </div>
                 <Badge variant="secondary">
                   {u.roundCount} round{u.roundCount === 1 ? "" : "s"}
                 </Badge>
               </div>
               {u.avgScore > 0 && (
-                <p className="text-sm text-muted-foreground mt-2">
+                <p className="text-sm text-white/60 mt-2">
                   Avg score: {u.avgScore}
                 </p>
               )}
@@ -121,7 +121,7 @@ export default function AdminPage() {
       {/* Filter indicator */}
       {filterUser !== "all" && (
         <div className="flex items-center gap-2 mb-4">
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-white/60">
             Showing rounds for:{" "}
             <strong>
               {data.users.find((u) => u.id === filterUser)?.name}
@@ -139,7 +139,7 @@ export default function AdminPage() {
       {/* Rounds list */}
       <div className="space-y-2">
         {sorted.length === 0 ? (
-          <p className="text-center text-muted-foreground py-8">
+          <p className="text-center text-white/60 py-8">
             No rounds recorded yet.
           </p>
         ) : (
@@ -156,13 +156,13 @@ export default function AdminPage() {
                         <span className="font-semibold text-sm">
                           {round.userName}
                         </span>
-                        <span className="text-muted-foreground text-xs">·</span>
+                        <span className="text-white/60 text-xs">·</span>
                         <span className="text-sm">{round.course.name}</span>
-                        <span className="text-muted-foreground text-xs">
+                        <span className="text-white/60 text-xs">
                           ({round.course.tees})
                         </span>
                       </div>
-                      <p className="text-xs text-muted-foreground mt-0.5">
+                      <p className="text-xs text-white/60 mt-0.5">
                         {format(new Date(round.date), "MMM d, yyyy")}
                       </p>
                     </div>
@@ -173,7 +173,7 @@ export default function AdminPage() {
                           diff < 0
                             ? "text-primary"
                             : diff === 0
-                              ? "text-muted-foreground"
+                              ? "text-white/60"
                               : "text-red-500"
                         }`}
                       >

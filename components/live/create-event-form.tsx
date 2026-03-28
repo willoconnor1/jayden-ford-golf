@@ -90,11 +90,11 @@ export function CreateEventForm() {
           <div className="space-y-3">
             {/* Front 9 */}
             <div>
-              <p className="text-xs text-muted-foreground mb-1.5">Front 9</p>
+              <p className="text-xs text-white/60 mb-1.5">Front 9</p>
               <div className="grid grid-cols-9 gap-1">
                 {holePars.slice(0, 9).map((par, i) => (
                   <div key={i} className="text-center">
-                    <p className="text-[10px] text-muted-foreground mb-0.5">{i + 1}</p>
+                    <p className="text-[10px] text-white/60 mb-0.5">{i + 1}</p>
                     <button
                       type="button"
                       className="w-full h-8 rounded border text-sm font-medium bg-background hover:bg-muted transition-colors"
@@ -108,11 +108,11 @@ export function CreateEventForm() {
             </div>
             {/* Back 9 */}
             <div>
-              <p className="text-xs text-muted-foreground mb-1.5">Back 9</p>
+              <p className="text-xs text-white/60 mb-1.5">Back 9</p>
               <div className="grid grid-cols-9 gap-1">
                 {holePars.slice(9, 18).map((par, i) => (
                   <div key={i + 9} className="text-center">
-                    <p className="text-[10px] text-muted-foreground mb-0.5">{i + 10}</p>
+                    <p className="text-[10px] text-white/60 mb-0.5">{i + 10}</p>
                     <button
                       type="button"
                       className="w-full h-8 rounded border text-sm font-medium bg-background hover:bg-muted transition-colors"
@@ -124,7 +124,7 @@ export function CreateEventForm() {
                 ))}
               </div>
             </div>
-            <p className="text-xs text-muted-foreground text-right">
+            <p className="text-xs text-white/60 text-right">
               Total Par: {holePars.reduce((a, b) => a + b, 0)}
             </p>
           </div>
