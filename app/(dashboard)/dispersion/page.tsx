@@ -73,7 +73,7 @@ export default function DispersionPage() {
         <Card>
           <CardContent className="py-12 text-center">
             <h2 className="text-lg font-semibold mb-2">No shot data yet</h2>
-            <p className="text-sm text-muted-foreground max-w-md mx-auto">
+            <p className="text-sm text-white/60 max-w-md mx-auto">
               When entering a round, expand the &quot;More&quot; section on each
               hole and click &quot;Track shots&quot; to record where each shot
               lands relative to your target.
@@ -140,14 +140,14 @@ export default function DispersionPage() {
             <CardHeader className="pb-2">
               <CardTitle className="text-lg">
                 Dispersion Pattern
-                <span className="text-sm font-normal text-muted-foreground ml-2">
+                <span className="text-sm font-normal text-white/60 ml-2">
                   ({shots.length} shot{shots.length !== 1 ? "s" : ""})
                 </span>
               </CardTitle>
             </CardHeader>
             <CardContent>
               {shots.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-8">
+                <p className="text-sm text-white/60 text-center py-8">
                   No shots match the current filters
                 </p>
               ) : (
@@ -264,7 +264,7 @@ function StatCard({ label, value }: { label: string; value: string }) {
   return (
     <Card>
       <CardContent className="py-3 px-4">
-        <p className="text-xs text-muted-foreground">{label}</p>
+        <p className="text-xs text-white/60">{label}</p>
         <p className="text-sm font-bold tabular-nums">{value}</p>
       </CardContent>
     </Card>

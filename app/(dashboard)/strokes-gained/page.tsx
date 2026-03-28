@@ -106,7 +106,7 @@ export default function StrokesGainedPage() {
             ].map((item) => (
               <Card key={item.label} className={cn(item.label === "Total" && "col-span-2 sm:col-span-1")}>
                 <CardContent className="pt-3 pb-2 px-3 sm:pt-4 sm:pb-3 sm:px-4">
-                  <p className="text-[10px] sm:text-xs text-muted-foreground">{item.label}</p>
+                  <p className="text-[10px] sm:text-xs text-white/60">{item.label}</p>
                   <p
                     className={cn(
                       "text-xl sm:text-2xl font-bold tabular-nums",
@@ -147,7 +147,7 @@ export default function StrokesGainedPage() {
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 text-center">
+            <p className="text-[10px] sm:text-xs text-white/60 mt-1 text-center">
               Blue = gaining vs PGA Tour, Red = losing
             </p>
           </CardContent>
@@ -213,7 +213,7 @@ export default function StrokesGainedPage() {
           <CardHeader className="pb-2">
             <CardTitle className="text-base sm:text-lg">Understanding Strokes Gained</CardTitle>
           </CardHeader>
-          <CardContent className="text-sm text-muted-foreground space-y-2">
+          <CardContent className="text-sm text-white/60 space-y-2">
             <p>
               <strong>Strokes Gained</strong> measures how many strokes you gain
               (or lose) compared to a PGA Tour player from the same position.

@@ -52,10 +52,10 @@ function DrillCard({ drill }: { drill: Drill }) {
             </Badge>
           </div>
         </div>
-        <p className="text-xs text-muted-foreground mb-2">
+        <p className="text-xs text-white/60 mb-2">
           {drill.description}
         </p>
-        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+        <div className="flex items-center gap-3 text-xs text-white/60">
           <span>{drill.duration}</span>
           <span>Target: {drill.targetStat}</span>
         </div>
@@ -99,7 +99,7 @@ function WeaknessSummary({ focuses }: { focuses: PracticeFocus[] }) {
               </span>
             </div>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-white/60">
               {focus.description}
             </p>
 
@@ -119,7 +119,7 @@ function WeaknessSummary({ focuses }: { focuses: PracticeFocus[] }) {
                 {focus.suggestedDrills.map((drill) => (
                   <div
                     key={drill.id}
-                    className="text-xs text-muted-foreground flex justify-between items-center"
+                    className="text-xs text-white/60 flex justify-between items-center"
                   >
                     <span>{drill.name}</span>
                     <span>{drill.duration}</span>
@@ -199,7 +199,7 @@ export default function PracticePage() {
                     >
                       {CATEGORY_LABELS[cat]}
                     </Badge>
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-sm text-white/60">
                       {drills.length} drills
                     </span>
                   </h2>

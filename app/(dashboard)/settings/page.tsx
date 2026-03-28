@@ -111,7 +111,7 @@ export default function SettingsPage() {
               <CardTitle className="text-lg">Data Backup</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-white/60">
                 Export your rounds and goals as a JSON file for safekeeping.
                 Import to restore data on a new device or after clearing your
                 browser.
@@ -138,7 +138,7 @@ export default function SettingsPage() {
               <CardTitle className="text-lg">Demo Data</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-white/60">
                 Remove the 10 pre-loaded demo rounds. This only deletes seed
                 data — your manually entered rounds are kept.
               </p>
