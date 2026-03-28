@@ -41,7 +41,7 @@ export default function StrokesGainedPage() {
   if (rounds.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="text-4xl mb-4">&#9971;</div>
+        <div className="text-4xl mb-4 text-muted-foreground">—</div>
         <h2 className="text-xl font-bold mb-2">No Rounds Yet</h2>
         <p className="text-muted-foreground mb-4">
           Log at least one round to see your strokes gained analysis.

@@ -71,7 +71,7 @@ export default function DashboardPage() {
   if (rounds.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <div className="text-6xl mb-4">&#9971;</div>
+        <div className="text-4xl mb-4 text-muted-foreground">—</div>
         <h1 className="text-2xl font-bold mb-2">Welcome, {firstName}</h1>
         <p className="text-muted-foreground mb-6 max-w-md">
           Track your rounds, analyze your strokes gained, and get personalized

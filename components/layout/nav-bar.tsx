@@ -47,8 +47,8 @@ export function NavBar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex md:w-60 md:flex-col md:fixed md:inset-y-0 border-r border-border bg-card">
-        <div className="flex h-14 items-center px-4 border-b border-border">
+      <aside className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 border-r border-border bg-sidebar">
+        <div className="flex h-14 items-center px-5 border-b border-border">
           <Link href="/" className="flex items-center gap-2 font-bold text-primary">
             <span className="bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
               {initials}
@@ -59,21 +59,21 @@ export function NavBar() {
             </div>
           </Link>
         </div>
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        <nav className="flex-1 px-4 py-5 space-y-1.5">
           {links.map((link) => {
             const isActive =
               link.href === "/"
                 ? pathname === "/"
-                : pathname.startsWith(link.href);
+                : pathname === link.href || pathname.startsWith(link.href + "/");
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150 border-l-[3px]",
                   isActive
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                    ? "bg-primary/10 text-primary border-primary font-semibold"
+                    : "text-muted-foreground hover:bg-accent/10 hover:text-foreground border-transparent"
                 )}
               >
                 <link.icon className="h-4 w-4" />
@@ -82,10 +82,10 @@ export function NavBar() {
             );
           })}
         </nav>
-        <div className="px-3 py-4 border-t border-border">
+        <div className="px-4 py-4 border-t border-border">
           <button
             onClick={logout}
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors w-full"
+            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent/10 hover:text-foreground transition-all duration-150 w-full border-l-[3px] border-transparent"
           >
             <LogOut className="h-4 w-4" />
             Sign out
@@ -100,7 +100,7 @@ export function NavBar() {
             const isActive =
               link.href === "/"
                 ? pathname === "/"
-                : pathname.startsWith(link.href);
+                : pathname === link.href || pathname.startsWith(link.href + "/");
             return (
               <Link
                 key={link.href}
