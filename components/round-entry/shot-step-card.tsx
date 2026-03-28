@@ -81,7 +81,7 @@ export function ShotStepCard({
           label="Hole Shape"
           options={HOLE_SHAPES}
           value={holeShape}
-          onChange={onHoleShapeChange}
+          onChange={(v) => v && onHoleShapeChange(v)}
           columns={3}
           activeColor="bg-slate-600"
         />
@@ -111,7 +111,11 @@ export function ShotStepCard({
           value={shot.intent}
           onChange={(v) => update({ intent: v as ShotIntent })}
           columns={3}
-          activeColor="bg-violet-600"
+          activeColorMap={{
+            "green": "bg-green-500/75",
+            "lay-up": "bg-yellow-500",
+            "recovery": "bg-orange-500",
+          }}
         />
       )}
 
@@ -122,18 +126,29 @@ export function ShotStepCard({
         value={shot.result}
         onChange={(v) => update({ result: v as ShotResult })}
         columns={3}
-        activeColor="bg-primary"
+        activeColorMap={{
+          "fairway": "bg-green-500/75",
+          "green": "bg-green-500/75",
+          "holed": "bg-green-500",
+          "rough": "bg-red-400",
+          "sand": "bg-red-400",
+          "penalty-area": "bg-red-500",
+          "out-of-bounds": "bg-red-500",
+          "tree-trouble": "bg-red-400",
+          "abnormal": "bg-red-400",
+        }}
       />
 
       {/* Miss Direction — only for miss results */}
       {shot.result && shot.result !== "fairway" && shot.result !== "green" && shot.result !== "holed" && (
-        <PillSelector
+        <PillSelector<ShotDirection>
           label="Miss Direction"
           options={SHOT_DIRECTIONS}
           value={shot.direction}
-          onChange={(v) => update({ direction: v as ShotDirection })}
+          onChange={(v) => update({ direction: v })}
           columns={4}
           activeColor="bg-blue-600"
+          multiSelect
         />
       )}
 

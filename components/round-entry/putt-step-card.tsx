@@ -108,8 +108,8 @@ export function PuttStepCard({
             className={cn(
               "py-3 text-sm font-semibold rounded-lg border-2 transition-colors",
               putt.made
-                ? "bg-primary text-white border-primary"
-                : "bg-background border-border text-muted-foreground hover:border-primary/30"
+                ? "bg-green-400/50 border-green-400/50"
+                : "bg-background border-border text-muted-foreground hover:border-green-300"
             )}
           >
             Made
@@ -148,7 +148,11 @@ export function PuttStepCard({
             value={putt.speed}
             onChange={(v) => update({ speed: v as PuttSpeed })}
             columns={3}
-            activeColor="bg-blue-600"
+            activeColorMap={{
+              "good-speed": "bg-green-500/75",
+              "short": "bg-red-400",
+              "too-firm": "bg-red-400",
+            }}
             allowDeselect
           />
 

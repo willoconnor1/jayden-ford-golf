@@ -126,4 +126,23 @@
   html {
     @apply font-sans;
   }
+  button,
+  a,
+  [role="button"],
+  [type="submit"],
+  [type="reset"],
+  summary {
+    transition: transform 0.15s ease;
+  }
+  button:hover,
+  a:hover,
+  [role="button"]:hover,
+  [type="submit"]:hover,
+  [type="reset"]:hover,
+  summary:hover {
+    transform: translateY(-1px);
+  }
+  button:disabled:hover {
+    transform: none;
+  }
 }

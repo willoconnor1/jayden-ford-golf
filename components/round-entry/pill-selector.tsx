@@ -7,25 +7,67 @@ interface PillOption<T extends string> {
   label: string;
 }
 
-interface PillSelectorProps<T extends string> {
+interface PillSelectorBaseProps<T extends string> {
   options: PillOption<T>[];
-  value: T | undefined;
-  onChange: (value: T) => void;
   columns?: number;
-  activeColor?: string; // tailwind bg class e.g. "bg-blue-600"
+  activeColor?: string;
+  activeColorMap?: Partial<Record<T, string>>;
   label?: string;
   allowDeselect?: boolean;
 }
 
-export function PillSelector<T extends string>({
-  options,
-  value,
-  onChange,
-  columns = 3,
-  activeColor = "bg-primary",
-  label,
-  allowDeselect = false,
-}: PillSelectorProps<T>) {
+interface SinglePillSelectorProps<T extends string> extends PillSelectorBaseProps<T> {
+  multiSelect?: false;
+  value: T | undefined;
+  onChange: (value: T | undefined) => void;
+}
+
+interface MultiPillSelectorProps<T extends string> extends PillSelectorBaseProps<T> {
+  multiSelect: true;
+  value: T[] | undefined;
+  onChange: (value: T[] | undefined) => void;
+}
+
+type PillSelectorProps<T extends string> = SinglePillSelectorProps<T> | MultiPillSelectorProps<T>;
+
+export function PillSelector<T extends string>(props: PillSelectorProps<T>) {
+  const {
+    options,
+    columns = 3,
+    activeColor = "bg-primary",
+    activeColorMap,
+    label,
+    allowDeselect = true,
+    value,
+    onChange,
+  } = props;
+  const multi = props.multiSelect === true;
+
+  const isActive = (opt: T) =>
+    multi
+      ? Array.isArray(value) && (value as T[]).includes(opt)
+      : value === opt;
+
+  const handleClick = (opt: T) => {
+    if (multi) {
+      const current = Array.isArray(value) ? (value as T[]) : [];
+      const onChangeMulti = onChange as (value: T[] | undefined) => void;
+      if (current.includes(opt)) {
+        const next = current.filter((v) => v !== opt);
+        onChangeMulti(next.length > 0 ? next : undefined);
+      } else {
+        onChangeMulti([...current, opt]);
+      }
+    } else {
+      const onChangeSingle = onChange as (value: T | undefined) => void;
+      if (isActive(opt) && allowDeselect) {
+        onChangeSingle(undefined);
+      } else {
+        onChangeSingle(opt);
+      }
+    }
+  };
+
   return (
     <div className="space-y-1.5">
       {label && (
@@ -36,23 +78,18 @@ export function PillSelector<T extends string>({
         style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
       >
         {options.map((opt) => {
-          const isActive = value === opt.value;
+          const active = isActive(opt.value);
+          const optColor = activeColorMap?.[opt.value] ?? activeColor;
           return (
             <button
               key={opt.value}
               type="button"
-              onClick={() => {
-                if (isActive && allowDeselect) {
-                  onChange(undefined as unknown as T);
-                } else {
-                  onChange(opt.value);
-                }
-              }}
+              onClick={() => handleClick(opt.value)}
               className={cn(
                 "px-2 py-2 text-xs font-medium rounded-lg border transition-colors text-center",
                 "min-h-[36px] active:scale-95",
-                isActive
-                  ? `${activeColor} text-white border-transparent`
+                active
+                  ? `${optColor} text-white border-transparent`
                   : "bg-background border-border text-muted-foreground hover:text-foreground"
               )}
             >

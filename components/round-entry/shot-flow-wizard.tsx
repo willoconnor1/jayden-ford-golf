@@ -27,6 +27,7 @@ function defaultShot(lie: ShotData["lie"] = "tee", club: ShotData["club"] = "dri
     club,
     targetDistance,
     lie,
+    intent: "green",
     missX: 0,
     missY: 0,
   };

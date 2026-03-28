@@ -62,14 +62,14 @@ export function HoleSummaryCard({
         {hole.par >= 4 && (
           <div className="flex justify-between border rounded-lg px-3 py-2">
             <span className="text-muted-foreground">Fairway</span>
-            <span className={cn("font-medium", hole.fairwayHit === "yes" ? "text-primary" : "text-red-500")}>
+            <span className={cn("font-medium", hole.fairwayHit === "yes" ? "text-green-500" : "text-red-500")}>
               {hole.fairwayHit === "yes" ? "Hit" : "Missed"}
             </span>
           </div>
         )}
         <div className="flex justify-between border rounded-lg px-3 py-2">
           <span className="text-muted-foreground">GIR</span>
-          <span className={cn("font-medium", hole.greenInRegulation ? "text-primary" : "text-red-500")}>
+          <span className={cn("font-medium", hole.greenInRegulation ? "text-green-500" : "text-red-500")}>
             {hole.greenInRegulation ? "Yes" : "No"}
           </span>
         </div>
@@ -86,7 +86,7 @@ export function HoleSummaryCard({
         {hole.upAndDownAttempt && (
           <div className="flex justify-between border rounded-lg px-3 py-2">
             <span className="text-muted-foreground">Up & Down</span>
-            <span className={cn("font-medium", hole.upAndDownConverted ? "text-primary" : "text-red-500")}>
+            <span className={cn("font-medium", hole.upAndDownConverted ? "text-green-500" : "text-red-500")}>
               {hole.upAndDownConverted ? "Yes" : "No"}
             </span>
           </div>
@@ -94,7 +94,7 @@ export function HoleSummaryCard({
         {hole.sandSaveAttempt && (
           <div className="flex justify-between border rounded-lg px-3 py-2">
             <span className="text-muted-foreground">Sand Save</span>
-            <span className={cn("font-medium", hole.sandSaveConverted ? "text-primary" : "text-red-500")}>
+            <span className={cn("font-medium", hole.sandSaveConverted ? "text-green-500" : "text-red-500")}>
               {hole.sandSaveConverted ? "Yes" : "No"}
             </span>
           </div>
@@ -106,15 +106,20 @@ export function HoleSummaryCard({
         <div className="space-y-1">
           <div className="text-xs font-medium text-muted-foreground">Shots</div>
           <div className="space-y-0.5">
-            {hole.shots.map((s, i) => (
-              <div key={i} className="text-xs text-muted-foreground flex gap-2">
-                <span className="w-4 text-right font-mono">{i + 1}.</span>
-                <span className="capitalize">{s.club.replace("-", " ")}</span>
-                {s.result && (
-                  <span className="capitalize">→ {s.result.replace("-", " ")}</span>
-                )}
-              </div>
-            ))}
+            {hole.shots.map((s, i) => {
+              const isGoodResult = s.result === "fairway" || s.result === "green" || s.result === "holed";
+              return (
+                <div key={i} className="text-xs text-muted-foreground flex gap-2">
+                  <span className="w-4 text-right font-mono">{i + 1}.</span>
+                  <span className="capitalize">{s.club.replace("-", " ")}</span>
+                  {s.result && (
+                    <span className={cn("capitalize font-medium", isGoodResult ? "text-green-500" : "text-red-400")}>
+                      → {s.result.replace("-", " ")}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
             <div className="text-xs text-muted-foreground flex gap-2">
               <span className="w-4 text-right font-mono"></span>
               <span>{hole.putts} putt{hole.putts !== 1 ? "s" : ""}</span>

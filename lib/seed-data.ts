@@ -239,12 +239,12 @@ function generateShotsForHole(
       result = rand() < 0.6 ? "fairway" : "rough";
     }
 
-    // Direction based on miss
-    let direction: ShotDirection | undefined;
-    if (missX < -10) direction = "left";
-    else if (missX > 10) direction = "right";
-    else if (missY < -10) direction = "short";
-    else if (missY > 10) direction = "long";
+    // Direction based on miss (can be multiple, e.g. left + short)
+    const direction: ShotDirection[] = [];
+    if (missX < -10) direction.push("left");
+    else if (missX > 10) direction.push("right");
+    if (missY < -10) direction.push("short");
+    else if (missY > 10) direction.push("long");
 
     shots.push({
       club,
@@ -255,7 +255,7 @@ function generateShotsForHole(
       result,
       intent,
       distanceRemaining: Math.max(0, Math.round(remaining)),
-      direction,
+      direction: direction.length > 0 ? direction : undefined,
       penaltyDrop: penaltyDrop || undefined,
     });
 
