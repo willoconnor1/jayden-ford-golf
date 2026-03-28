@@ -84,36 +84,29 @@ export async function getCourseDetail(
 // ── Transform API tees → our CourseTeeData[] ─────────────────────
 
 function extractTees(apiTees: APITees): CourseTeeData[] {
+  // Use male tees if available, otherwise fall back to female
+  const teeList = apiTees.male ?? apiTees.female ?? Object.values(apiTees)[0];
+  if (!Array.isArray(teeList)) return [];
+
   const tees: CourseTeeData[] = [];
 
-  // Iterate over gender groups (male, female)
-  for (const [gender, teeList] of Object.entries(apiTees)) {
-    if (!Array.isArray(teeList)) continue;
+  for (const apiTee of teeList) {
+    if (!apiTee.holes || apiTee.holes.length === 0) continue;
 
-    for (const apiTee of teeList) {
-      if (!apiTee.holes || apiTee.holes.length === 0) continue;
+    const holePars = apiTee.holes.map((h) => h.par);
+    const holeDistances = apiTee.holes.map((h) => h.yardage);
 
-      const holePars = apiTee.holes.map((h) => h.par);
-      const holeDistances = apiTee.holes.map((h) => h.yardage);
-
-      // Add gender prefix to tee name if both genders exist
-      const hasMultipleGenders = Object.keys(apiTees).length > 1;
-      const displayName = hasMultipleGenders
-        ? `${apiTee.tee_name} (${gender})`
-        : apiTee.tee_name;
-
-      tees.push({
-        name: displayName,
-        rating: apiTee.course_rating ?? 72,
-        slope: apiTee.slope_rating ?? 113,
-        totalPar: apiTee.par_total ?? holePars.reduce((a, b) => a + b, 0),
-        totalDistance:
-          apiTee.total_yards ??
-          holeDistances.reduce((a, b) => a + b, 0),
-        holePars,
-        holeDistances,
-      });
-    }
+    tees.push({
+      name: apiTee.tee_name,
+      rating: apiTee.course_rating ?? 72,
+      slope: apiTee.slope_rating ?? 113,
+      totalPar: apiTee.par_total ?? holePars.reduce((a, b) => a + b, 0),
+      totalDistance:
+        apiTee.total_yards ??
+        holeDistances.reduce((a, b) => a + b, 0),
+      holePars,
+      holeDistances,
+    });
   }
 
   return tees;

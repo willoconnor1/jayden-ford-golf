@@ -118,13 +118,13 @@ export function DriverMissInput({ missX, onChange }: DriverMissInputProps) {
           {/* Miss line */}
           {missX !== 0 && (
             <line x1={CENTER_X} y1={CENTER_Y} x2={dotX} y2={CENTER_Y}
-              stroke="hsl(var(--destructive))" strokeWidth={1.5} strokeDasharray="4 2" />
+              stroke="rgba(74, 222, 128, 0.7)" strokeWidth={1.5} strokeDasharray="4 2" />
           )}
 
           {/* Draggable dot */}
           <circle
             cx={dotX} cy={CENTER_Y} r={7}
-            fill="hsl(var(--destructive))" stroke="white" strokeWidth={2}
+            fill="rgba(74, 222, 128, 0.5)" stroke="white" strokeWidth={2}
             className="drop-shadow-sm"
           />
         </svg>

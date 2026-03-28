@@ -70,6 +70,9 @@ export function ShotStepCard({
         {!isTeeShot && (
           <span className="ml-1 capitalize">· {shot.lie.replace("-", " ")}</span>
         )}
+        {!isTeeShot && shot.targetDistance > 0 && (
+          <span className="ml-1 font-semibold text-emerald-600">· {shot.targetDistance} yds to pin</span>
+        )}
       </div>
 
       {/* Hole Shape — tee shots on par 4/5 only */}
