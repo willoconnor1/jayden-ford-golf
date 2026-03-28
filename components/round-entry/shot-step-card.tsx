@@ -71,7 +71,7 @@ export function ShotStepCard({
           <span className="ml-1 capitalize">· {shot.lie.replace("-", " ")}</span>
         )}
         {!isTeeShot && shot.targetDistance > 0 && (
-          <span className="ml-1 font-semibold text-emerald-600">· {shot.targetDistance} yds to pin</span>
+          <span className="ml-1 font-semibold text-primary">· {shot.targetDistance} yds to pin</span>
         )}
       </div>
 
@@ -122,7 +122,7 @@ export function ShotStepCard({
         value={shot.result}
         onChange={(v) => update({ result: v as ShotResult })}
         columns={3}
-        activeColor="bg-emerald-600"
+        activeColor="bg-primary"
       />
 
       {/* Miss Direction — only for miss results */}
@@ -138,7 +138,7 @@ export function ShotStepCard({
       )}
 
       {/* Distance remaining */}
-      {shot.result && shot.result !== "fairway" && shot.result !== "green" && shot.result !== "holed" && (
+      {shot.result && shot.result !== "green" && shot.result !== "holed" && (
         <div className="space-y-1">
           <div className="text-xs font-medium text-muted-foreground">
             Distance Remaining (yds)

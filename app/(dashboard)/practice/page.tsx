@@ -90,7 +90,7 @@ function WeaknessSummary({ focuses }: { focuses: PracticeFocus[] }) {
               <span
                 className={cn(
                   "font-bold tabular-nums text-sm shrink-0",
-                  focus.sgValue >= 0 ? "text-green-600" : "text-red-500"
+                  focus.sgValue >= 0 ? "text-primary" : "text-red-500"
                 )}
               >
                 {focus.sgValue >= 0 ? "+" : ""}
@@ -147,7 +147,6 @@ export default function PracticePage() {
       <>
         <PageHeader title="Practice Plan" />
         <div className="text-center py-12">
-          <div className="text-4xl mb-4 text-muted-foreground">—</div>
           <h2 className="text-xl font-bold mb-2">Need Round Data First</h2>
           <p className="text-muted-foreground mb-4">
             Log a few rounds so we can analyze your game and create a

@@ -41,7 +41,6 @@ export default function StrokesGainedPage() {
   if (rounds.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="text-4xl mb-4 text-muted-foreground">—</div>
         <h2 className="text-xl font-bold mb-2">No Rounds Yet</h2>
         <p className="text-muted-foreground mb-4">
           Log at least one round to see your strokes gained analysis.
@@ -57,10 +56,10 @@ export default function StrokesGainedPage() {
   // Shorter labels for mobile bar chart
   const barData = sgAverages
     ? [
-        { category: "Tee", value: sgAverages.sgOffTheTee, fill: sgAverages.sgOffTheTee >= 0 ? "#22c55e" : "#ef4444" },
-        { category: "Approach", value: sgAverages.sgApproach, fill: sgAverages.sgApproach >= 0 ? "#22c55e" : "#ef4444" },
-        { category: "Short Game", value: sgAverages.sgAroundTheGreen, fill: sgAverages.sgAroundTheGreen >= 0 ? "#22c55e" : "#ef4444" },
-        { category: "Putting", value: sgAverages.sgPutting, fill: sgAverages.sgPutting >= 0 ? "#22c55e" : "#ef4444" },
+        { category: "Tee", value: sgAverages.sgOffTheTee, fill: sgAverages.sgOffTheTee >= 0 ? "#6BA3D6" : "#ef4444" },
+        { category: "Approach", value: sgAverages.sgApproach, fill: sgAverages.sgApproach >= 0 ? "#6BA3D6" : "#ef4444" },
+        { category: "Short Game", value: sgAverages.sgAroundTheGreen, fill: sgAverages.sgAroundTheGreen >= 0 ? "#6BA3D6" : "#ef4444" },
+        { category: "Putting", value: sgAverages.sgPutting, fill: sgAverages.sgPutting >= 0 ? "#6BA3D6" : "#ef4444" },
       ]
     : [];
 
@@ -105,7 +104,7 @@ export default function StrokesGainedPage() {
                   <p
                     className={cn(
                       "text-xl sm:text-2xl font-bold tabular-nums",
-                      item.value >= 0 ? "text-green-600" : "text-red-500"
+                      item.value >= 0 ? "text-primary" : "text-red-500"
                     )}
                   >
                     {item.value > 0 ? "+" : ""}
@@ -143,7 +142,7 @@ export default function StrokesGainedPage() {
               </ResponsiveContainer>
             </div>
             <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 text-center">
-              Green = gaining vs PGA Tour, Red = losing
+              Blue = gaining vs PGA Tour, Red = losing
             </p>
           </CardContent>
         </Card>
@@ -191,8 +190,8 @@ export default function StrokesGainedPage() {
                       <PolarRadiusAxis tick={{ fontSize: 9 }} />
                       <Radar
                         dataKey="value"
-                        stroke="#16a34a"
-                        fill="#16a34a"
+                        stroke="#6BA3D6"
+                        fill="#6BA3D6"
                         fillOpacity={0.3}
                       />
                     </RadarChart>

@@ -15,7 +15,7 @@ const SIZE = 200;
 const CENTER = SIZE / 2;
 const YARDS_ZOOM_STEPS = [10, 25, 50, 75, 100];
 const FEET_ZOOM_STEPS = [15, 30, 60, 100, 150];
-const DEFAULT_ZOOM_INDEX = 2;
+const DEFAULT_ZOOM_INDEX = 1;
 
 function getRings(maxVal: number): number[] {
   const step = maxVal <= 15 ? 3 : maxVal <= 30 ? 5 : maxVal <= 60 ? 10 : maxVal <= 100 ? 20 : 30;

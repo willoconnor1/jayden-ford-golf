@@ -49,7 +49,7 @@ function GoalCard({ goal }: { goal: Goal }) {
   }, [isAchieved, goal.isCompleted, goal.id, goal.statCategory, completeGoal]);
 
   return (
-    <Card className={cn(goal.isCompleted && "border-green-500/50 bg-green-50/50")}>
+    <Card className={cn(goal.isCompleted && "border-primary/50 bg-primary/5")}>
       <CardContent className="pt-3 pb-3 px-3 sm:px-4 space-y-3">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
@@ -63,7 +63,7 @@ function GoalCard({ goal }: { goal: Goal }) {
           </div>
           <div className="flex items-center gap-1.5 shrink-0">
             {goal.isCompleted ? (
-              <Badge className="bg-green-600 text-xs">Done</Badge>
+              <Badge className="bg-primary text-xs">Done</Badge>
             ) : daysLeft < 0 ? (
               <Badge variant="secondary" className="bg-red-100 text-red-700 text-xs">
                 Overdue
@@ -247,7 +247,7 @@ export default function GoalsPage() {
 
         {completedGoals.length > 0 && (
           <div className="space-y-3">
-            <h2 className="font-semibold text-green-700">Completed</h2>
+            <h2 className="font-semibold text-primary">Completed</h2>
             {completedGoals.map((goal) => (
               <GoalCard key={goal.id} goal={goal} />
             ))}

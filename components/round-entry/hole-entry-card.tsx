@@ -233,7 +233,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                 size="sm"
                 className={cn(
                   "h-9 px-3.5 text-xs",
-                  hole.fairwayHit === val && val === "yes" && "bg-green-600 text-white border-green-600 hover:bg-green-700",
+                  hole.fairwayHit === val && val === "yes" && "bg-primary text-white border-primary hover:bg-primary/90",
                   hole.fairwayHit === val && val === "no" && "bg-red-500 text-white border-red-500 hover:bg-red-600",
                   hole.fairwayHit === val && val === "na" && "bg-muted border-muted",
                 )}
@@ -256,7 +256,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
               size="sm"
               className={cn(
                 "h-9 px-3.5 text-xs",
-                hole.greenInRegulation && "bg-green-600 text-white border-green-600 hover:bg-green-700"
+                hole.greenInRegulation && "bg-primary text-white border-primary hover:bg-primary/90"
               )}
               onClick={() => update({ greenInRegulation: true })}
             >
@@ -331,7 +331,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                         <span className="text-xs text-amber-600 font-medium">miss</span>
                       )}
                       {!isMiss && hole.putts > 1 && (
-                        <span className="text-xs text-green-600 font-medium">made</span>
+                        <span className="text-xs text-primary font-medium">made</span>
                       )}
                     </div>
                     {isMiss && (() => {
@@ -419,7 +419,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                                   className={cn(
                                     "px-2.5 py-1 text-xs rounded-full border transition-colors",
                                     miss?.puttBreak === opt.value
-                                      ? "bg-emerald-600 text-white border-emerald-600"
+                                      ? "bg-primary text-white border-primary"
                                       : "bg-background border-border text-muted-foreground hover:text-foreground"
                                   )}
                                 >

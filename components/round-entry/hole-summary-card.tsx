@@ -62,14 +62,14 @@ export function HoleSummaryCard({
         {hole.par >= 4 && (
           <div className="flex justify-between border rounded-lg px-3 py-2">
             <span className="text-muted-foreground">Fairway</span>
-            <span className={cn("font-medium", hole.fairwayHit === "yes" ? "text-green-600" : "text-red-500")}>
+            <span className={cn("font-medium", hole.fairwayHit === "yes" ? "text-primary" : "text-red-500")}>
               {hole.fairwayHit === "yes" ? "Hit" : "Missed"}
             </span>
           </div>
         )}
         <div className="flex justify-between border rounded-lg px-3 py-2">
           <span className="text-muted-foreground">GIR</span>
-          <span className={cn("font-medium", hole.greenInRegulation ? "text-green-600" : "text-red-500")}>
+          <span className={cn("font-medium", hole.greenInRegulation ? "text-primary" : "text-red-500")}>
             {hole.greenInRegulation ? "Yes" : "No"}
           </span>
         </div>
@@ -86,7 +86,7 @@ export function HoleSummaryCard({
         {hole.upAndDownAttempt && (
           <div className="flex justify-between border rounded-lg px-3 py-2">
             <span className="text-muted-foreground">Up & Down</span>
-            <span className={cn("font-medium", hole.upAndDownConverted ? "text-green-600" : "text-red-500")}>
+            <span className={cn("font-medium", hole.upAndDownConverted ? "text-primary" : "text-red-500")}>
               {hole.upAndDownConverted ? "Yes" : "No"}
             </span>
           </div>
@@ -94,7 +94,7 @@ export function HoleSummaryCard({
         {hole.sandSaveAttempt && (
           <div className="flex justify-between border rounded-lg px-3 py-2">
             <span className="text-muted-foreground">Sand Save</span>
-            <span className={cn("font-medium", hole.sandSaveConverted ? "text-green-600" : "text-red-500")}>
+            <span className={cn("font-medium", hole.sandSaveConverted ? "text-primary" : "text-red-500")}>
               {hole.sandSaveConverted ? "Yes" : "No"}
             </span>
           </div>

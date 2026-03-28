@@ -19,7 +19,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/auth-provider";
 
-const links = [
+const baseLinks = [
   { href: "/", label: "Dashboard", mobileLabel: "Home", icon: LayoutDashboard },
   { href: "/rounds/new", label: "New Round", mobileLabel: "New", icon: PlusCircle },
   { href: "/rounds", label: "Rounds", mobileLabel: "Rounds", icon: ClipboardList },
@@ -30,12 +30,21 @@ const links = [
   { href: "/dispersion", label: "Dispersion", mobileLabel: "Shots", icon: Crosshair },
   { href: "/live", label: "Live", mobileLabel: "Live", icon: Radio },
   { href: "/settings", label: "Settings", mobileLabel: "Settings", icon: Settings },
-  { href: "/admin", label: "Admin", mobileLabel: "Admin", icon: ShieldCheck },
 ];
+
+const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? "")
+  .split(",")
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
 
 export function NavBar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+
+  const isAdmin = user?.email ? ADMIN_EMAILS.includes(user.email.toLowerCase()) : false;
+  const links = isAdmin
+    ? [...baseLinks, { href: "/admin", label: "Admin", mobileLabel: "Admin", icon: ShieldCheck }]
+    : baseLinks;
 
   const initials = user?.name
     ? user.name

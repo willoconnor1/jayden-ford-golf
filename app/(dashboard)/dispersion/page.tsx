@@ -66,7 +66,6 @@ export default function DispersionPage() {
       {!hasShots ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <div className="text-4xl mb-4 text-muted-foreground">—</div>
             <h2 className="text-lg font-semibold mb-2">No shot data yet</h2>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
               When entering a round, expand the &quot;More&quot; section on each

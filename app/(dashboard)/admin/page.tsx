@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/layout/page-header";
@@ -147,39 +148,41 @@ export default function AdminPage() {
             const diffStr =
               diff === 0 ? "E" : diff > 0 ? `+${diff}` : `${diff}`;
             return (
-              <Card key={round.id}>
-                <CardContent className="p-4 flex items-center justify-between">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-semibold text-sm">
-                        {round.userName}
-                      </span>
-                      <span className="text-muted-foreground text-xs">·</span>
-                      <span className="text-sm">{round.course.name}</span>
-                      <span className="text-muted-foreground text-xs">
-                        ({round.course.tees})
-                      </span>
+              <Link key={round.id} href={`/admin/rounds/${round.id}`}>
+                <Card className="cursor-pointer hover:bg-accent/5 transition-colors">
+                  <CardContent className="p-4 flex items-center justify-between">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-semibold text-sm">
+                          {round.userName}
+                        </span>
+                        <span className="text-muted-foreground text-xs">·</span>
+                        <span className="text-sm">{round.course.name}</span>
+                        <span className="text-muted-foreground text-xs">
+                          ({round.course.tees})
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {format(new Date(round.date), "MMM d, yyyy")}
+                      </p>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      {format(new Date(round.date), "MMM d, yyyy")}
-                    </p>
-                  </div>
-                  <div className="text-right ml-4 shrink-0">
-                    <p className="text-lg font-bold">{round.totalScore}</p>
-                    <p
-                      className={`text-xs font-medium ${
-                        diff < 0
-                          ? "text-green-600"
-                          : diff === 0
-                            ? "text-muted-foreground"
-                            : "text-red-500"
-                      }`}
-                    >
-                      {diffStr}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+                    <div className="text-right ml-4 shrink-0">
+                      <p className="text-lg font-bold">{round.totalScore}</p>
+                      <p
+                        className={`text-xs font-medium ${
+                          diff < 0
+                            ? "text-primary"
+                            : diff === 0
+                              ? "text-muted-foreground"
+                              : "text-red-500"
+                        }`}
+                      >
+                        {diffStr}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             );
           })
         )}

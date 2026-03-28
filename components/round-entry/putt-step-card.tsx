@@ -81,7 +81,7 @@ export function PuttStepCard({
         value={putt.puttBreak}
         onChange={(v) => update({ puttBreak: v as PuttBreak })}
         columns={4}
-        activeColor="bg-emerald-600"
+        activeColor="bg-primary"
         allowDeselect
       />
 
@@ -108,8 +108,8 @@ export function PuttStepCard({
             className={cn(
               "py-3 text-sm font-semibold rounded-lg border-2 transition-colors",
               putt.made
-                ? "bg-green-600 text-white border-green-600"
-                : "bg-background border-border text-muted-foreground hover:border-green-300"
+                ? "bg-primary text-white border-primary"
+                : "bg-background border-border text-muted-foreground hover:border-primary/30"
             )}
           >
             Made
