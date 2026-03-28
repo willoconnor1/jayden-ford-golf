@@ -100,14 +100,14 @@ export default function CoursesPage() {
               <Card key={course.name}>
                 <CardContent className="py-3 px-3 sm:px-4">
                   <div className="flex items-center gap-3">
-                    <span className="text-lg font-bold text-muted-foreground w-7 text-center shrink-0">
+                    <span className="text-lg font-bold text-white/60 w-7 text-center shrink-0">
                       {i + 1}
                     </span>
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-sm sm:text-base truncate">
                         {course.name}
                       </p>
-                      <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground mt-0.5">
+                      <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-white/60 mt-0.5">
                         <span>
                           {course.count} round{course.count === 1 ? "" : "s"}
                         </span>
@@ -142,7 +142,7 @@ export default function CoursesPage() {
         </h2>
 
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
           <Input
             value={query}
             onChange={(e) => handleSearch(e.target.value)}
@@ -150,7 +150,7 @@ export default function CoursesPage() {
             className="pl-9"
           />
           {isSearching && (
-            <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
+            <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-white/60" />
           )}
 
           {/* Search results dropdown */}
@@ -163,7 +163,7 @@ export default function CoursesPage() {
                 >
                   <p className="font-medium">{result.name}</p>
                   {(result.city || result.country) && (
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
+                    <div className="flex items-center gap-1 text-xs text-white/60 mt-0.5">
                       <MapPin className="h-3 w-3 shrink-0" />
                       {[result.city, result.state, result.country]
                         .filter(Boolean)
