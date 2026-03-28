@@ -57,7 +57,7 @@ function GoalCard({ goal }: { goal: Goal }) {
             <p className="font-medium text-sm">
               {STAT_LABELS[goal.statCategory]}
             </p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-white/60">
               Target: {formatStat(goal.targetValue, goal.statCategory)} by{" "}
               {format(new Date(goal.targetDate), "MMM d")}
             </p>
@@ -66,7 +66,7 @@ function GoalCard({ goal }: { goal: Goal }) {
             {goal.isCompleted ? (
               <Badge className="bg-primary text-xs">Done</Badge>
             ) : daysLeft < 0 ? (
-              <Badge variant="secondary" className="bg-red-100 text-red-700 text-xs">
+              <Badge variant="secondary" className="bg-red-500/20 text-red-400 text-xs">
                 Overdue
               </Badge>
             ) : (
@@ -75,7 +75,7 @@ function GoalCard({ goal }: { goal: Goal }) {
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-muted-foreground hover:text-destructive"
+              className="h-8 w-8 text-white/50 hover:text-destructive"
               onClick={() => {
                 deleteGoal(goal.id);
                 toast.success("Goal removed");
@@ -87,7 +87,7 @@ function GoalCard({ goal }: { goal: Goal }) {
         </div>
 
         <div className="space-y-1">
-          <div className="flex justify-between text-xs">
+          <div className="flex justify-between text-xs text-white/70">
             <span>
               Current: {formatStat(currentValue, goal.statCategory)}
             </span>
@@ -99,7 +99,7 @@ function GoalCard({ goal }: { goal: Goal }) {
             value={Math.max(0, Math.min(100, progress))}
             className="h-2"
           />
-          <p className="text-xs text-muted-foreground text-right">
+          <p className="text-xs text-white/60 text-right">
             {progress.toFixed(0)}% complete
           </p>
         </div>
