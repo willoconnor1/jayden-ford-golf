@@ -16,6 +16,7 @@ import { HoleData, CourseInfo, Round, EntryMode } from "@/lib/types";
 import { DEFAULT_HOLE_PARS } from "@/lib/constants";
 import { EntryModeSelector } from "./entry-mode-selector";
 import { ShotFlowWizard } from "./shot-flow-wizard";
+import { VoiceShotFlowWrapper } from "./voice-shot-flow-wrapper";
 import { calculateRoundStats } from "@/lib/stats/calculate-stats";
 import { ArrowLeft, ArrowRight, Save } from "lucide-react";
 import { toast } from "sonner";
@@ -412,7 +413,7 @@ export function RoundEntryWizard({ initialDraft }: RoundEntryWizardProps) {
       )}
 
       {/* Step 1: Shot Flow (Standard/Detailed mode) */}
-      {isShotFlowStep && (
+      {isShotFlowStep && entryMode !== "voice" && (
         <ShotFlowWizard
           holePars={course.holePars}
           holeDistances={course.holeDistances}
@@ -424,6 +425,19 @@ export function RoundEntryWizard({ initialDraft }: RoundEntryWizardProps) {
           }}
           initialState={initialDraft?.shotFlow ?? undefined}
           onStateChange={handleShotFlowStateChange}
+        />
+      )}
+
+      {/* Step 1: Voice Shot Flow */}
+      {isShotFlowStep && entryMode === "voice" && (
+        <VoiceShotFlowWrapper
+          holePars={course.holePars}
+          holeDistances={course.holeDistances}
+          onComplete={(flowHoles) => {
+            shotFlowStateRef.current = null;
+            setHoles(flowHoles);
+            setStep(summaryStep);
+          }}
         />
       )}
 

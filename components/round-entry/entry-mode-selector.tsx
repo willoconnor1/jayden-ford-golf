@@ -24,13 +24,18 @@ const MODES: { value: EntryMode; title: string; subtitle: string }[] = [
     title: "Detailed",
     subtitle: "Shot-by-shot + visual miss trackers",
   },
+  {
+    value: "voice",
+    title: "Voice (Beta)",
+    subtitle: "Speak your stats shot-by-shot",
+  },
 ];
 
 export function EntryModeSelector({ value, onChange }: EntryModeSelectorProps) {
   return (
     <div className="space-y-2">
       <div className="text-sm font-medium">Entry Mode</div>
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-4 gap-2">
         {MODES.map((mode) => (
           <button
             key={mode.value}
