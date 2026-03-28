@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { courses } from "@/lib/db/schema";
-import { rowToCourse } from "@/lib/db/helpers";
+import { courseToRow, rowToCourse } from "@/lib/db/helpers";
 import { searchCourses, apiCourseToSavedCourse } from "@/lib/golf-course-api";
 import { ilike } from "drizzle-orm";
 import type { SavedCourse } from "@/lib/types";
@@ -58,6 +58,23 @@ export async function GET(request: NextRequest) {
     const deduped = apiCourses.filter((c) => !cachedExtIds.has(c.externalId));
 
     const combined = [...cached, ...deduped].slice(0, limit);
+
+    // 5. Cache new API results in DB (background, don't block response)
+    if (deduped.length > 0) {
+      Promise.resolve().then(async () => {
+        for (const course of deduped) {
+          try {
+            await db
+              .insert(courses)
+              .values(courseToRow(course))
+              .onConflictDoNothing({ target: courses.id });
+          } catch {
+            // Ignore individual insert failures
+          }
+        }
+      });
+    }
+
     return NextResponse.json({ courses: combined, source: "mixed" });
   } catch (error) {
     console.error("Course search failed:", error);

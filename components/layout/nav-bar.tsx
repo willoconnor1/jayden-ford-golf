@@ -13,6 +13,7 @@ import {
   Radio,
   Settings,
   LogOut,
+  MapPinned,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/auth-provider";
@@ -21,6 +22,7 @@ const links = [
   { href: "/", label: "Dashboard", mobileLabel: "Home", icon: LayoutDashboard },
   { href: "/rounds/new", label: "New Round", mobileLabel: "New", icon: PlusCircle },
   { href: "/rounds", label: "Rounds", mobileLabel: "Rounds", icon: ClipboardList },
+  { href: "/courses", label: "Courses", mobileLabel: "Courses", icon: MapPinned },
   { href: "/strokes-gained", label: "Strokes Gained", mobileLabel: "SG", icon: TrendingUp },
   { href: "/goals", label: "Goals", mobileLabel: "Goals", icon: Target },
   { href: "/practice", label: "Practice", mobileLabel: "Practice", icon: Dumbbell },
