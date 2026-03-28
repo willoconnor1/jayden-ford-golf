@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { rounds, goals, courses } from "@/lib/db/schema";
 import {
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     for (const round of body.rounds) {
       const row = roundToRow(round, user.userId);
       if (dbRoundIds.has(round.id)) {
-        await db.update(rounds).set(row).where(eq(rounds.id, round.id));
+        await db.update(rounds).set(row).where(and(eq(rounds.id, round.id), eq(rounds.userId, user.userId)));
       } else {
         await db.insert(rounds).values(row);
       }
@@ -74,7 +74,7 @@ export async function POST(request: Request) {
     for (const goal of body.goals) {
       const row = goalToRow(goal, user.userId);
       if (dbGoalIds.has(goal.id)) {
-        await db.update(goals).set(row).where(eq(goals.id, goal.id));
+        await db.update(goals).set(row).where(and(eq(goals.id, goal.id), eq(goals.userId, user.userId)));
       } else {
         await db.insert(goals).values(row);
       }

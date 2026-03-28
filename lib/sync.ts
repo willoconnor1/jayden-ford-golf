@@ -1,4 +1,5 @@
 import type { Round, Goal, SavedCourse } from "@/lib/types";
+import { toast } from "sonner";
 
 const API_BASE = "/api";
 
@@ -25,9 +26,10 @@ function fireAndForget(fn: () => Promise<unknown>, label: string) {
   fn().catch((e) => {
     console.warn(`Background sync (${label}) failed, retrying in 2s:`, e);
     setTimeout(() => {
-      fn().catch((e2) =>
-        console.warn(`Background sync (${label}) retry failed:`, e2)
-      );
+      fn().catch((e2) => {
+        console.warn(`Background sync (${label}) retry failed:`, e2);
+        toast.error("Failed to save. Data saved locally — will retry.");
+      });
     }, 2000);
   });
 }
@@ -94,6 +96,14 @@ export function syncSaveCourse(course: SavedCourse) {
   );
 }
 
+export function syncDeleteCourse(id: string) {
+  if (!isDbConfigured()) return;
+  fireAndForget(
+    () => api(`/courses/${id}`, { method: "DELETE" }),
+    "delete course"
+  );
+}
+
 // ── Full sync (pull from DB → merge into local state) ─────────────
 
 export async function pullFromDb(): Promise<{
@@ -121,5 +131,6 @@ export async function pushToDb(
     });
   } catch (e) {
     console.warn("Push to DB failed:", e);
+    toast.error("Background sync failed. Data saved locally.");
   }
 }

@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/layout/page-header";
+import { PageBackground } from "@/components/layout/page-background";
 import { useRoundStore } from "@/stores/round-store";
 import { useHydration } from "@/hooks/use-hydration";
 import { Club, ShotLie } from "@/lib/types";
@@ -47,10 +48,13 @@ export default function DispersionPage() {
 
   if (!hydrated) {
     return (
-      <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-muted rounded w-48" />
-        <div className="h-64 bg-muted rounded-lg" />
-      </div>
+      <>
+        <PageBackground image="/te-arai-south.jpg" />
+        <div className="relative z-10 animate-pulse space-y-4">
+          <div className="h-8 bg-muted/60 rounded w-48" />
+          <div className="h-64 bg-muted/60 rounded-lg" />
+        </div>
+      </>
     );
   }
 
@@ -58,6 +62,8 @@ export default function DispersionPage() {
 
   return (
     <>
+      <PageBackground image="/te-arai-south.jpg" />
+      <div className="relative z-10">
       <PageHeader
         title="Shot Dispersion"
         description="Analyze where your shots miss relative to your target"
@@ -80,7 +86,7 @@ export default function DispersionPage() {
           <div className="space-y-3">
             {/* Club filter */}
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-muted-foreground">
+              <label className="text-xs font-medium text-white/70">
                 Club
               </label>
               <div className="flex flex-wrap gap-1.5">
@@ -104,7 +110,7 @@ export default function DispersionPage() {
 
             {/* Lie filter */}
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-muted-foreground">
+              <label className="text-xs font-medium text-white/70">
                 Lie
               </label>
               <div className="flex flex-wrap gap-1.5">
@@ -225,6 +231,7 @@ export default function DispersionPage() {
           )}
         </div>
       )}
+      </div>
     </>
   );
 }
@@ -245,7 +252,7 @@ function FilterPill({
         "px-2.5 py-1 rounded-full text-xs font-medium transition-colors border",
         active
           ? "bg-primary text-primary-foreground border-primary"
-          : "bg-card text-muted-foreground border-border hover:bg-accent"
+          : "bg-card/60 text-white/70 border-white/20 hover:bg-card/80"
       )}
     >
       {children}

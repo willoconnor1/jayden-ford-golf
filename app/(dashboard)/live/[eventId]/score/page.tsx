@@ -25,7 +25,7 @@ export default function ScoreEntryPage({
   if (error || !data) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">{error || "Event not found"}</p>
+        <p className="text-white/70">{error || "Event not found"}</p>
         <Link href="/live" className={buttonVariants({ variant: "outline" }) + " mt-4"}>
           Back to Live Events
         </Link>
@@ -36,7 +36,7 @@ export default function ScoreEntryPage({
   if (!playerId) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">You need to join this event to enter scores</p>
+        <p className="text-white/70">You need to join this event to enter scores</p>
         <Link href={`/live/${eventId}`} className={buttonVariants({ variant: "outline" }) + " mt-4"}>
           Go to Event Lobby
         </Link>
@@ -47,7 +47,7 @@ export default function ScoreEntryPage({
   if (data.event.status !== "active") {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">
+        <p className="text-white/70">
           {data.event.status === "lobby" ? "Event hasn't started yet" : "Event is completed"}
         </p>
         <Link href={`/live/${eventId}`} className={buttonVariants({ variant: "outline" }) + " mt-4"}>

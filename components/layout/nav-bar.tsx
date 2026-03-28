@@ -58,15 +58,15 @@ export function NavBar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 border-r border-border bg-sidebar">
-        <div className="flex h-14 items-center px-5 border-b border-border">
+      <aside className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 z-20 border-r border-white/10 bg-black/40 backdrop-blur-md">
+        <div className="flex h-14 items-center px-5 border-b border-white/10">
           <Link href="/" className="flex items-center gap-2 font-bold text-primary">
             <span className="bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
               {initials}
             </span>
             <div className="flex flex-col leading-tight">
               <span className="text-sm">{user?.name ?? "Golf Dashboard"}</span>
-              <span className="text-[10px] text-muted-foreground font-normal">Golf Performance</span>
+              <span className="text-[10px] text-white/50 font-normal">Golf Performance</span>
             </div>
           </Link>
         </div>
@@ -84,7 +84,7 @@ export function NavBar() {
                   "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150 border-l-[3px]",
                   isActive
                     ? "bg-primary/10 text-primary border-primary font-semibold"
-                    : "text-muted-foreground hover:bg-accent/10 hover:text-foreground border-transparent"
+                    : "text-white/60 hover:bg-white/10 hover:text-white border-transparent"
                 )}
               >
                 <link.icon className="h-4 w-4" />
@@ -93,10 +93,10 @@ export function NavBar() {
             );
           })}
         </nav>
-        <div className="px-4 py-4 border-t border-border">
+        <div className="px-4 py-4 border-t border-white/10">
           <button
             onClick={logout}
-            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent/10 hover:text-foreground transition-all duration-150 w-full border-l-[3px] border-transparent"
+            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/60 hover:bg-white/10 hover:text-white transition-all duration-150 w-full border-l-[3px] border-transparent"
           >
             <LogOut className="h-4 w-4" />
             Sign out

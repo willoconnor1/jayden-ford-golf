@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { PageHeader } from "@/components/layout/page-header";
+import { PageBackground } from "@/components/layout/page-background";
 import { RoundEntryWizard } from "@/components/round-entry/round-entry-wizard";
 import { useDraftRoundStore } from "@/stores/draft-round-store";
 import { Card, CardContent } from "@/components/ui/card";
@@ -31,11 +32,20 @@ export default function NewRoundPage() {
   const showPrompt = hydrated && draft !== null && choice === "undecided";
 
   if (!hydrated) {
-    return <PageHeader title="Log New Round" description="Enter your hole-by-hole data" />;
+    return (
+      <>
+        <PageBackground image="/jacks-point.jpg" />
+        <div className="relative z-10">
+          <PageHeader title="Log New Round" description="Enter your hole-by-hole data" />
+        </div>
+      </>
+    );
   }
 
   return (
     <>
+      <PageBackground image="/jacks-point.jpg" />
+      <div className="relative z-10">
       <PageHeader
         title={showPrompt ? "Round in Progress" : "Log New Round"}
         description={showPrompt ? undefined : "Enter your hole-by-hole data"}
@@ -80,6 +90,7 @@ export default function NewRoundPage() {
           }
         />
       )}
+      </div>
     </>
   );
 }

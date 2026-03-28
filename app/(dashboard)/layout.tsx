@@ -9,7 +9,7 @@ export default function DashboardLayout({
   return (
     <SyncProvider>
       <NavBar />
-      <main className="md:ml-64 pb-24 md:pb-8 px-4 md:px-8 lg:px-10 pt-4 md:pt-8">
+      <main className="md:ml-64 pb-24 md:pb-8 px-4 md:px-8 lg:px-10 pt-4 md:pt-8 relative">
         <div className="max-w-7xl mx-auto">
           {children}
         </div>

@@ -5,6 +5,7 @@ import { PlusCircle } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/layout/page-header";
+import { PageBackground } from "@/components/layout/page-background";
 import { useHydration } from "@/hooks/use-hydration";
 import { useStrokesGained } from "@/hooks/use-strokes-gained";
 import { useRoundStore } from "@/stores/round-store";
@@ -35,21 +36,24 @@ export default function StrokesGainedPage() {
   const { sgByRound, sgAverages } = useStrokesGained();
 
   if (!hydrated) {
-    return <div className="animate-pulse h-96 bg-muted rounded-lg" />;
+    return <><PageBackground image="/cap-kidnappers.jpg" /><div className="relative z-10 animate-pulse h-96 bg-muted/60 rounded-lg" /></>;
   }
 
   if (rounds.length === 0) {
     return (
-      <div className="text-center py-12">
-        <h2 className="text-xl font-bold mb-2">No Rounds Yet</h2>
-        <p className="text-muted-foreground mb-4">
-          Log at least one round to see your strokes gained analysis.
-        </p>
-        <Link href="/rounds/new" className={buttonVariants()}>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Log a Round
-        </Link>
-      </div>
+      <>
+        <PageBackground image="/cap-kidnappers.jpg" />
+        <div className="relative z-10 text-center py-12">
+          <h2 className="text-xl font-bold mb-2 text-white drop-shadow-md">No Rounds Yet</h2>
+          <p className="text-white/70 mb-4">
+            Log at least one round to see your strokes gained analysis.
+          </p>
+          <Link href="/rounds/new" className={buttonVariants()}>
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Log a Round
+          </Link>
+        </div>
+      </>
     );
   }
 
@@ -82,6 +86,8 @@ export default function StrokesGainedPage() {
 
   return (
     <>
+      <PageBackground image="/cap-kidnappers.jpg" />
+      <div className="relative z-10">
       <PageHeader
         title="Strokes Gained"
         description="Your performance vs PGA Tour average"
@@ -228,6 +234,7 @@ export default function StrokesGainedPage() {
             </p>
           </CardContent>
         </Card>
+      </div>
       </div>
     </>
   );

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { PageHeader } from "@/components/layout/page-header";
+import { PageBackground } from "@/components/layout/page-background";
 import { useHydration } from "@/hooks/use-hydration";
 import { useStrokesGained } from "@/hooks/use-strokes-gained";
 import { useRoundStore } from "@/stores/round-store";
@@ -139,23 +140,26 @@ export default function PracticePage() {
   const { sgAverages } = useStrokesGained();
 
   if (!hydrated) {
-    return <div className="animate-pulse h-96 bg-muted rounded-lg" />;
+    return <><PageBackground image="/tara-iti.jpg" /><div className="relative z-10 animate-pulse h-96 bg-muted/60 rounded-lg" /></>;
   }
 
   if (rounds.length === 0 || !sgAverages) {
     return (
       <>
-        <PageHeader title="Practice Plan" />
-        <div className="text-center py-12">
-          <h2 className="text-xl font-bold mb-2">Need Round Data First</h2>
-          <p className="text-muted-foreground mb-4">
-            Log a few rounds so we can analyze your game and create a
-            personalized practice plan.
-          </p>
-          <Link href="/rounds/new" className={buttonVariants()}>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Log a Round
-          </Link>
+        <PageBackground image="/tara-iti.jpg" />
+        <div className="relative z-10">
+          <PageHeader title="Practice Plan" />
+          <div className="text-center py-12">
+            <h2 className="text-xl font-bold mb-2 text-white drop-shadow-md">Need Round Data First</h2>
+            <p className="text-white/70 mb-4">
+              Log a few rounds so we can analyze your game and create a
+              personalized practice plan.
+            </p>
+            <Link href="/rounds/new" className={buttonVariants()}>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Log a Round
+            </Link>
+          </div>
         </div>
       </>
     );
@@ -165,6 +169,8 @@ export default function PracticePage() {
 
   return (
     <>
+      <PageBackground image="/tara-iti.jpg" />
+      <div className="relative z-10">
       <PageHeader
         title="Practice Plan"
         description="Personalized recommendations based on your strokes gained data"
@@ -206,6 +212,7 @@ export default function PracticePage() {
           )}
         </TabsContent>
       </Tabs>
+      </div>
     </>
   );
 }

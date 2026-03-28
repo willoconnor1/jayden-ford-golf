@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PageHeader } from "@/components/layout/page-header";
+import { PageBackground } from "@/components/layout/page-background";
 import { useGoalStore } from "@/stores/goal-store";
 import { useHydration } from "@/hooks/use-hydration";
 import { useGoalProgress } from "@/hooks/use-goal-progress";
@@ -119,7 +120,7 @@ export default function GoalsPage() {
   const [targetDate, setTargetDate] = useState("");
 
   if (!hydrated) {
-    return <div className="animate-pulse h-64 bg-muted rounded-lg" />;
+    return <><PageBackground image="/kinloch-2.webp" /><div className="relative z-10 animate-pulse h-64 bg-muted/60 rounded-lg" /></>;
   }
 
   const getCurrentValue = (cat: StatCategory): number => {
@@ -159,6 +160,8 @@ export default function GoalsPage() {
 
   return (
     <>
+      <PageBackground image="/kinloch-2.webp" />
+      <div className="relative z-10">
       <PageHeader title="Goals" description="Set targets and track your progress">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger
@@ -231,14 +234,14 @@ export default function GoalsPage() {
 
       <div className="space-y-6">
         {activeGoals.length === 0 && completedGoals.length === 0 && (
-          <div className="text-center py-12 text-muted-foreground">
+          <div className="text-center py-12 text-white/70">
             <p>No goals yet. Set your first goal to start tracking progress.</p>
           </div>
         )}
 
         {activeGoals.length > 0 && (
           <div className="space-y-3">
-            <h2 className="font-semibold">Active Goals</h2>
+            <h2 className="font-semibold text-white drop-shadow-sm">Active Goals</h2>
             {activeGoals.map((goal) => (
               <GoalCard key={goal.id} goal={goal} />
             ))}
@@ -247,12 +250,13 @@ export default function GoalsPage() {
 
         {completedGoals.length > 0 && (
           <div className="space-y-3">
-            <h2 className="font-semibold text-primary">Completed</h2>
+            <h2 className="font-semibold text-primary text-white drop-shadow-sm">Completed</h2>
             {completedGoals.map((goal) => (
               <GoalCard key={goal.id} goal={goal} />
             ))}
           </div>
         )}
+      </div>
       </div>
     </>
   );

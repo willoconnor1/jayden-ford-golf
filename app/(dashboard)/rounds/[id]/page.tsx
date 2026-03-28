@@ -33,7 +33,7 @@ export default function RoundDetailPage({
   if (!round) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">Round not found.</p>
+        <p className="text-white/70">Round not found.</p>
         <Link href="/rounds" className={buttonVariants({ variant: "outline" }) + " mt-4"}>
           Back to Rounds
         </Link>

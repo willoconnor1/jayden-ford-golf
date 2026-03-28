@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/layout/page-header";
+import { PageBackground } from "@/components/layout/page-background";
 import { useRoundStore } from "@/stores/round-store";
 import { useGoalStore } from "@/stores/goal-store";
 import { Download, Upload, Trash2 } from "lucide-react";
@@ -97,61 +98,64 @@ export default function SettingsPage() {
 
   return (
     <>
-      <PageHeader
-        title="Settings"
-        description="Manage your data and preferences"
-      />
+      <PageBackground image="/royal-18th.jpg" />
+      <div className="relative z-10">
+        <PageHeader
+          title="Settings"
+          description="Manage your data and preferences"
+        />
 
-      <div className="space-y-6 max-w-2xl">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Data Backup</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Export your rounds and goals as a JSON file for safekeeping.
-              Import to restore data on a new device or after clearing your
-              browser.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Button onClick={handleExport} variant="outline">
-                <Download className="mr-2 h-4 w-4" />
-                Export Data ({rounds.length} rounds)
-              </Button>
+        <div className="space-y-6 max-w-2xl">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Data Backup</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Export your rounds and goals as a JSON file for safekeeping.
+                Import to restore data on a new device or after clearing your
+                browser.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Button onClick={handleExport} variant="outline">
+                  <Download className="mr-2 h-4 w-4" />
+                  Export Data ({rounds.length} rounds)
+                </Button>
+                <Button
+                  onClick={handleImport}
+                  variant="outline"
+                  disabled={importing}
+                >
+                  <Upload className="mr-2 h-4 w-4" />
+                  {importing ? "Importing..." : "Import Backup"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Demo Data</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Remove the 10 pre-loaded demo rounds. This only deletes seed
+                data — your manually entered rounds are kept.
+              </p>
               <Button
-                onClick={handleImport}
+                onClick={() => {
+                  clearSeedData();
+                  toast.success("Seed data removed");
+                }}
                 variant="outline"
-                disabled={importing}
+                className="text-destructive hover:text-destructive"
               >
-                <Upload className="mr-2 h-4 w-4" />
-                {importing ? "Importing..." : "Import Backup"}
+                <Trash2 className="mr-2 h-4 w-4" />
+                Remove Seed Data
               </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Demo Data</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Remove the 10 pre-loaded demo rounds. This only deletes seed
-              data — your manually entered rounds are kept.
-            </p>
-            <Button
-              onClick={() => {
-                clearSeedData();
-                toast.success("Seed data removed");
-              }}
-              variant="outline"
-              className="text-destructive hover:text-destructive"
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              Remove Seed Data
-            </Button>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </>
   );

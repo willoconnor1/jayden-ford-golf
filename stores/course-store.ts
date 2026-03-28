@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { SavedCourse, CourseInfo } from "@/lib/types";
-import { syncSaveCourse } from "@/lib/sync";
+import { syncSaveCourse, syncDeleteCourse } from "@/lib/sync";
 
 interface CourseStore {
   // Persisted: cached/saved courses
@@ -36,12 +36,23 @@ export const useCourseStore = create<CourseStore>()(
 
       saveCourse: (course) => {
         set((state) => {
-          // Replace if same id exists, otherwise append
-          const exists = state.courses.find((c) => c.id === course.id);
-          const courses = exists
-            ? state.courses.map((c) => (c.id === course.id ? course : c))
-            : [...state.courses, course];
-          return { courses };
+          // Dedup by externalId first, then by id
+          const existsByExternal = course.externalId
+            ? state.courses.find((c) => c.externalId === course.externalId)
+            : null;
+          const existsById = state.courses.find((c) => c.id === course.id);
+          const existing = existsByExternal || existsById;
+
+          if (existing) {
+            // Update the existing entry (keep its id if matched by externalId)
+            const merged = { ...course, id: existing.id };
+            return {
+              courses: state.courses.map((c) =>
+                c.id === existing.id ? merged : c
+              ),
+            };
+          }
+          return { courses: [...state.courses, course] };
         });
         syncSaveCourse(course);
       },
@@ -50,6 +61,7 @@ export const useCourseStore = create<CourseStore>()(
         set((state) => ({
           courses: state.courses.filter((c) => c.id !== id),
         }));
+        syncDeleteCourse(id);
       },
 
       toggleFavorite: (id) => {
@@ -58,6 +70,8 @@ export const useCourseStore = create<CourseStore>()(
             c.id === id ? { ...c, isFavorite: !c.isFavorite } : c
           ),
         }));
+        const updated = get().courses.find((c) => c.id === id);
+        if (updated) syncSaveCourse(updated);
       },
 
       searchCourses: async (query) => {

@@ -61,15 +61,28 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
       );
       mergedGoals.push(...localOnlyGoals);
 
-      // ── Merge courses (DB is source of truth) ──────────────
+      // ── Merge courses (DB is source of truth, dedup by externalId) ──
       const remoteCourses = remote.courses ?? [];
-      const remoteCourseMap = new Map(remoteCourses.map((c) => [c.id, c]));
-
-      const mergedCourses = [...remoteCourses];
-      const localOnlyCourses = localCourses.filter(
-        (c) => !remoteCourseMap.has(c.id)
+      // Dedup remote courses by externalId (keep first occurrence)
+      const seenExtIds = new Set<string>();
+      const dedupedRemote = remoteCourses.filter((c) => {
+        if (c.externalId) {
+          if (seenExtIds.has(c.externalId)) return false;
+          seenExtIds.add(c.externalId);
+        }
+        return true;
+      });
+      const remoteCourseMap = new Map(dedupedRemote.map((c) => [c.id, c]));
+      const remoteExtIdSet = new Set(
+        dedupedRemote.map((c) => c.externalId).filter(Boolean)
       );
-      mergedCourses.push(...localOnlyCourses);
+
+      const mergedCourses = [...dedupedRemote];
+      const localOnlyCourses = localCourses.filter(
+        (c) =>
+          !remoteCourseMap.has(c.id) &&
+          !(c.externalId && remoteExtIdSet.has(c.externalId))
+      );
 
       // Update local stores with merged data
       useRoundStore.setState({ rounds: mergedRounds });

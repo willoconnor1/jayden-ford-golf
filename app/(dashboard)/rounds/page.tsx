@@ -6,6 +6,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/layout/page-header";
+import { PageBackground } from "@/components/layout/page-background";
 import { useRoundStore } from "@/stores/round-store";
 import { useHydration } from "@/hooks/use-hydration";
 import { calculateRoundStats } from "@/lib/stats/calculate-stats";
@@ -24,17 +25,22 @@ export default function RoundsPage() {
 
   if (!hydrated) {
     return (
-      <div className="animate-pulse space-y-3">
-        <div className="h-8 bg-muted rounded w-48" />
-        {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="h-20 bg-muted rounded-lg" />
-        ))}
-      </div>
+      <>
+        <PageBackground image="/kauri-cliffs.jpg" />
+        <div className="relative z-10 animate-pulse space-y-3">
+          <div className="h-8 bg-muted/60 rounded w-48" />
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="h-20 bg-muted/60 rounded-lg" />
+          ))}
+        </div>
+      </>
     );
   }
 
   return (
     <>
+      <PageBackground image="/kauri-cliffs.jpg" />
+      <div className="relative z-10">
       <PageHeader title="Round History" description={`${rounds.length} round${rounds.length === 1 ? "" : "s"}`}>
         <Link href="/rounds/new" className={buttonVariants()}>
           <PlusCircle className="mr-2 h-4 w-4" />
@@ -43,8 +49,8 @@ export default function RoundsPage() {
       </PageHeader>
 
       {sorted.length === 0 ? (
-        <div className="text-center py-12 text-muted-foreground">
-          <p>No rounds yet. Log your first round to get started.</p>
+        <div className="text-center py-12">
+          <p className="text-white/70">No rounds yet. Log your first round to get started.</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -107,6 +113,7 @@ export default function RoundsPage() {
           })}
         </div>
       )}
+      </div>
     </>
   );
 }

@@ -5,7 +5,7 @@ import { PlusCircle } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { PageHeader } from "@/components/layout/page-header";
+import { PageBackground } from "@/components/layout/page-background";
 import { StatGrid } from "@/components/dashboard/stat-grid";
 import { RecentRounds } from "@/components/dashboard/recent-rounds";
 import { useStats } from "@/hooks/use-stats";
@@ -57,30 +57,36 @@ export default function DashboardPage() {
 
   if (!hydrated) {
     return (
-      <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-muted rounded w-48" />
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="h-24 bg-muted rounded-lg" />
-          ))}
+      <>
+        <PageBackground image="/te-arai-north.jpg" />
+        <div className="relative z-10 animate-pulse space-y-4">
+          <div className="h-8 bg-muted/60 rounded w-48" />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="h-24 bg-muted/60 rounded-lg backdrop-blur-sm" />
+            ))}
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   if (rounds.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <h1 className="text-2xl font-bold mb-2">Welcome, {firstName}</h1>
-        <p className="text-muted-foreground mb-6 max-w-md">
-          Track your rounds, analyze your strokes gained, and get personalized
-          practice plans to sharpen your game.
-        </p>
-        <Link href="/rounds/new" className={buttonVariants({ size: "lg" })}>
-          <PlusCircle className="mr-2 h-5 w-5" />
-          Log Your First Round
-        </Link>
-      </div>
+      <>
+        <PageBackground image="/te-arai-north.jpg" />
+        <div className="relative z-10 flex flex-col items-center justify-center min-h-[60vh] text-center">
+          <h1 className="text-4xl sm:text-5xl font-bold mb-3 text-white drop-shadow-md">Welcome, {firstName}</h1>
+          <p className="text-lg text-white/70 mb-6 max-w-md drop-shadow-sm">
+            Track your rounds, analyze your strokes gained, and get personalized
+            practice plans to sharpen your game.
+          </p>
+          <Link href="/rounds/new" className={buttonVariants({ size: "lg" })}>
+            <PlusCircle className="mr-2 h-5 w-5" />
+            Log Your First Round
+          </Link>
+        </div>
+      </>
     );
   }
 
@@ -96,15 +102,27 @@ export default function DashboardPage() {
 
   return (
     <>
-      <PageHeader
-        title={`${firstName}'s Dashboard`}
-        description={`${rounds.length} round${rounds.length === 1 ? "" : "s"} tracked`}
-      >
-        <Link href="/rounds/new" className={buttonVariants()}>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          New Round
-        </Link>
-      </PageHeader>
+      <PageBackground image="/te-arai-north.jpg" />
+
+      {/* All content above the background */}
+      <div className="relative z-10">
+
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mb-6">
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white drop-shadow-md">
+            {firstName}&apos;s Dashboard
+          </h1>
+          <p className="text-sm text-white/70 mt-0.5 drop-shadow-sm">
+            {rounds.length} round{rounds.length === 1 ? "" : "s"} tracked
+          </p>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <Link href="/rounds/new" className={buttonVariants()}>
+            <PlusCircle className="mr-2 h-4 w-4" />
+            New Round
+          </Link>
+        </div>
+      </div>
 
       <div className="space-y-6">
         <StatGrid stats={aggregateStats} />
@@ -185,6 +203,7 @@ export default function DashboardPage() {
             )}
           </div>
         </div>
+      </div>
       </div>
     </>
   );
