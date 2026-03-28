@@ -105,7 +105,7 @@ export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
   const labelY = (CENTER + dotY) / 2 - 8;
 
   return (
-    <div className="flex flex-col items-center gap-1" onWheel={handleWheel}>
+    <div className="flex flex-col items-center gap-1 select-none" onWheel={handleWheel}>
       <div className="text-xs text-muted-foreground">
         Drag ball to miss position ({distanceFt.toFixed(1)}ft, {dirLabel}) · ±{maxFeet}ft
       </div>
@@ -114,7 +114,7 @@ export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
         width={SIZE}
         height={SIZE}
         className="touch-none cursor-crosshair rounded-lg border"
-        style={{ background: "oklch(0.96 0.02 145 / 0.3)" }}
+        style={{ background: "rgba(74, 222, 128, 0.15)" }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -146,16 +146,17 @@ export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
         {(missX !== 0 || missY !== 0) && (
           <>
             <line x1={CENTER} y1={CENTER} x2={dotX} y2={dotY}
-              stroke="hsl(var(--destructive))" strokeWidth={1.5} strokeDasharray="4 2" />
+              stroke="rgba(74, 222, 128, 0.7)" strokeWidth={1.5} strokeDasharray="4 2" />
             <text x={labelX} y={labelY} textAnchor="middle"
-              fontSize={10} fontWeight="bold" fill="hsl(var(--destructive))">
+              fontSize={10} fontWeight="bold" fill="rgba(34, 197, 94, 0.8)">
               {distanceFt.toFixed(1)}ft
             </text>
           </>
         )}
 
-        <circle cx={dotX} cy={dotY} r={8}
-          fill="white" stroke="oklch(0.4 0 0)" strokeWidth={1.5} className="drop-shadow-sm" />
+        {/* Golf ball */}
+        <circle cx={dotX} cy={dotY} r={8} fill="white" stroke="#b0b0b0" strokeWidth={1} className="drop-shadow-sm" />
+        <circle cx={dotX - 1} cy={dotY - 1} r={5} fill="none" stroke="#d4d4d4" strokeWidth={0.5} />
       </svg>
     </div>
   );

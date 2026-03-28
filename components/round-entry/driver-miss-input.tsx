@@ -65,7 +65,7 @@ export function DriverMissInput({ missX, onChange }: DriverMissInputProps) {
   const zoomOut = () => setZoomIndex((i) => Math.min(ZOOM_STEPS.length - 1, i + 1));
 
   return (
-    <div className="flex flex-col items-center gap-1">
+    <div className="flex flex-col items-center gap-1 select-none">
       <div className="text-xs text-muted-foreground">
         Drag to mark miss ({Math.round(absMiss)}yds {dirLabel}) · ±{maxYards}yds
       </div>
@@ -82,7 +82,8 @@ export function DriverMissInput({ missX, onChange }: DriverMissInputProps) {
           ref={svgRef}
           width={WIDTH}
           height={HEIGHT}
-          className="touch-none cursor-crosshair bg-muted/30 rounded-lg border"
+          className="touch-none cursor-crosshair rounded-lg border"
+          style={{ background: "rgba(74, 222, 128, 0.15)" }}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
@@ -121,12 +122,9 @@ export function DriverMissInput({ missX, onChange }: DriverMissInputProps) {
               stroke="rgba(74, 222, 128, 0.7)" strokeWidth={1.5} strokeDasharray="4 2" />
           )}
 
-          {/* Draggable dot */}
-          <circle
-            cx={dotX} cy={CENTER_Y} r={7}
-            fill="rgba(74, 222, 128, 0.5)" stroke="white" strokeWidth={2}
-            className="drop-shadow-sm"
-          />
+          {/* Golf ball */}
+          <circle cx={dotX} cy={CENTER_Y} r={8} fill="white" stroke="#b0b0b0" strokeWidth={1} className="drop-shadow-sm" />
+          <circle cx={dotX - 1} cy={CENTER_Y - 1} r={5} fill="none" stroke="#d4d4d4" strokeWidth={0.5} />
         </svg>
         <button
           type="button"

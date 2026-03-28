@@ -123,7 +123,7 @@ export function ShotMissInput({ missX, missY, onChange }: ShotMissInputProps) {
   const labelY = (CENTER + dotY) / 2 - 8;
 
   return (
-    <div className="flex flex-col items-center gap-1">
+    <div className="flex flex-col items-center gap-1 select-none">
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <span>Drag to mark miss ({Math.round(displayDist)}{unitLabel}) · ±{maxRange}{unitLabel}</span>
         <button
@@ -147,7 +147,8 @@ export function ShotMissInput({ missX, missY, onChange }: ShotMissInputProps) {
           ref={svgRef}
           width={SIZE}
           height={SIZE}
-          className="touch-none cursor-crosshair bg-muted/30 rounded-lg border"
+          className="touch-none cursor-crosshair rounded-lg border"
+          style={{ background: "rgba(74, 222, 128, 0.15)" }}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
@@ -186,8 +187,9 @@ export function ShotMissInput({ missX, missY, onChange }: ShotMissInputProps) {
             </>
           )}
 
-          <circle cx={dotX} cy={dotY} r={7}
-            fill="rgba(74, 222, 128, 0.5)" stroke="white" strokeWidth={2} className="drop-shadow-sm" />
+          {/* Golf ball */}
+          <circle cx={dotX} cy={dotY} r={8} fill="white" stroke="#b0b0b0" strokeWidth={1} className="drop-shadow-sm" />
+          <circle cx={dotX - 1} cy={dotY - 1} r={5} fill="none" stroke="#d4d4d4" strokeWidth={0.5} />
         </svg>
         <button
           type="button"
