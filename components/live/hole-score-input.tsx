@@ -32,7 +32,7 @@ export function HoleScoreInput({
         </Button>
         <div className="text-center w-12">
           <p className="text-2xl font-bold tabular-nums">{score}</p>
-          <p className="text-[10px] text-muted-foreground">
+          <p className="text-[10px] text-white/60">
             {diff === 0 ? "E" : diff > 0 ? `+${diff}` : diff}
           </p>
         </div>

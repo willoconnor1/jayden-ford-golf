@@ -111,7 +111,7 @@ export default function AdminRoundDetailPage({
             >
               <thead>
                 <tr className="border-b">
-                  <th className="py-1.5 px-1 text-left text-muted-foreground">
+                  <th className="py-1.5 px-1 text-left text-white/60">
                     Hole
                   </th>
                   {round.holes.slice(0, 9).map((_, i) => (
@@ -123,7 +123,7 @@ export default function AdminRoundDetailPage({
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-b text-muted-foreground">
+                <tr className="border-b text-white/60">
                   <td className="py-1.5 px-1 text-left">Par</td>
                   {round.holes.slice(0, 9).map((h, i) => (
                     <td key={i} className="py-1.5 px-0.5">
@@ -145,7 +145,7 @@ export default function AdminRoundDetailPage({
                     {round.holes.slice(0, 9).reduce((s, h) => s + h.score, 0)}
                   </td>
                 </tr>
-                <tr className="border-b text-muted-foreground">
+                <tr className="border-b text-white/60">
                   <td className="py-1.5 px-1 text-left">Putts</td>
                   {round.holes.slice(0, 9).map((h, i) => (
                     <td key={i} className="py-1.5 px-0.5">
@@ -165,7 +165,7 @@ export default function AdminRoundDetailPage({
             >
               <thead>
                 <tr className="border-b">
-                  <th className="py-1.5 px-1 text-left text-muted-foreground">
+                  <th className="py-1.5 px-1 text-left text-white/60">
                     Hole
                   </th>
                   {round.holes.slice(9, 18).map((_, i) => (
@@ -178,7 +178,7 @@ export default function AdminRoundDetailPage({
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-b text-muted-foreground">
+                <tr className="border-b text-white/60">
                   <td className="py-1.5 px-1 text-left">Par</td>
                   {round.holes.slice(9, 18).map((h, i) => (
                     <td key={i} className="py-1.5 px-0.5">
@@ -204,7 +204,7 @@ export default function AdminRoundDetailPage({
                   </td>
                   <td className="py-1.5 px-1 font-bold">{stats.totalScore}</td>
                 </tr>
-                <tr className="border-b text-muted-foreground">
+                <tr className="border-b text-white/60">
                   <td className="py-1.5 px-1 text-left">Putts</td>
                   {round.holes.slice(9, 18).map((h, i) => (
                     <td key={i} className="py-1.5 px-0.5">
@@ -227,7 +227,7 @@ export default function AdminRoundDetailPage({
         <div className="grid grid-cols-2 gap-3">
           <Card>
             <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
-              <CardTitle className="text-xs sm:text-sm text-muted-foreground">
+              <CardTitle className="text-xs sm:text-sm text-white/60">
                 Fairways
               </CardTitle>
             </CardHeader>
@@ -235,14 +235,14 @@ export default function AdminRoundDetailPage({
               <p className="text-xl sm:text-2xl font-bold">
                 {stats.fairwaysHit}/{stats.fairwaysAttempted}
               </p>
-              <p className="text-xs sm:text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-white/60">
                 {stats.fairwayPercentage.toFixed(1)}%
               </p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
-              <CardTitle className="text-xs sm:text-sm text-muted-foreground">
+              <CardTitle className="text-xs sm:text-sm text-white/60">
                 Greens in Reg
               </CardTitle>
             </CardHeader>
@@ -250,27 +250,27 @@ export default function AdminRoundDetailPage({
               <p className="text-xl sm:text-2xl font-bold">
                 {stats.greensInRegulation}/18
               </p>
-              <p className="text-xs sm:text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-white/60">
                 {stats.girPercentage.toFixed(1)}%
               </p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
-              <CardTitle className="text-xs sm:text-sm text-muted-foreground">
+              <CardTitle className="text-xs sm:text-sm text-white/60">
                 Total Putts
               </CardTitle>
             </CardHeader>
             <CardContent className="pb-3 px-3 sm:px-6">
               <p className="text-xl sm:text-2xl font-bold">{stats.totalPutts}</p>
-              <p className="text-xs sm:text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-white/60">
                 {stats.puttsPerGir.toFixed(2)} per GIR
               </p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
-              <CardTitle className="text-xs sm:text-sm text-muted-foreground">
+              <CardTitle className="text-xs sm:text-sm text-white/60">
                 Scrambling
               </CardTitle>
             </CardHeader>
@@ -278,7 +278,7 @@ export default function AdminRoundDetailPage({
               <p className="text-xl sm:text-2xl font-bold">
                 {stats.scramblingPercentage.toFixed(0)}%
               </p>
-              <p className="text-xs sm:text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-white/60">
                 {stats.upAndDownConversions}/{stats.upAndDownAttempts} up & down
               </p>
             </CardContent>
@@ -325,7 +325,7 @@ export default function AdminRoundDetailPage({
               <CardTitle className="text-base sm:text-lg">Notes</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+              <p className="text-sm text-white/60 whitespace-pre-wrap">
                 {round.notes}
               </p>
             </CardContent>

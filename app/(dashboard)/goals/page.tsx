@@ -194,7 +194,7 @@ export default function GoalsPage() {
                     ))}
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-white/60">
                   Current: {formatStat(getCurrentValue(statCategory), statCategory)}
                   {" | "}
                   {STAT_DIRECTION[statCategory] === "increase"

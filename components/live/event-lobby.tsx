@@ -82,11 +82,11 @@ export function EventLobby({
         onClick={copyCode}
       >
         <CardContent className="py-6 text-center">
-          <p className="text-xs text-muted-foreground mb-1">Share this code to join</p>
+          <p className="text-xs text-white/60 mb-1">Share this code to join</p>
           <p className="text-3xl font-bold font-mono tracking-[0.3em]">
             {event.joinCode}
           </p>
-          <div className="flex items-center justify-center gap-1 mt-2 text-xs text-muted-foreground">
+          <div className="flex items-center justify-center gap-1 mt-2 text-xs text-white/60">
             <Copy className="h-3 w-3" />
             Tap to copy
           </div>
@@ -122,7 +122,7 @@ export function EventLobby({
         </CardHeader>
         <CardContent className="space-y-2">
           {players.length === 0 && (
-            <p className="text-sm text-muted-foreground text-center py-4">
+            <p className="text-sm text-white/60 text-center py-4">
               Waiting for players to join...
             </p>
           )}

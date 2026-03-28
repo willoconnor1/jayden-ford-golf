@@ -54,13 +54,13 @@ export function PuttStepCard({
 
   return (
     <div className="space-y-4">
-      <div className="text-xs font-medium text-muted-foreground">
+      <div className="text-xs font-medium text-white/60">
         Putt {puttNumber}
       </div>
 
       {/* Distance */}
       <div className="space-y-1">
-        <div className="text-xs font-medium text-muted-foreground">
+        <div className="text-xs font-medium text-white/60">
           Distance (feet)
         </div>
         <Input
@@ -98,7 +98,7 @@ export function PuttStepCard({
 
       {/* Made / Missed */}
       <div className="space-y-1.5">
-        <div className="text-xs font-medium text-muted-foreground">Result</div>
+        <div className="text-xs font-medium text-white/60">Result</div>
         <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
@@ -109,7 +109,7 @@ export function PuttStepCard({
               "py-3 text-sm font-semibold rounded-lg border-2 transition-colors",
               putt.made
                 ? "bg-green-400/50 border-green-400/50"
-                : "bg-background border-border text-muted-foreground hover:border-green-300"
+                : "bg-background border-border text-white/60 hover:border-green-300"
             )}
           >
             Made
@@ -121,7 +121,7 @@ export function PuttStepCard({
               "py-3 text-sm font-semibold rounded-lg border-2 transition-colors",
               !putt.made
                 ? "bg-red-600 text-white border-red-600"
-                : "bg-background border-border text-muted-foreground hover:border-red-300"
+                : "bg-background border-border text-white/60 hover:border-red-300"
             )}
           >
             Missed

@@ -32,7 +32,7 @@ function NumberStepper({
 }) {
   return (
     <div className="flex items-center gap-2">
-      <Label className="text-xs text-muted-foreground w-12 shrink-0">{label}</Label>
+      <Label className="text-xs text-white/60 w-12 shrink-0">{label}</Label>
       <Button
         type="button"
         variant="outline"
@@ -132,7 +132,7 @@ function ShotTrackingSection({
       <button
         type="button"
         onClick={toggleShots}
-        className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        className="flex items-center gap-1.5 text-xs text-white/60 hover:text-foreground transition-colors"
       >
         <Crosshair className="h-3.5 w-3.5" />
         {showShots ? "Remove shot tracking" : `Track ${nonPuttShots} shot${nonPuttShots !== 1 ? "s" : ""}`}
@@ -183,11 +183,11 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
             <span className="text-sm font-bold bg-primary text-primary-foreground rounded-full w-7 h-7 flex items-center justify-center shrink-0">
               {hole.holeNumber}
             </span>
-            <span className="text-sm text-muted-foreground">
+            <span className="text-sm text-white/60">
               Par {hole.par}
             </span>
             {hole.distance > 0 && (
-              <span className="text-xs text-muted-foreground">
+              <span className="text-xs text-white/60">
                 {hole.distance} yds
               </span>
             )}
@@ -223,7 +223,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
 
         {/* Fairway */}
         <div className="flex items-center gap-2">
-          <Label className="text-xs text-muted-foreground w-12 shrink-0">Fairway</Label>
+          <Label className="text-xs text-white/60 w-12 shrink-0">Fairway</Label>
           <div className="flex gap-1.5">
             {(["yes", "no", "na"] as const).map((val) => (
               <Button
@@ -248,7 +248,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
 
         {/* GIR */}
         <div className="flex items-center gap-2">
-          <Label className="text-xs text-muted-foreground w-12 shrink-0">GIR</Label>
+          <Label className="text-xs text-white/60 w-12 shrink-0">GIR</Label>
           <div className="flex gap-1.5">
             <Button
               type="button"
@@ -309,7 +309,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                 return (
                   <div key={i} className="space-y-2">
                     <div className="flex items-center gap-1.5">
-                      <Label className="text-xs text-muted-foreground shrink-0 w-14">
+                      <Label className="text-xs text-white/60 shrink-0 w-14">
                         {ordinal} putt
                       </Label>
                       <Input
@@ -326,7 +326,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                         min={0}
                         max={120}
                       />
-                      <span className="text-xs text-muted-foreground">ft</span>
+                      <span className="text-xs text-white/60">ft</span>
                       {isMiss && (
                         <span className="text-xs text-amber-600 font-medium">miss</span>
                       )}
@@ -351,7 +351,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                           />
                           {/* Miss direction */}
                           <div className="flex items-center gap-1.5">
-                            <Label className="text-xs text-muted-foreground shrink-0">Miss</Label>
+                            <Label className="text-xs text-white/60 shrink-0">Miss</Label>
                             <div className="flex gap-1">
                               {([
                                 { value: "left" as PuttMissDirection, label: "Left" },
@@ -368,14 +368,14 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                                     "px-2.5 py-1 text-xs rounded-full border transition-colors",
                                     miss?.missDirection === opt.value
                                       ? "bg-amber-600 text-white border-amber-600"
-                                      : "bg-background border-border text-muted-foreground hover:text-foreground"
+                                      : "bg-background border-border text-white/60 hover:text-foreground"
                                   )}
                                 >
                                   {opt.label}
                                 </button>
                               ))}
                             </div>
-                            <span className="text-muted-foreground/40 text-xs px-1">|</span>
+                            <span className="text-white/60/40 text-xs px-1">|</span>
                             <div className="flex gap-1">
                               {([
                                 { value: "short" as PuttSpeed, label: "Short" },
@@ -392,7 +392,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                                     "px-2.5 py-1 text-xs rounded-full border transition-colors",
                                     miss?.speed === opt.value
                                       ? "bg-blue-600 text-white border-blue-600"
-                                      : "bg-background border-border text-muted-foreground hover:text-foreground"
+                                      : "bg-background border-border text-white/60 hover:text-foreground"
                                   )}
                                 >
                                   {opt.label}
@@ -402,7 +402,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                           </div>
                           {/* Putt break */}
                           <div className="flex items-center gap-1.5">
-                            <Label className="text-xs text-muted-foreground shrink-0">Break</Label>
+                            <Label className="text-xs text-white/60 shrink-0">Break</Label>
                             <div className="flex gap-1 flex-wrap">
                               {([
                                 { value: "straight" as PuttBreak, label: "Straight" },
@@ -420,7 +420,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                                     "px-2.5 py-1 text-xs rounded-full border transition-colors",
                                     miss?.puttBreak === opt.value
                                       ? "bg-primary text-white border-primary"
-                                      : "bg-background border-border text-muted-foreground hover:text-foreground"
+                                      : "bg-background border-border text-white/60 hover:text-foreground"
                                   )}
                                 >
                                   {opt.label}
@@ -442,7 +442,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
         <button
           type="button"
           onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors w-full py-1"
+          className="flex items-center gap-1.5 text-xs text-white/60 hover:text-foreground transition-colors w-full py-1"
         >
           {expanded ? (
             <ChevronUp className="h-3.5 w-3.5" />
@@ -464,7 +464,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
 
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               <div className="flex items-center gap-2">
-                <Label className="text-xs text-muted-foreground">
+                <Label className="text-xs text-white/60">
                   Up & Down
                 </Label>
                 <Switch
@@ -474,7 +474,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
               </div>
               {hole.upAndDownAttempt && (
                 <div className="flex items-center gap-2">
-                  <Label className="text-xs text-muted-foreground">
+                  <Label className="text-xs text-white/60">
                     Converted
                   </Label>
                   <Switch
@@ -489,7 +489,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
 
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
               <div className="flex items-center gap-2">
-                <Label className="text-xs text-muted-foreground">
+                <Label className="text-xs text-white/60">
                   Sand Save
                 </Label>
                 <Switch
@@ -499,7 +499,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
               </div>
               {hole.sandSaveAttempt && (
                 <div className="flex items-center gap-2">
-                  <Label className="text-xs text-muted-foreground">
+                  <Label className="text-xs text-white/60">
                     Saved
                   </Label>
                   <Switch

@@ -18,7 +18,7 @@ export function PlayerScorecard({ data, playerId }: PlayerScorecardProps) {
   const playerScores = scores.filter((s) => s.playerId === playerId);
 
   if (!player) {
-    return <p className="text-sm text-muted-foreground">Player not found</p>;
+    return <p className="text-sm text-white/60">Player not found</p>;
   }
 
   // Build hole-by-hole data
@@ -48,7 +48,7 @@ export function PlayerScorecard({ data, playerId }: PlayerScorecardProps) {
               {formatScoreToPar(scoreToPar, thru)}
             </Badge>
           )}
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-white/60 mt-1">
             Thru {thru} {thru === 1 ? "hole" : "holes"}
           </p>
         </CardContent>
@@ -64,7 +64,7 @@ export function PlayerScorecard({ data, playerId }: PlayerScorecardProps) {
           <table className="w-full text-xs text-center tabular-nums" style={{ minWidth: "340px" }}>
             <thead>
               <tr className="border-b">
-                <th className="py-1.5 px-1 text-left text-muted-foreground">Hole</th>
+                <th className="py-1.5 px-1 text-left text-white/60">Hole</th>
                 {Array.from({ length: 9 }, (_, i) => (
                   <th key={i} className="py-1.5 px-0.5 w-7">{i + 1}</th>
                 ))}
@@ -72,7 +72,7 @@ export function PlayerScorecard({ data, playerId }: PlayerScorecardProps) {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b text-muted-foreground">
+              <tr className="border-b text-white/60">
                 <td className="py-1.5 px-1 text-left">Par</td>
                 {event.holePars.slice(0, 9).map((par, i) => (
                   <td key={i} className="py-1.5 px-0.5">{par}</td>
@@ -89,7 +89,7 @@ export function PlayerScorecard({ data, playerId }: PlayerScorecardProps) {
                       {strokes != null ? (
                         <ScoreIndicator score={strokes} par={par} />
                       ) : (
-                        <span className="text-muted-foreground">-</span>
+                        <span className="text-white/60">-</span>
                       )}
                     </td>
                   );
@@ -105,7 +105,7 @@ export function PlayerScorecard({ data, playerId }: PlayerScorecardProps) {
           <table className="w-full text-xs text-center tabular-nums mt-3" style={{ minWidth: "380px" }}>
             <thead>
               <tr className="border-b">
-                <th className="py-1.5 px-1 text-left text-muted-foreground">Hole</th>
+                <th className="py-1.5 px-1 text-left text-white/60">Hole</th>
                 {Array.from({ length: 9 }, (_, i) => (
                   <th key={i} className="py-1.5 px-0.5 w-7">{i + 10}</th>
                 ))}
@@ -114,7 +114,7 @@ export function PlayerScorecard({ data, playerId }: PlayerScorecardProps) {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b text-muted-foreground">
+              <tr className="border-b text-white/60">
                 <td className="py-1.5 px-1 text-left">Par</td>
                 {event.holePars.slice(9, 18).map((par, i) => (
                   <td key={i} className="py-1.5 px-0.5">{par}</td>
@@ -134,7 +134,7 @@ export function PlayerScorecard({ data, playerId }: PlayerScorecardProps) {
                       {strokes != null ? (
                         <ScoreIndicator score={strokes} par={par} />
                       ) : (
-                        <span className="text-muted-foreground">-</span>
+                        <span className="text-white/60">-</span>
                       )}
                     </td>
                   );

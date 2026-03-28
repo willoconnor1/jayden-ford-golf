@@ -35,7 +35,7 @@ export function HoleSummaryCard({
 
   return (
     <div className="space-y-4">
-      <div className="text-xs font-medium text-muted-foreground">
+      <div className="text-xs font-medium text-white/60">
         Hole {hole.holeNumber} Summary
       </div>
 
@@ -53,7 +53,7 @@ export function HoleSummaryCard({
           <div className={cn("text-sm font-semibold", holeScoreColor(hole.score - hole.par))}>
             {label}
           </div>
-          <div className="text-xs text-muted-foreground">Par {hole.par}</div>
+          <div className="text-xs text-white/60">Par {hole.par}</div>
         </div>
       </div>
 
@@ -61,31 +61,31 @@ export function HoleSummaryCard({
       <div className="grid grid-cols-2 gap-2 text-xs">
         {hole.par >= 4 && (
           <div className="flex justify-between border rounded-lg px-3 py-2">
-            <span className="text-muted-foreground">Fairway</span>
+            <span className="text-white/60">Fairway</span>
             <span className={cn("font-medium", hole.fairwayHit === "yes" ? "text-green-500" : "text-red-500")}>
               {hole.fairwayHit === "yes" ? "Hit" : "Missed"}
             </span>
           </div>
         )}
         <div className="flex justify-between border rounded-lg px-3 py-2">
-          <span className="text-muted-foreground">GIR</span>
+          <span className="text-white/60">GIR</span>
           <span className={cn("font-medium", hole.greenInRegulation ? "text-green-500" : "text-red-500")}>
             {hole.greenInRegulation ? "Yes" : "No"}
           </span>
         </div>
         <div className="flex justify-between border rounded-lg px-3 py-2">
-          <span className="text-muted-foreground">Putts</span>
+          <span className="text-white/60">Putts</span>
           <span className="font-medium">{hole.putts}</span>
         </div>
         {hole.penaltyStrokes > 0 && (
           <div className="flex justify-between border rounded-lg px-3 py-2">
-            <span className="text-muted-foreground">Penalties</span>
+            <span className="text-white/60">Penalties</span>
             <span className="font-medium text-red-500">{hole.penaltyStrokes}</span>
           </div>
         )}
         {hole.upAndDownAttempt && (
           <div className="flex justify-between border rounded-lg px-3 py-2">
-            <span className="text-muted-foreground">Up & Down</span>
+            <span className="text-white/60">Up & Down</span>
             <span className={cn("font-medium", hole.upAndDownConverted ? "text-green-500" : "text-red-500")}>
               {hole.upAndDownConverted ? "Yes" : "No"}
             </span>
@@ -93,7 +93,7 @@ export function HoleSummaryCard({
         )}
         {hole.sandSaveAttempt && (
           <div className="flex justify-between border rounded-lg px-3 py-2">
-            <span className="text-muted-foreground">Sand Save</span>
+            <span className="text-white/60">Sand Save</span>
             <span className={cn("font-medium", hole.sandSaveConverted ? "text-green-500" : "text-red-500")}>
               {hole.sandSaveConverted ? "Yes" : "No"}
             </span>
@@ -104,12 +104,12 @@ export function HoleSummaryCard({
       {/* Shot replay */}
       {hole.shots && hole.shots.length > 0 && (
         <div className="space-y-1">
-          <div className="text-xs font-medium text-muted-foreground">Shots</div>
+          <div className="text-xs font-medium text-white/60">Shots</div>
           <div className="space-y-0.5">
             {hole.shots.map((s, i) => {
               const isGoodResult = s.result === "fairway" || s.result === "green" || s.result === "holed";
               return (
-                <div key={i} className="text-xs text-muted-foreground flex gap-2">
+                <div key={i} className="text-xs text-white/60 flex gap-2">
                   <span className="w-4 text-right font-mono">{i + 1}.</span>
                   <span className="capitalize">{s.club.replace("-", " ")}</span>
                   {s.result && (
@@ -120,7 +120,7 @@ export function HoleSummaryCard({
                 </div>
               );
             })}
-            <div className="text-xs text-muted-foreground flex gap-2">
+            <div className="text-xs text-white/60 flex gap-2">
               <span className="w-4 text-right font-mono"></span>
               <span>{hole.putts} putt{hole.putts !== 1 ? "s" : ""}</span>
             </div>

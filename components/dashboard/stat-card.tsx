@@ -25,7 +25,7 @@ export function StatCard({
   return (
     <Card>
       <CardContent className="pt-3 pb-2.5 px-3 sm:pt-4 sm:pb-3 sm:px-4">
-        <p className="text-[10px] sm:text-xs font-medium text-muted-foreground uppercase tracking-wide leading-tight">
+        <p className="text-[10px] sm:text-xs font-medium text-white/60 uppercase tracking-wide leading-tight">
           {label}
         </p>
         <div className="flex items-end justify-between mt-1">
@@ -35,7 +35,7 @@ export function StatCard({
               className={cn(
                 "flex items-center gap-1 text-xs font-medium",
                 trendIsGood ? "text-primary" : "text-red-500",
-                trend === "neutral" && "text-muted-foreground"
+                trend === "neutral" && "text-white/60"
               )}
             >
               <TrendIcon className="h-3.5 w-3.5" />
@@ -43,7 +43,7 @@ export function StatCard({
           )}
         </div>
         {comparison && (
-          <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5">
+          <p className="text-[10px] sm:text-xs text-white/60 mt-0.5">
             PGA: {comparison}
           </p>
         )}

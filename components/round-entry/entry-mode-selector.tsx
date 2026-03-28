@@ -49,7 +49,7 @@ export function EntryModeSelector({ value, onChange }: EntryModeSelectorProps) {
             )}
           >
             <span className="text-sm font-semibold">{mode.title}</span>
-            <span className="text-[10px] leading-tight text-muted-foreground">
+            <span className="text-[10px] leading-tight text-white/60">
               {mode.subtitle}
             </span>
           </button>

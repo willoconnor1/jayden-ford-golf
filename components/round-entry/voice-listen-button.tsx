@@ -28,7 +28,7 @@ export function VoiceListenButton({
       {/* Transcript display */}
       {(interimTranscript || transcript) && (
         <div className="w-full rounded-md border bg-muted/30 p-3">
-          <div className="text-xs font-semibold text-muted-foreground mb-1">
+          <div className="text-xs font-semibold text-white/60 mb-1">
             {isListening ? "Hearing..." : "Heard:"}
           </div>
           <p className="text-sm">{transcript || interimTranscript}</p>
@@ -61,7 +61,7 @@ export function VoiceListenButton({
       <span
         className={cn(
           "text-sm",
-          isError ? "text-destructive" : "text-muted-foreground"
+          isError ? "text-destructive" : "text-white/60"
         )}
       >
         {isError

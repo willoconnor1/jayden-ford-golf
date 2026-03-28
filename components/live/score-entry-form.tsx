@@ -134,7 +134,7 @@ export function ScoreEntryForm({ data, playerId }: ScoreEntryFormProps) {
       </div>
 
       {/* Group Info */}
-      <p className="text-xs text-muted-foreground text-center">
+      <p className="text-xs text-white/60 text-center">
         Group {myGroup}
       </p>
 
@@ -192,7 +192,7 @@ export function ScoreEntryForm({ data, playerId }: ScoreEntryFormProps) {
                   ? "bg-primary text-primary-foreground"
                   : allScored
                     ? "bg-muted text-foreground"
-                    : "bg-background border text-muted-foreground"
+                    : "bg-background border text-white/60"
               }`}
             >
               {hole}

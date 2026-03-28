@@ -138,7 +138,7 @@ export function CourseSearchInput({
       <div ref={containerRef} className="relative">
         <Label>Course Name</Label>
         <div className="relative mt-1.5">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
           <Input
             value={query}
             onChange={(e) => handleInputChange(e.target.value)}
@@ -151,13 +151,13 @@ export function CourseSearchInput({
           {query && (
             <button
               onClick={handleClear}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-foreground"
             >
               <X className="h-4 w-4" />
             </button>
           )}
           {(isSearching || isLoadingDetail) && (
-            <Loader2 className="absolute right-9 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
+            <Loader2 className="absolute right-9 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-white/60" />
           )}
         </div>
 
@@ -167,7 +167,7 @@ export function CourseSearchInput({
             {/* Recent courses */}
             {recentCourseNames.length > 0 && query.length < 2 && (
               <div>
-                <div className="px-3 py-1.5 text-xs font-medium text-muted-foreground">
+                <div className="px-3 py-1.5 text-xs font-medium text-white/60">
                   Recent Courses
                 </div>
                 {recentCourseNames.map((name) => (
@@ -185,7 +185,7 @@ export function CourseSearchInput({
             {/* Favorite courses */}
             {favoriteCourses.length > 0 && query.length < 2 && (
               <div>
-                <div className="px-3 py-1.5 text-xs font-medium text-muted-foreground border-t">
+                <div className="px-3 py-1.5 text-xs font-medium text-white/60 border-t">
                   Favorites
                 </div>
                 {favoriteCourses.map((c) => (
@@ -196,7 +196,7 @@ export function CourseSearchInput({
                   >
                     <div>{c.name}</div>
                     {c.city && (
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-1 text-xs text-white/60">
                         <MapPin className="h-3 w-3" />
                         {[c.city, c.state, c.country].filter(Boolean).join(", ")}
                       </div>
@@ -213,7 +213,7 @@ export function CourseSearchInput({
                   query.length >= 2 && (
                     <div className="border-t" />
                   )}
-                <div className="px-3 py-1.5 text-xs font-medium text-muted-foreground">
+                <div className="px-3 py-1.5 text-xs font-medium text-white/60">
                   Search Results
                 </div>
                 {searchResults.map((result) => (
@@ -224,7 +224,7 @@ export function CourseSearchInput({
                   >
                     <div>{result.name}</div>
                     {(result.city || result.country) && (
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-1 text-xs text-white/60">
                         <MapPin className="h-3 w-3" />
                         {[result.city, result.state, result.country]
                           .filter(Boolean)
@@ -238,7 +238,7 @@ export function CourseSearchInput({
 
             {/* No results */}
             {query.length >= 2 && !isSearching && searchResults.length === 0 && (
-              <div className="px-3 py-4 text-sm text-center text-muted-foreground">
+              <div className="px-3 py-4 text-sm text-center text-white/60">
                 No courses found. You can enter details manually below.
               </div>
             )}
@@ -250,7 +250,7 @@ export function CourseSearchInput({
                   setIsOpen(false);
                   onManualEntry();
                 }}
-                className="w-full text-left px-3 py-2 text-sm text-muted-foreground hover:bg-accent transition-colors"
+                className="w-full text-left px-3 py-2 text-sm text-white/60 hover:bg-accent transition-colors"
               >
                 Enter course manually...
               </button>
@@ -280,7 +280,7 @@ export function CourseSearchInput({
             ))}
           </div>
           {selectedTee && (
-            <div className="text-xs text-muted-foreground">
+            <div className="text-xs text-white/60">
               Rating: {course.rating} | Slope: {course.slope} | Par: {course.totalPar}
             </div>
           )}

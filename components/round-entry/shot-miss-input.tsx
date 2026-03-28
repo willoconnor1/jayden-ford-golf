@@ -124,7 +124,7 @@ export function ShotMissInput({ missX, missY, onChange }: ShotMissInputProps) {
 
   return (
     <div className="flex flex-col items-center gap-1 select-none">
-      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+      <div className="flex items-center gap-2 text-xs text-white/60">
         <span>Drag to mark miss ({Math.round(displayDist)}{unitLabel}) · ±{maxRange}{unitLabel}</span>
         <button
           type="button"
@@ -138,7 +138,7 @@ export function ShotMissInput({ missX, missY, onChange }: ShotMissInputProps) {
         <button
           type="button"
           onClick={zoomIn}
-          className="flex items-center justify-center w-7 h-7 rounded-md border bg-background text-muted-foreground hover:bg-muted transition-colors"
+          className="flex items-center justify-center w-7 h-7 rounded-md border bg-background text-white/60 hover:bg-muted transition-colors"
           aria-label="Decrease range"
         >
           <Minus className="w-3.5 h-3.5" />
@@ -194,13 +194,13 @@ export function ShotMissInput({ missX, missY, onChange }: ShotMissInputProps) {
         <button
           type="button"
           onClick={zoomOut}
-          className="flex items-center justify-center w-7 h-7 rounded-md border bg-background text-muted-foreground hover:bg-muted transition-colors"
+          className="flex items-center justify-center w-7 h-7 rounded-md border bg-background text-white/60 hover:bg-muted transition-colors"
           aria-label="Increase range"
         >
           <Plus className="w-3.5 h-3.5" />
         </button>
       </div>
-      <div className="text-[10px] text-muted-foreground/60">
+      <div className="text-[10px] text-white/60/60">
         Use +/− or pinch to adjust range
       </div>
     </div>

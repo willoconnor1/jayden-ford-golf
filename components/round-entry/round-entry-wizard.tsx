@@ -60,7 +60,7 @@ function HoleParDistanceRow({
 }) {
   return (
     <div className="flex items-center gap-2 py-1.5 border-b border-border/50 last:border-0">
-      <span className="text-xs text-muted-foreground font-medium w-6 text-center shrink-0">
+      <span className="text-xs text-white/60 font-medium w-6 text-center shrink-0">
         {holeIndex + 1}
       </span>
       <select
@@ -212,7 +212,7 @@ export function RoundEntryWizard({ initialDraft }: RoundEntryWizardProps) {
     <div className="max-w-2xl mx-auto space-y-3">
       {/* Progress */}
       <div className="space-y-2">
-        <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
+        <div className="flex justify-between text-xs sm:text-sm text-white/60">
           {STEPS.map((s, i) => (
             <button
               key={s}
@@ -245,7 +245,7 @@ export function RoundEntryWizard({ initialDraft }: RoundEntryWizardProps) {
               : stats.scoreToPar}
           )
         </span>
-        <span className="text-xs sm:text-sm text-muted-foreground sm:text-foreground">
+        <span className="text-xs sm:text-sm text-white/60 sm:text-foreground">
           FW: {stats.fairwayPercentage.toFixed(0)}% | GIR:{" "}
           {stats.girPercentage.toFixed(0)}% | Putts: {stats.totalPutts}
         </span>
@@ -343,7 +343,7 @@ export function RoundEntryWizard({ initialDraft }: RoundEntryWizardProps) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6">
                 {/* Front 9 */}
                 <div>
-                  <div className="flex items-center gap-2 py-1 text-xs text-muted-foreground font-medium border-b">
+                  <div className="flex items-center gap-2 py-1 text-xs text-white/60 font-medium border-b">
                     <span className="w-6 text-center">Hole</span>
                     <span className="w-14 text-center">Par</span>
                     <span className="flex-1">Distance</span>
@@ -362,7 +362,7 @@ export function RoundEntryWizard({ initialDraft }: RoundEntryWizardProps) {
 
                 {/* Back 9 */}
                 <div>
-                  <div className="flex items-center gap-2 py-1 text-xs text-muted-foreground font-medium border-b mt-3 sm:mt-0">
+                  <div className="flex items-center gap-2 py-1 text-xs text-white/60 font-medium border-b mt-3 sm:mt-0">
                     <span className="w-6 text-center">Hole</span>
                     <span className="w-14 text-center">Par</span>
                     <span className="flex-1">Distance</span>
@@ -452,7 +452,7 @@ export function RoundEntryWizard({ initialDraft }: RoundEntryWizardProps) {
               <div className="space-y-4">
                 <div className="text-center">
                   <p className="text-4xl font-bold">{stats.totalScore}</p>
-                  <p className="text-sm sm:text-lg text-muted-foreground">
+                  <p className="text-sm sm:text-lg text-white/60">
                     {course.name} &middot;{" "}
                     {stats.scoreToPar === 0
                       ? "Even"
@@ -467,7 +467,7 @@ export function RoundEntryWizard({ initialDraft }: RoundEntryWizardProps) {
                   <table className="w-full text-xs text-center" style={{ minWidth: "360px" }}>
                     <thead>
                       <tr className="border-b">
-                        <th className="py-1.5 px-1 text-muted-foreground text-left">Hole</th>
+                        <th className="py-1.5 px-1 text-white/60 text-left">Hole</th>
                         {holes.slice(0, 9).map((_, i) => (
                           <th key={i} className="py-1.5 px-0.5 w-7">{i + 1}</th>
                         ))}
@@ -475,7 +475,7 @@ export function RoundEntryWizard({ initialDraft }: RoundEntryWizardProps) {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="border-b text-muted-foreground">
+                      <tr className="border-b text-white/60">
                         <td className="py-1.5 px-1 text-left">Par</td>
                         {holes.slice(0, 9).map((h, i) => (
                           <td key={i} className="py-1.5 px-0.5">{h.par}</td>
@@ -501,7 +501,7 @@ export function RoundEntryWizard({ initialDraft }: RoundEntryWizardProps) {
                   <table className="w-full text-xs text-center mt-2" style={{ minWidth: "360px" }}>
                     <thead>
                       <tr className="border-b">
-                        <th className="py-1.5 px-1 text-muted-foreground text-left">Hole</th>
+                        <th className="py-1.5 px-1 text-white/60 text-left">Hole</th>
                         {holes.slice(9, 18).map((_, i) => (
                           <th key={i} className="py-1.5 px-0.5 w-7">{i + 10}</th>
                         ))}
@@ -510,7 +510,7 @@ export function RoundEntryWizard({ initialDraft }: RoundEntryWizardProps) {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="border-b text-muted-foreground">
+                      <tr className="border-b text-white/60">
                         <td className="py-1.5 px-1 text-left">Par</td>
                         {holes.slice(9, 18).map((h, i) => (
                           <td key={i} className="py-1.5 px-0.5">{h.par}</td>
@@ -543,37 +543,37 @@ export function RoundEntryWizard({ initialDraft }: RoundEntryWizardProps) {
                 {/* Stats summary */}
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Fairways</span>
+                    <span className="text-white/60">Fairways</span>
                     <span className="font-medium tabular-nums">
                       {stats.fairwaysHit}/{stats.fairwaysAttempted} (
                       {stats.fairwayPercentage.toFixed(0)}%)
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">GIR</span>
+                    <span className="text-white/60">GIR</span>
                     <span className="font-medium tabular-nums">
                       {stats.greensInRegulation}/18 (
                       {stats.girPercentage.toFixed(0)}%)
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Total Putts</span>
+                    <span className="text-white/60">Total Putts</span>
                     <span className="font-medium tabular-nums">{stats.totalPutts}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Putts/GIR</span>
+                    <span className="text-white/60">Putts/GIR</span>
                     <span className="font-medium tabular-nums">
                       {stats.puttsPerGir.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Up & Down</span>
+                    <span className="text-white/60">Up & Down</span>
                     <span className="font-medium tabular-nums">
                       {stats.upAndDownConversions}/{stats.upAndDownAttempts}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Penalties</span>
+                    <span className="text-white/60">Penalties</span>
                     <span className="font-medium tabular-nums">{stats.penalties}</span>
                   </div>
                 </div>

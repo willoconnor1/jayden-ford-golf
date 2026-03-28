@@ -31,7 +31,7 @@ export function ShotEntryCard({ shotIndex, shot, onChange }: ShotEntryCardProps)
 
   return (
     <div className="border rounded-lg p-3 space-y-3 bg-card">
-      <div className="text-xs font-medium text-muted-foreground">
+      <div className="text-xs font-medium text-white/60">
         Shot {shotIndex + 1}
       </div>
 
@@ -74,7 +74,7 @@ export function ShotEntryCard({ shotIndex, shot, onChange }: ShotEntryCardProps)
         <div className="space-y-1">
           <Label className="text-xs">Lie</Label>
           {isDriver ? (
-            <div className="flex items-center h-8 text-xs text-muted-foreground px-2 border rounded bg-muted/50">
+            <div className="flex items-center h-8 text-xs text-white/60 px-2 border rounded bg-muted/50">
               Tee
             </div>
           ) : (

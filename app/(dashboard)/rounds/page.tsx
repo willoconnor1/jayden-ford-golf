@@ -70,11 +70,11 @@ export default function RoundsPage() {
                           <p className="font-semibold text-sm sm:text-base truncate">
                             {round.course.name}
                           </p>
-                          <p className="text-xs sm:text-sm text-muted-foreground">
+                          <p className="text-xs sm:text-sm text-white/60">
                             {format(new Date(round.date), "MMM d, yyyy")}{" "}
                             {round.course.tees && `| ${round.course.tees}`}
                           </p>
-                          <div className="flex gap-2 sm:gap-3 mt-0.5 text-xs text-muted-foreground">
+                          <div className="flex gap-2 sm:gap-3 mt-0.5 text-xs text-white/60">
                             <span>FW {stats.fairwayPercentage.toFixed(0)}%</span>
                             <span>GIR {stats.girPercentage.toFixed(0)}%</span>
                             <span>{stats.totalPutts} putts</span>
@@ -98,7 +98,7 @@ export default function RoundsPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="shrink-0 h-9 w-9 text-muted-foreground hover:text-destructive"
+                      className="shrink-0 h-9 w-9 text-white/60 hover:text-destructive"
                       onClick={() => {
                         deleteRound(round.id);
                         toast.success("Round deleted");

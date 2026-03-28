@@ -10,7 +10,7 @@ interface VoicePromptCardProps {
 export function VoicePromptCard({ template }: VoicePromptCardProps) {
   return (
     <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
-      <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+      <div className="text-xs font-semibold text-white/60 uppercase tracking-wide">
         {template.title}
       </div>
       <ul className="space-y-1.5">
@@ -22,7 +22,7 @@ export function VoicePromptCard({ template }: VoicePromptCardProps) {
               item.optional && "opacity-50"
             )}
           >
-            <span className="text-muted-foreground font-medium min-w-[100px] shrink-0">
+            <span className="text-white/60 font-medium min-w-[100px] shrink-0">
               {item.label}:
             </span>
             <span className="text-primary font-semibold italic">
@@ -31,7 +31,7 @@ export function VoicePromptCard({ template }: VoicePromptCardProps) {
           </li>
         ))}
       </ul>
-      <p className="text-xs text-muted-foreground text-center">
+      <p className="text-xs text-white/60 text-center">
         Tap the mic and say your data — any order works
       </p>
     </div>

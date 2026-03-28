@@ -65,7 +65,7 @@ export function ShotStepCard({
   return (
     <div className="space-y-4">
       {/* Shot label */}
-      <div className="text-xs font-medium text-muted-foreground">
+      <div className="text-xs font-medium text-white/60">
         Shot {shotNumber}
         {!isTeeShot && (
           <span className="ml-1 capitalize">· {shot.lie.replace("-", " ")}</span>
@@ -89,7 +89,7 @@ export function ShotStepCard({
 
       {/* Club selector */}
       <div className="space-y-1">
-        <div className="text-xs font-medium text-muted-foreground">Club</div>
+        <div className="text-xs font-medium text-white/60">Club</div>
         <select
           value={shot.club}
           onChange={(e) => update({ club: e.target.value as Club })}
@@ -155,7 +155,7 @@ export function ShotStepCard({
       {/* Distance remaining */}
       {shot.result && shot.result !== "green" && shot.result !== "holed" && (
         <div className="space-y-1">
-          <div className="text-xs font-medium text-muted-foreground">
+          <div className="text-xs font-medium text-white/60">
             Distance Remaining (yds)
           </div>
           <Input
