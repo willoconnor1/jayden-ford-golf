@@ -157,8 +157,8 @@ export function ShotStepCard({
         </div>
       )}
 
-      {/* Visual miss tracker — Detailed mode only, hide for on-target results */}
-      {isDetailed && shot.result && shot.result !== "fairway" && shot.result !== "green" && shot.result !== "holed" && (
+      {/* Visual miss tracker — Detailed mode only */}
+      {isDetailed && (
         <div className="pt-1">
           {isPar45Tee ? (
             <DriverMissInput
