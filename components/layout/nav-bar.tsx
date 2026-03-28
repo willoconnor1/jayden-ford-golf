@@ -14,6 +14,7 @@ import {
   Settings,
   LogOut,
   MapPinned,
+  ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/auth-provider";
@@ -29,6 +30,7 @@ const links = [
   { href: "/dispersion", label: "Dispersion", mobileLabel: "Shots", icon: Crosshair },
   { href: "/live", label: "Live", mobileLabel: "Live", icon: Radio },
   { href: "/settings", label: "Settings", mobileLabel: "Settings", icon: Settings },
+  { href: "/admin", label: "Admin", mobileLabel: "Admin", icon: ShieldCheck },
 ];
 
 export function NavBar() {
