@@ -31,12 +31,12 @@ function DashboardGoalCard({ goal }: { goal: Goal }) {
           <p className="text-xs font-medium truncate">
             {STAT_LABELS[goal.statCategory]}
           </p>
-          <span className="text-[10px] text-muted-foreground shrink-0">
+          <span className="text-[10px] text-white/60 shrink-0">
             {daysLeft < 0 ? "Overdue" : `${daysLeft}d left`}
           </span>
         </div>
         <Progress value={Math.max(0, Math.min(100, progress))} className="h-1.5" />
-        <div className="flex justify-between text-[10px] text-muted-foreground mt-0.5">
+        <div className="flex justify-between text-[10px] text-white/60 mt-0.5">
           <span>{formatStat(currentValue, goal.statCategory)}</span>
           <span>{formatStat(goal.targetValue, goal.statCategory)}</span>
         </div>
@@ -194,7 +194,7 @@ export default function DashboardPage() {
                     <DashboardGoalCard key={goal.id} goal={goal} />
                   ))}
                   {activeGoals.length > 3 && (
-                    <p className="text-xs text-muted-foreground text-center">
+                    <p className="text-xs text-white/60 text-center">
                       +{activeGoals.length - 3} more
                     </p>
                   )}
