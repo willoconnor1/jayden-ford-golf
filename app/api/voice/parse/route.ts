@@ -3,7 +3,9 @@ import OpenAI from "openai";
 import { getAuthUser } from "@/lib/auth";
 import type { TemplateType } from "@/lib/voice/voice-templates";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+function getOpenAI() {
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+}
 
 // Golf vocabulary prompt for Whisper — dramatically improves accuracy for domain terms
 const WHISPER_PROMPT =
@@ -124,6 +126,8 @@ export async function POST(request: Request) {
     }
 
     // Step 1: Whisper transcription
+    const openai = getOpenAI();
+
     const transcription = await openai.audio.transcriptions.create({
       model: "whisper-1",
       file: audioFile,
