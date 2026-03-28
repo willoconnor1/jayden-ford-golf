@@ -51,11 +51,11 @@ export default function RegisterPage() {
     <Card className="w-full max-w-sm">
       <CardHeader className="text-center">
         <div className="mx-auto mb-2 bg-primary text-primary-foreground rounded-full w-12 h-12 flex items-center justify-center text-lg font-bold">
-          GP
+          J
         </div>
         <CardTitle className="text-xl">Create an account</CardTitle>
         <CardDescription>
-          Start tracking your golf performance
+          Start tracking your game
         </CardDescription>
       </CardHeader>
       <CardContent>

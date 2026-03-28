@@ -1,6 +1,6 @@
 @../../CLAUDE.md
 
-# Golf Mobile — Expo React Native App
+# Jolf Mobile — Expo React Native App
 
 ## Tech Stack
 - Expo SDK 55, React Native 0.83.2, React 19.2.0

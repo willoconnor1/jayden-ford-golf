@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "golf-mobile",
-    "slug": "golf-mobile",
+    "name": "jolf-mobile",
+    "slug": "jolf-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "golfmobile",
+    "scheme": "jolf",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash-icon.png",
@@ -36,8 +36,8 @@
       [
         "expo-speech-recognition",
         {
-          "microphonePermission": "Allow Golf Stats to use the microphone for voice input.",
-          "speechRecognitionPermission": "Allow Golf Stats to use speech recognition for voice input."
+          "microphonePermission": "Allow Jolf to use the microphone for voice input.",
+          "speechRecognitionPermission": "Allow Jolf to use speech recognition for voice input."
         }
       ]
     ],

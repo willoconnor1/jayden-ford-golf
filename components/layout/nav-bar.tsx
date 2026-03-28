@@ -65,8 +65,8 @@ export function NavBar() {
               {initials}
             </span>
             <div className="flex flex-col leading-tight">
-              <span className="text-sm">{user?.name ?? "Golf Dashboard"}</span>
-              <span className="text-[10px] text-white/50 font-normal">Golf Performance</span>
+              <span className="text-sm">{user?.name ?? "Jolf"}</span>
+              <span className="text-[10px] text-white/50 font-normal">Jolf</span>
             </div>
           </Link>
         </div>

@@ -76,7 +76,7 @@ export default function DashboardPage() {
       <>
         <PageBackground image="/te-arai-north.jpg" />
         <div className="relative z-10 flex flex-col items-center justify-center min-h-[60vh] text-center">
-          <h1 className="text-5xl sm:text-6xl mb-3 text-white drop-shadow-md" style={{ fontFamily: "var(--font-script)" }}>Welcome, {firstName}</h1>
+          <h1 className="text-5xl sm:text-6xl italic font-light mb-3 text-white drop-shadow-md" style={{ fontFamily: "var(--font-script)" }}>Welcome, {firstName}</h1>
           <p className="text-lg text-white/70 mb-6 max-w-md drop-shadow-sm">
             Track your rounds, analyze your strokes gained, and get personalized
             practice plans to sharpen your game.

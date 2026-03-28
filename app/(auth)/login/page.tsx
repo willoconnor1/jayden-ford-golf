@@ -38,10 +38,10 @@ export default function LoginPage() {
     <Card className="w-full max-w-sm">
       <CardHeader className="text-center">
         <div className="mx-auto mb-2 bg-primary text-primary-foreground rounded-full w-12 h-12 flex items-center justify-center text-lg font-bold">
-          GP
+          J
         </div>
         <CardTitle className="text-xl">Welcome back</CardTitle>
-        <CardDescription>Sign in to your golf dashboard</CardDescription>
+        <CardDescription>Sign in to Jolf</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">

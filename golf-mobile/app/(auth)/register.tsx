@@ -57,11 +57,11 @@ export default function RegisterScreen() {
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.logo}>
-            <Text style={styles.logoText}>GP</Text>
+            <Text style={styles.logoText}>J</Text>
           </View>
           <Text style={styles.title}>Create an account</Text>
           <Text style={styles.subtitle}>
-            Start tracking your golf performance
+            Start tracking your game
           </Text>
 
           {error ? <Text style={styles.error}>{error}</Text> : null}

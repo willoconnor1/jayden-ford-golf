@@ -21,8 +21,8 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Golf Performance Dashboard",
-  description: "Professional golf performance tracking and strokes gained analysis",
+  title: "Jolf",
+  description: "Golf performance tracking and strokes gained analysis",
 };
 
 export default function RootLayout({

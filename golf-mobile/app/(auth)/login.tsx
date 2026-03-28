@@ -40,10 +40,10 @@ export default function LoginScreen() {
         style={styles.inner}
       >
         <View style={styles.logo}>
-          <Text style={styles.logoText}>GP</Text>
+          <Text style={styles.logoText}>J</Text>
         </View>
         <Text style={styles.title}>Welcome back</Text>
-        <Text style={styles.subtitle}>Sign in to your golf dashboard</Text>
+        <Text style={styles.subtitle}>Sign in to Jolf</Text>
 
         {error ? <Text style={styles.error}>{error}</Text> : null}
 

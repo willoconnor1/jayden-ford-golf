@@ -1,7 +1,7 @@
 @../CLAUDE.md
 @AGENTS.md
 
-# Golf Dashboard — Web App (Next.js 16)
+# Jolf — Web App (Next.js 16)
 
 ## Tech Stack
 - Next.js 16.2.0 (App Router), React 19.2.4, TypeScript
