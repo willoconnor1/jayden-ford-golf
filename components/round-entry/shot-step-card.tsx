@@ -125,8 +125,8 @@ export function ShotStepCard({
         activeColor="bg-emerald-600"
       />
 
-      {/* Miss Direction — only for non-green/holed results */}
-      {shot.result && shot.result !== "green" && shot.result !== "holed" && (
+      {/* Miss Direction — only for miss results */}
+      {shot.result && shot.result !== "fairway" && shot.result !== "green" && shot.result !== "holed" && (
         <PillSelector
           label="Miss Direction"
           options={SHOT_DIRECTIONS}
@@ -138,7 +138,7 @@ export function ShotStepCard({
       )}
 
       {/* Distance remaining */}
-      {shot.result && shot.result !== "green" && shot.result !== "holed" && (
+      {shot.result && shot.result !== "fairway" && shot.result !== "green" && shot.result !== "holed" && (
         <div className="space-y-1">
           <div className="text-xs font-medium text-muted-foreground">
             Distance Remaining (yds)
@@ -157,9 +157,8 @@ export function ShotStepCard({
         </div>
       )}
 
-      {/* Visual miss tracker — Detailed mode only */}
-      {/* Par 4/5 tee shots always use horizontal L/R tracker */}
-      {isDetailed && (
+      {/* Visual miss tracker — Detailed mode only, hide for on-target results */}
+      {isDetailed && shot.result && shot.result !== "fairway" && shot.result !== "green" && shot.result !== "holed" && (
         <div className="pt-1">
           {isPar45Tee ? (
             <DriverMissInput
