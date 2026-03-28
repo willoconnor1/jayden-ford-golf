@@ -13,8 +13,6 @@ import { deriveHoleData, resultToNextLie } from "./derive-hole-data";
 import { getClubForDistance } from "@/lib/constants-clubs";
 import { useVoiceRecognition } from "@/hooks/use-voice-recognition";
 import { selectTemplate, type ShotContext } from "@/lib/voice/voice-templates";
-import { parseShotSpeech } from "@/lib/voice/parse-shot-speech";
-import { parsePuttSpeech } from "@/lib/voice/parse-putt-speech";
 
 type Phase = "shot" | "putt" | "summary";
 
@@ -42,7 +40,6 @@ export function VoiceShotFlowWrapper({
   onComplete,
 }: VoiceShotFlowWrapperProps) {
   const totalHoles = holePars.length;
-  const voice = useVoiceRecognition();
 
   const [holeIndex, setHoleIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("shot");
@@ -73,61 +70,66 @@ export function VoiceShotFlowWrapper({
   };
   const template = selectTemplate(templateContext);
 
-  // ── Auto-populate when voice transcript is finalized ──
+  // ── Voice hook with AI context ──
+  const voice = useVoiceRecognition({
+    templateType: template.type,
+    phase: phase === "summary" ? "shot" : phase,
+  });
+
+  // ── Auto-populate when AI returns parsed data ──
   useEffect(() => {
-    if (voice.state !== "processing" || !voice.transcript) return;
+    if (!voice.parsedData) return;
+    const data = voice.parsedData;
 
     if (phase === "shot") {
-      const parsed = parseShotSpeech(voice.transcript, template.type);
       setShots((prev) => {
         const current = prev[currentShotIndex];
         const updated: ShotData = {
           ...current,
-          ...(parsed.shot.club && { club: parsed.shot.club }),
-          ...(parsed.shot.result && { result: parsed.shot.result }),
-          ...(parsed.shot.lie && { lie: parsed.shot.lie }),
-          ...(parsed.shot.intent && { intent: parsed.shot.intent }),
-          ...(parsed.shot.missX !== undefined && { missX: parsed.shot.missX }),
-          ...(parsed.shot.missY !== undefined && { missY: parsed.shot.missY }),
-          ...(parsed.shot.direction && { direction: parsed.shot.direction }),
-          ...(parsed.shot.distanceRemaining !== undefined && {
-            distanceRemaining: parsed.shot.distanceRemaining,
+          ...(data.club && { club: data.club as ShotData["club"] }),
+          ...(data.result && { result: data.result as ShotData["result"] }),
+          ...(data.lie && { lie: data.lie as ShotData["lie"] }),
+          ...(data.intent && { intent: data.intent as ShotData["intent"] }),
+          ...(data.missX !== undefined && { missX: data.missX as number }),
+          ...(data.missY !== undefined && { missY: data.missY as number }),
+          ...(data.direction && { direction: data.direction as ShotData["direction"] }),
+          ...(data.distanceRemaining !== undefined && {
+            distanceRemaining: data.distanceRemaining as number,
           }),
-          ...(parsed.shot.targetDistance !== undefined && {
-            targetDistance: parsed.shot.targetDistance,
+          ...(data.targetDistance !== undefined && {
+            targetDistance: data.targetDistance as number,
           }),
-          ...(parsed.shot.penaltyDrop !== undefined && {
-            penaltyDrop: parsed.shot.penaltyDrop,
+          ...(data.penaltyDrop !== undefined && {
+            penaltyDrop: data.penaltyDrop as boolean,
           }),
         };
         const next = [...prev];
         next[currentShotIndex] = updated;
         return next;
       });
-      if (parsed.holeShape) {
-        setHoleShape(parsed.holeShape);
+      if (data.holeShape) {
+        setHoleShape(data.holeShape as HoleShape);
       }
     } else if (phase === "putt") {
-      const parsed = parsePuttSpeech(voice.transcript);
       setPutts((prev) => {
         const current = prev[currentPuttIndex];
         const updated: PuttData = {
           ...current,
-          ...(parsed.distance !== undefined && { distance: parsed.distance }),
-          ...(parsed.puttBreak && { puttBreak: parsed.puttBreak }),
-          ...(parsed.puttSlope && { puttSlope: parsed.puttSlope }),
-          ...(parsed.made !== undefined && { made: parsed.made }),
-          ...(parsed.missDirection && { missDirection: parsed.missDirection }),
-          ...(parsed.speed && { speed: parsed.speed }),
+          ...(data.distance !== undefined && { distance: data.distance as number }),
+          ...(data.puttBreak && { puttBreak: data.puttBreak as PuttData["puttBreak"] }),
+          ...(data.puttSlope && { puttSlope: data.puttSlope as PuttData["puttSlope"] }),
+          ...(data.made !== undefined && { made: data.made as boolean }),
+          ...(data.missDirection && { missDirection: data.missDirection as PuttData["missDirection"] }),
+          ...(data.speed && { speed: data.speed as PuttData["speed"] }),
+          ...(data.missX !== undefined && { missX: data.missX as number }),
+          ...(data.missY !== undefined && { missY: data.missY as number }),
         };
         const next = [...prev];
         next[currentPuttIndex] = updated;
         return next;
       });
     }
-
-    voice.reset();
-  }, [voice.state, voice.transcript]);
+  }, [voice.parsedData]);
 
   // ── History ──
   const pushHistory = useCallback(() => {
@@ -250,7 +252,7 @@ export function VoiceShotFlowWrapper({
 
   // ── Mic button handler ──
   const handleMicPress = () => {
-    if (voice.state === "listening") {
+    if (voice.state === "recording") {
       voice.stop();
     } else {
       voice.start();
@@ -288,7 +290,6 @@ export function VoiceShotFlowWrapper({
             <VoicePromptCard template={template} />
             <VoiceListenButton
               state={voice.state}
-              interimTranscript={voice.interimTranscript}
               transcript={voice.transcript}
               error={voice.error}
               onPress={handleMicPress}

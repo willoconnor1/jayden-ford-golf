@@ -25,16 +25,16 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  driving: "bg-blue-100 text-blue-800",
-  approach: "bg-orange-100 text-orange-800",
-  shortGame: "bg-emerald-100 text-emerald-800",
-  putting: "bg-purple-100 text-purple-800",
+  driving: "bg-blue-500/20 text-blue-300",
+  approach: "bg-orange-500/20 text-orange-300",
+  shortGame: "bg-emerald-500/20 text-emerald-300",
+  putting: "bg-purple-500/20 text-purple-300",
 };
 
 const DIFFICULTY_COLORS: Record<string, string> = {
-  beginner: "bg-green-100 text-green-800",
-  intermediate: "bg-yellow-100 text-yellow-800",
-  advanced: "bg-red-100 text-red-800",
+  beginner: "bg-green-500/20 text-green-300",
+  intermediate: "bg-yellow-500/20 text-yellow-300",
+  advanced: "bg-red-500/20 text-red-300",
 };
 
 function DrillCard({ drill }: { drill: Drill }) {

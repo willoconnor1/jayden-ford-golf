@@ -6,7 +6,6 @@ import { Mic, Square, Loader2 } from "lucide-react";
 
 interface VoiceListenButtonProps {
   state: VoiceState;
-  interimTranscript: string;
   transcript: string;
   error: string | null;
   onPress: () => void;
@@ -14,24 +13,23 @@ interface VoiceListenButtonProps {
 
 export function VoiceListenButton({
   state,
-  interimTranscript,
   transcript,
   error,
   onPress,
 }: VoiceListenButtonProps) {
-  const isListening = state === "listening";
+  const isRecording = state === "recording";
   const isProcessing = state === "processing";
   const isError = state === "error";
 
   return (
     <div className="flex flex-col items-center gap-3 py-2">
-      {/* Transcript display */}
-      {(interimTranscript || transcript) && (
+      {/* Transcript display — shown after AI processing */}
+      {transcript && (
         <div className="w-full rounded-md border bg-muted/30 p-3">
           <div className="text-xs font-semibold text-white/60 mb-1">
-            {isListening ? "Hearing..." : "Heard:"}
+            Heard:
           </div>
-          <p className="text-sm">{transcript || interimTranscript}</p>
+          <p className="text-sm">{transcript}</p>
         </div>
       )}
 
@@ -42,15 +40,15 @@ export function VoiceListenButton({
         disabled={isProcessing}
         className={cn(
           "w-16 h-16 rounded-full flex items-center justify-center transition-all shadow-md",
-          isListening && "bg-destructive text-white animate-pulse",
+          isRecording && "bg-destructive text-white animate-pulse",
           isProcessing && "bg-muted-foreground text-white cursor-not-allowed",
           isError && "bg-destructive text-white",
-          !isListening && !isProcessing && !isError && "bg-primary text-white hover:bg-primary/90",
+          !isRecording && !isProcessing && !isError && "bg-primary text-white hover:bg-primary/90",
         )}
       >
         {isProcessing ? (
           <Loader2 className="h-6 w-6 animate-spin" />
-        ) : isListening ? (
+        ) : isRecording ? (
           <Square className="h-6 w-6" />
         ) : (
           <Mic className="h-6 w-6" />
@@ -66,11 +64,11 @@ export function VoiceListenButton({
       >
         {isError
           ? error
-          : isListening
-            ? "Click to stop"
+          : isRecording
+            ? "Tap to stop"
             : isProcessing
               ? "Processing..."
-              : "Click to speak"}
+              : "Tap to speak"}
       </span>
     </div>
   );

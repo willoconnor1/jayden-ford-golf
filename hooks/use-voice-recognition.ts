@@ -2,17 +2,24 @@
 
 import { useState, useCallback, useRef } from "react";
 import {
-  startListening,
-  stopListening,
+  startRecording,
+  stopRecording,
+  cancelRecording,
   isSupported,
-} from "@/lib/voice/web-speech-recognizer";
+} from "@/lib/voice/audio-recorder";
+import type { TemplateType } from "@/lib/voice/voice-templates";
 
-export type VoiceState = "idle" | "listening" | "processing" | "error";
+export type VoiceState = "idle" | "recording" | "processing" | "error";
+
+interface VoiceContext {
+  templateType: TemplateType;
+  phase: "shot" | "putt";
+}
 
 interface UseVoiceRecognitionReturn {
   state: VoiceState;
   transcript: string;
-  interimTranscript: string;
+  parsedData: Record<string, unknown> | null;
   error: string | null;
   isSupported: boolean;
   start: () => void;
@@ -20,60 +27,78 @@ interface UseVoiceRecognitionReturn {
   reset: () => void;
 }
 
-export function useVoiceRecognition(): UseVoiceRecognitionReturn {
+export function useVoiceRecognition(
+  context: VoiceContext
+): UseVoiceRecognitionReturn {
   const [state, setState] = useState<VoiceState>("idle");
   const [transcript, setTranscript] = useState("");
-  const [interimTranscript, setInterimTranscript] = useState("");
+  const [parsedData, setParsedData] = useState<Record<string, unknown> | null>(
+    null
+  );
   const [error, setError] = useState<string | null>(null);
-  const transcriptRef = useRef("");
+  const contextRef = useRef(context);
+  contextRef.current = context;
 
-  const start = useCallback(() => {
+  const start = useCallback(async () => {
     setError(null);
     setTranscript("");
-    setInterimTranscript("");
-    transcriptRef.current = "";
+    setParsedData(null);
 
-    startListening({
-      onStart: () => {
-        setState("listening");
-      },
-      onResult: (text, isFinal) => {
-        if (isFinal) {
-          transcriptRef.current = transcriptRef.current
-            ? `${transcriptRef.current} ${text}`
-            : text;
-          setTranscript(transcriptRef.current);
-          setInterimTranscript("");
-        } else {
-          setInterimTranscript(text);
-        }
-      },
-      onError: (message) => {
-        setError(message);
-        setState("error");
-      },
-      onEnd: () => {
-        setState(transcriptRef.current ? "processing" : "idle");
-      },
-    });
+    try {
+      await startRecording();
+      setState("recording");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to start recording"
+      );
+      setState("error");
+    }
   }, []);
 
-  const stop = useCallback(() => {
-    stopListening();
+  const stop = useCallback(async () => {
+    try {
+      const audioBlob = await stopRecording();
+      setState("processing");
+
+      // Build FormData and send to API
+      const formData = new FormData();
+      const ext = audioBlob.type.includes("webm") ? "webm" : "wav";
+      formData.append("audio", audioBlob, `recording.${ext}`);
+      formData.append("templateType", contextRef.current.templateType);
+      formData.append("phase", contextRef.current.phase);
+
+      const res = await fetch("/api/voice/parse", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `API error ${res.status}`);
+      }
+
+      const { transcript: t, data } = await res.json();
+      setTranscript(t || "");
+      setParsedData(data && Object.keys(data).length > 0 ? data : null);
+      setState("idle");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Voice parsing failed");
+      setState("error");
+    }
   }, []);
 
   const reset = useCallback(() => {
+    cancelRecording();
     setState("idle");
     setTranscript("");
-    setInterimTranscript("");
+    setParsedData(null);
     setError(null);
-    transcriptRef.current = "";
   }, []);
 
   return {
     state,
     transcript,
-    interimTranscript,
+    parsedData,
     error,
     isSupported: isSupported(),
     start,
