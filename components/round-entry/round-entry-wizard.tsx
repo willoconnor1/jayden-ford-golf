@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { HoleEntryCard } from "./hole-entry-card";
 import { CourseSearchInput } from "./course-search-input";
 import { useRoundStore } from "@/stores/round-store";
+import { useDraftRoundStore, DraftWizardState, DraftShotFlowState } from "@/stores/draft-round-store";
 import { HoleData, CourseInfo, Round, EntryMode } from "@/lib/types";
 import { DEFAULT_HOLE_PARS } from "@/lib/constants";
 import { EntryModeSelector } from "./entry-mode-selector";
@@ -100,35 +101,64 @@ function HoleParDistanceRow({
   );
 }
 
-export function RoundEntryWizard() {
+interface RoundEntryWizardProps {
+  initialDraft?: {
+    wizard: DraftWizardState;
+    shotFlow: DraftShotFlowState | null;
+  };
+}
+
+export function RoundEntryWizard({ initialDraft }: RoundEntryWizardProps) {
   const router = useRouter();
   const addRound = useRoundStore((s) => s.addRound);
   const rounds = useRoundStore((s) => s.rounds);
-  const [step, setStep] = useState(0);
-  const [notes, setNotes] = useState("");
-  const [entryMode, setEntryMode] = useState<EntryMode>("simple");
+  const saveDraft = useDraftRoundStore((s) => s.saveDraft);
+  const clearDraft = useDraftRoundStore((s) => s.clearDraft);
+
+  const [step, setStep] = useState(initialDraft?.wizard.step ?? 0);
+  const [notes, setNotes] = useState(initialDraft?.wizard.notes ?? "");
+  const [entryMode, setEntryMode] = useState<EntryMode>(initialDraft?.wizard.entryMode ?? "simple");
 
   const isSimple = entryMode === "simple";
   const STEPS = isSimple ? SIMPLE_STEPS : FLOW_STEPS;
   const summaryStep = STEPS.length - 1;
   const isShotFlowStep = !isSimple && step === 1;
 
-  const [course, setCourse] = useState<CourseInfo>({
-    name: "",
-    tees: "",
-    rating: 72.0,
-    slope: 113,
-    totalPar: 72,
-    holePars: [...DEFAULT_HOLE_PARS],
-    holeDistances: Array(18).fill(0),
-  });
-
-  const [holes, setHoles] = useState<HoleData[]>(
-    createDefaultHoles(DEFAULT_HOLE_PARS, Array(18).fill(0))
+  const [course, setCourse] = useState<CourseInfo>(
+    initialDraft?.wizard.course ?? {
+      name: "",
+      tees: "",
+      rating: 72.0,
+      slope: 113,
+      totalPar: 72,
+      holePars: [...DEFAULT_HOLE_PARS],
+      holeDistances: Array(18).fill(0),
+    }
   );
 
-  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
-  const [isManualEntry, setIsManualEntry] = useState(false);
+  const [holes, setHoles] = useState<HoleData[]>(
+    initialDraft?.wizard.holes ?? createDefaultHoles(DEFAULT_HOLE_PARS, Array(18).fill(0))
+  );
+
+  const [date, setDate] = useState(initialDraft?.wizard.date ?? new Date().toISOString().split("T")[0]);
+  const [isManualEntry, setIsManualEntry] = useState(initialDraft?.wizard.isManualEntry ?? false);
+
+  // Draft auto-save
+  const shotFlowStateRef = useRef<DraftShotFlowState | null>(initialDraft?.shotFlow ?? null);
+
+  const handleShotFlowStateChange = useCallback((state: DraftShotFlowState) => {
+    shotFlowStateRef.current = state;
+  }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      saveDraft(
+        { step, notes, entryMode, course, holes, date, isManualEntry },
+        shotFlowStateRef.current
+      );
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [step, notes, entryMode, course, holes, date, isManualEntry, saveDraft]);
 
   const updateHole = (index: number, hole: HoleData) => {
     const updated = [...holes];
@@ -157,6 +187,7 @@ export function RoundEntryWizard() {
     };
 
     addRound(round);
+    clearDraft();
     toast.success("Round saved!");
     router.push("/");
   };
@@ -387,9 +418,12 @@ export function RoundEntryWizard() {
           holeDistances={course.holeDistances}
           entryMode={entryMode}
           onComplete={(flowHoles) => {
+            shotFlowStateRef.current = null;
             setHoles(flowHoles);
             setStep(summaryStep);
           }}
+          initialState={initialDraft?.shotFlow ?? undefined}
+          onStateChange={handleShotFlowStateChange}
         />
       )}
 

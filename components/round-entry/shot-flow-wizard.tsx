@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { HoleData, ShotData, HoleShape, EntryMode } from "@/lib/types";
+import type { DraftShotFlowState } from "@/stores/draft-round-store";
 import { Card, CardContent } from "@/components/ui/card";
 import { ShotFlowHeader } from "./shot-flow-header";
 import { ShotStepCard } from "./shot-step-card";
@@ -17,6 +18,8 @@ interface ShotFlowWizardProps {
   holeDistances: number[];
   entryMode: EntryMode; // "standard" | "detailed"
   onComplete: (holes: HoleData[]) => void;
+  initialState?: DraftShotFlowState;
+  onStateChange?: (state: DraftShotFlowState) => void;
 }
 
 function defaultShot(lie: ShotData["lie"] = "tee", club: ShotData["club"] = "driver", targetDistance = 0): ShotData {
@@ -43,23 +46,30 @@ export function ShotFlowWizard({
   holeDistances,
   entryMode,
   onComplete,
+  initialState,
+  onStateChange,
 }: ShotFlowWizardProps) {
   const totalHoles = holePars.length;
   const isDetailed = entryMode === "detailed";
 
   // Per-hole state
-  const [holeIndex, setHoleIndex] = useState(0);
-  const [phase, setPhase] = useState<Phase>("shot");
-  const [shots, setShots] = useState<ShotData[]>([defaultShot("tee", "driver")]);
-  const [putts, setPutts] = useState<PuttData[]>([]);
-  const [holeShape, setHoleShape] = useState<HoleShape | undefined>();
-  const [completedHoles, setCompletedHoles] = useState<HoleData[]>([]);
-  const [summaryHole, setSummaryHole] = useState<HoleData | null>(null);
+  const [holeIndex, setHoleIndex] = useState(initialState?.holeIndex ?? 0);
+  const [phase, setPhase] = useState<Phase>(initialState?.phase ?? "shot");
+  const [shots, setShots] = useState<ShotData[]>(initialState?.shots ?? [defaultShot("tee", "driver")]);
+  const [putts, setPutts] = useState<PuttData[]>(initialState?.putts ?? []);
+  const [holeShape, setHoleShape] = useState<HoleShape | undefined>(initialState?.holeShape);
+  const [completedHoles, setCompletedHoles] = useState<HoleData[]>(initialState?.completedHoles ?? []);
+  const [summaryHole, setSummaryHole] = useState<HoleData | null>(initialState?.summaryHole ?? null);
 
   // History stack for back navigation: each entry is a snapshot
   const [history, setHistory] = useState<
     Array<{ phase: Phase; shots: ShotData[]; putts: PuttData[] }>
-  >([]);
+  >(initialState?.history ?? []);
+
+  // Report state changes to parent for draft saving
+  useEffect(() => {
+    onStateChange?.({ holeIndex, phase, shots, putts, holeShape, completedHoles, summaryHole, history });
+  }, [holeIndex, phase, shots, putts, holeShape, completedHoles, summaryHole, history, onStateChange]);
 
   const par = holePars[holeIndex];
   const distance = holeDistances[holeIndex];
@@ -165,8 +175,9 @@ export function ShotFlowWizard({
       return;
     }
 
-    // Missed — next putt
-    setPutts((prev) => [...prev, defaultPutt()]);
+    // Missed — next putt, auto-populate distance from miss position
+    const missDistFt = Math.round(Math.sqrt(currentPutt.missX ** 2 + currentPutt.missY ** 2) * 2) / 2;
+    setPutts((prev) => [...prev, { ...defaultPutt(), distance: missDistFt || 0 }]);
   };
 
   // ── Summary / next hole ────────────────────────────────────
