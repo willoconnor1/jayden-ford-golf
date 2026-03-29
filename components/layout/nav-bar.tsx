@@ -75,7 +75,8 @@ export function NavBar() {
             const isActive =
               link.href === "/"
                 ? pathname === "/"
-                : pathname === link.href || pathname.startsWith(link.href + "/");
+                : pathname === link.href ||
+                  (link.href !== "/rounds" && pathname.startsWith(link.href + "/"));
             return (
               <Link
                 key={link.href}
@@ -111,7 +112,8 @@ export function NavBar() {
             const isActive =
               link.href === "/"
                 ? pathname === "/"
-                : pathname === link.href || pathname.startsWith(link.href + "/");
+                : pathname === link.href ||
+                  (link.href !== "/rounds" && pathname.startsWith(link.href + "/"));
             return (
               <Link
                 key={link.href}

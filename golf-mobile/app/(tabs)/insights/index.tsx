@@ -107,7 +107,7 @@ export default function InsightsHub() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#ffffff" },
-  scroll: { padding: 16, gap: 12 },
+  scroll: { padding: 16, paddingBottom: 100, gap: 12 },
   summaryRow: { flexDirection: "row", gap: 8, marginBottom: 4 },
   summaryCard: { flex: 1, padding: 12, alignItems: "center" },
   summaryLabel: { fontSize: 11, fontWeight: "500", color: "#6b7280", marginBottom: 2 },

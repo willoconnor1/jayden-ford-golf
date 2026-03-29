@@ -97,7 +97,7 @@ export function ShotFlowWizard({
     }
 
     if (currentShot.result === "green") {
-      const puttDist = currentShot.distanceRemaining || 0;
+      const puttDist = currentShot.distanceToHole || 0;
       setPutts([{ ...defaultPutt(), distance: puttDist }]);
       setPhase("putt");
       return;
@@ -144,9 +144,10 @@ export function ShotFlowWizard({
       return;
     }
 
-    // Auto-populate distance from miss position
+    // Use explicit remaining distance or fall back to miss position
     const missDistFt = Math.round(Math.sqrt(currentPutt.missX ** 2 + currentPutt.missY ** 2) * 2) / 2;
-    setPutts((prev) => [...prev, { ...defaultPutt(), distance: missDistFt || 0 }]);
+    const nextDist = currentPutt.remainingDistance ?? missDistFt ?? 0;
+    setPutts((prev) => [...prev, { ...defaultPutt(), distance: nextDist }]);
   };
 
   // ── Next hole / finish ──

@@ -19,6 +19,8 @@ import { Goal, StatCategory } from "@/lib/types";
 import { STAT_LABELS, STAT_DIRECTION, formatStat } from "@/lib/constants";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
+import { ScreenBackground } from "@/components/ui/ScreenBackground";
+import { BACKGROUNDS } from "@/lib/background-images";
 import { differenceInDays, format } from "date-fns";
 
 // ── Goal Card Component ───────────────────────────────────────
@@ -187,9 +189,11 @@ export default function GoalsScreen() {
   const completedGoals = goals.filter((g) => g.isCompleted);
 
   return (
-    <SafeAreaView style={styles.container} edges={["bottom"]}>
-      <ScrollView contentContainerStyle={styles.scroll}>
-        {/* Add Goal button */}
+    <View style={styles.wrapper}>
+      <ScreenBackground image={BACKGROUNDS.goals} />
+      <SafeAreaView style={styles.container} edges={["bottom"]}>
+        <ScrollView contentContainerStyle={styles.scroll}>
+          {/* Add Goal button */}
         <Pressable style={styles.addBtn} onPress={() => setModalVisible(true)}>
           <Ionicons name="add-circle-outline" size={18} color="#ffffff" />
           <Text style={styles.addBtnText}>New Goal</Text>
@@ -222,9 +226,9 @@ export default function GoalsScreen() {
             ))}
           </View>
         )}
-      </ScrollView>
+        </ScrollView>
 
-      {/* Create Goal Modal */}
+        {/* Create Goal Modal */}
       <Modal
         visible={modalVisible}
         animationType="slide"
@@ -277,13 +281,15 @@ export default function GoalsScreen() {
             </Pressable>
           </ScrollView>
         </SafeAreaView>
-      </Modal>
-    </SafeAreaView>
+        </Modal>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#ffffff" },
+  wrapper: { flex: 1 },
+  container: { flex: 1 },
   scroll: { padding: 16, gap: 16 },
   // Add button
   addBtn: {

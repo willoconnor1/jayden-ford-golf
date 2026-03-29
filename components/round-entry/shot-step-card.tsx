@@ -172,24 +172,34 @@ export function ShotStepCard({
         </div>
       )}
 
-      {/* Distance to hole — feet, shown when result is green (carries to first putt) */}
+      {/* Green result — miss from target + distance to hole */}
       {shot.result === "green" && (
-        <div className="space-y-1">
-          <div className="text-xs font-medium text-white/60">
-            Distance to Hole (ft)
+        <>
+          {/* Miss from target — computed from tracker */}
+          {(shot.missX !== 0 || shot.missY !== 0) && (
+            <div className="text-xs text-white/50">
+              Miss from target: {Math.round(Math.sqrt(shot.missX ** 2 + shot.missY ** 2) * 3)} ft
+            </div>
+          )}
+
+          {/* Distance to hole — carries to first putt */}
+          <div className="space-y-1">
+            <div className="text-xs font-medium text-white/60">
+              Distance to Hole (ft)
+            </div>
+            <Input
+              type="number"
+              value={shot.distanceToHole ?? ""}
+              onChange={(e) =>
+                update({ distanceToHole: parseInt(e.target.value) || 0 })
+              }
+              className="h-10 text-sm"
+              placeholder="20"
+              min={0}
+              max={200}
+            />
           </div>
-          <Input
-            type="number"
-            value={shot.distanceRemaining || ""}
-            onChange={(e) =>
-              update({ distanceRemaining: parseInt(e.target.value) || 0 })
-            }
-            className="h-10 text-sm"
-            placeholder="20"
-            min={0}
-            max={200}
-          />
-        </div>
+        </>
       )}
 
       {/* Visual miss tracker — Detailed mode only */}

@@ -6,6 +6,11 @@ import Svg, { Rect, Line, Text as SvgText } from "react-native-svg";
 import { useRoundStore } from "@/stores/round-store";
 import { useStrokesGained } from "@/hooks/use-strokes-gained";
 import { Card } from "@/components/ui/Card";
+import { ScreenBackground } from "@/components/ui/ScreenBackground";
+import { BACKGROUNDS } from "@/lib/background-images";
+import { SGTrendChart } from "@/components/charts/SGTrendChart";
+import { GameProfileRadar } from "@/components/charts/GameProfileRadar";
+import { format } from "date-fns";
 
 const SG_CATEGORIES = [
   { label: "Off the Tee", key: "sgOffTheTee" as const },
@@ -67,12 +72,14 @@ function SGBarChart({ data }: { data: { label: string; value: number }[] }) {
 
 export default function StrokesGainedScreen() {
   const rounds = useRoundStore((s) => s.rounds);
-  const { sgAverages } = useStrokesGained();
+  const { sgAverages, sgByRound } = useStrokesGained();
 
   if (rounds.length === 0) {
     return (
-      <SafeAreaView style={styles.container} edges={["bottom"]}>
-        <View style={styles.empty}>
+      <View style={styles.wrapper}>
+        <ScreenBackground image={BACKGROUNDS.strokesGained} />
+        <SafeAreaView style={styles.container} edges={["bottom"]}>
+          <View style={styles.empty}>
           <Text style={styles.emptyTitle}>No Rounds Yet</Text>
           <Text style={styles.emptyText}>
             Log at least one round to see your strokes gained analysis.
@@ -83,8 +90,9 @@ export default function StrokesGainedScreen() {
               <Text style={styles.ctaText}>Log a Round</Text>
             </Pressable>
           </Link>
-        </View>
-      </SafeAreaView>
+          </View>
+        </SafeAreaView>
+      </View>
     );
   }
 
@@ -98,8 +106,10 @@ export default function StrokesGainedScreen() {
     : [];
 
   return (
-    <SafeAreaView style={styles.container} edges={["bottom"]}>
-      <ScrollView contentContainerStyle={styles.scroll}>
+    <View style={styles.wrapper}>
+      <ScreenBackground image={BACKGROUNDS.strokesGained} />
+      <SafeAreaView style={styles.container} edges={["bottom"]}>
+        <ScrollView contentContainerStyle={styles.scroll}>
         {/* Summary Cards */}
         {sgAverages && (
           <View style={styles.cardGrid}>
@@ -139,6 +149,37 @@ export default function StrokesGainedScreen() {
           </Card>
         )}
 
+        {/* Trend Chart */}
+        {sgByRound.length > 1 && (
+          <Card style={styles.chartCard}>
+            <Text style={styles.chartTitle}>Trends Over Time</Text>
+            <SGTrendChart
+              data={[...sgByRound].reverse().map((r) => ({
+                date: format(new Date(r.date), "MM/dd"),
+                Tee: Number(r.sg.sgOffTheTee.toFixed(2)),
+                App: Number(r.sg.sgApproach.toFixed(2)),
+                Short: Number(r.sg.sgAroundTheGreen.toFixed(2)),
+                Putt: Number(r.sg.sgPutting.toFixed(2)),
+              }))}
+            />
+          </Card>
+        )}
+
+        {/* Radar Chart */}
+        {sgAverages && (
+          <Card style={styles.chartCard}>
+            <Text style={styles.chartTitle}>Game Profile</Text>
+            <GameProfileRadar
+              data={[
+                { stat: "Tee", value: sgAverages.sgOffTheTee },
+                { stat: "Approach", value: sgAverages.sgApproach },
+                { stat: "Short Game", value: sgAverages.sgAroundTheGreen },
+                { stat: "Putting", value: sgAverages.sgPutting },
+              ]}
+            />
+          </Card>
+        )}
+
         {/* Understanding SG */}
         <Card style={styles.infoCard}>
           <Text style={styles.infoTitle}>Understanding Strokes Gained</Text>
@@ -161,13 +202,15 @@ export default function StrokesGainedScreen() {
             <Text style={styles.bold}>Putting:</Text> All putts, measured from your first putt distance.
           </Text>
         </Card>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#ffffff" },
+  wrapper: { flex: 1 },
+  container: { flex: 1 },
   scroll: { padding: 16, gap: 16 },
   // Empty state
   empty: { flex: 1, alignItems: "center", justifyContent: "center", paddingVertical: 60 },

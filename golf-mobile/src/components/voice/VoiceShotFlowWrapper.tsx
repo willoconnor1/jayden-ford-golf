@@ -90,10 +90,11 @@ export function VoiceShotFlowWrapper({
         if (d.result) patch.result = d.result;
         if (d.lie) patch.lie = d.lie;
         if (d.intent) patch.intent = d.intent;
-        if (d.missX !== undefined) patch.missX = d.missX;
-        if (d.missY !== undefined) patch.missY = d.missY;
+        if (d.missX !== undefined) patch.missX = d.missX / 3; // feet → yards
+        if (d.missY !== undefined) patch.missY = d.missY / 3; // feet → yards
         if (d.direction) patch.direction = d.direction;
         if (d.distanceRemaining !== undefined) patch.distanceRemaining = d.distanceRemaining;
+        if (d.distanceToHole !== undefined) patch.distanceToHole = d.distanceToHole;
         if (d.targetDistance !== undefined) patch.targetDistance = d.targetDistance;
         if (d.penaltyDrop !== undefined) patch.penaltyDrop = d.penaltyDrop;
         const next = [...prev];
@@ -115,6 +116,7 @@ export function VoiceShotFlowWrapper({
         if (d.speed) patch.speed = d.speed;
         if (d.missX !== undefined) patch.missX = d.missX;
         if (d.missY !== undefined) patch.missY = d.missY;
+        if (d.remainingDistance !== undefined) patch.remainingDistance = d.remainingDistance;
         const next = [...prev];
         next[currentPuttIndex] = { ...current, ...patch };
         return next;
@@ -168,7 +170,7 @@ export function VoiceShotFlowWrapper({
     }
 
     if (currentShot.result === "green") {
-      const puttDist = currentShot.distanceRemaining || 0;
+      const puttDist = currentShot.distanceToHole || 0;
       setPutts([{ ...defaultPutt(), distance: puttDist }]);
       setPhase("putt");
       return;
@@ -218,7 +220,8 @@ export function VoiceShotFlowWrapper({
 
     const missDistFt =
       Math.round(Math.sqrt(currentPutt.missX ** 2 + currentPutt.missY ** 2) * 2) / 2;
-    setPutts((prev) => [...prev, { ...defaultPutt(), distance: missDistFt || 0 }]);
+    const nextDist = currentPutt.remainingDistance ?? missDistFt ?? 0;
+    setPutts((prev) => [...prev, { ...defaultPutt(), distance: nextDist }]);
   };
 
   // ── Next hole / finish ──

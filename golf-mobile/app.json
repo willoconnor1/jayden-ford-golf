@@ -39,7 +39,8 @@
           "microphonePermission": "Allow Jolf to use the microphone for voice input.",
           "speechRecognitionPermission": "Allow Jolf to use speech recognition for voice input."
         }
-      ]
+      ],
+      "expo-sharing"
     ],
     "experiments": {
       "typedRoutes": true

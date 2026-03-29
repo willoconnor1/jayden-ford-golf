@@ -126,7 +126,7 @@ export function ShotFlowWizard({
 
     if (currentShot.result === "green") {
       // Reached green — start putting, carry over distance to hole as putt distance
-      const puttDist = currentShot.distanceRemaining || 0;
+      const puttDist = currentShot.distanceToHole || 0;
       setPutts([{ ...defaultPutt(), distance: puttDist }]);
       setPhase("putt");
       return;
@@ -177,9 +177,10 @@ export function ShotFlowWizard({
       return;
     }
 
-    // Missed — next putt, auto-populate distance from miss position
+    // Missed — next putt, use explicit remaining distance or fall back to miss position
     const missDistFt = Math.round(Math.sqrt(currentPutt.missX ** 2 + currentPutt.missY ** 2) * 2) / 2;
-    setPutts((prev) => [...prev, { ...defaultPutt(), distance: missDistFt || 0 }]);
+    const nextDist = currentPutt.remainingDistance ?? missDistFt ?? 0;
+    setPutts((prev) => [...prev, { ...defaultPutt(), distance: nextDist }]);
   };
 
   // ── Summary / next hole ────────────────────────────────────

@@ -3,15 +3,7 @@ import { db } from "@/lib/db";
 import { rounds, users } from "@/lib/db/schema";
 import { rowToRound } from "@/lib/db/helpers";
 import { getAuthUser } from "@/lib/auth";
-
-/** Comma-separated list of admin emails set in env */
-function isAdminEmail(email: string): boolean {
-  const adminEmails = (process.env.ADMIN_EMAILS ?? "")
-    .split(",")
-    .map((e) => e.trim().toLowerCase())
-    .filter(Boolean);
-  return adminEmails.includes(email.toLowerCase());
-}
+import { isAdminEmail } from "@/lib/admin";
 
 /**
  * GET /api/admin/rounds — returns all users' rounds (admin only)

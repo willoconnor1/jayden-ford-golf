@@ -195,6 +195,7 @@ export interface ShotData {
   direction?: ShotDirection[];     // left / right / short / long (multi-select)
   intent?: ShotIntent;             // green / lay-up / recovery
   distanceRemaining?: number;      // yards remaining after shot
+  distanceToHole?: number;         // feet from hole (green results only)
 }
 
 // ── Course Library ──────────────────────────────────────────────

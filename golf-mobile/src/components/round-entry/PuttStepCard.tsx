@@ -16,6 +16,7 @@ export interface PuttData {
   speed?: PuttSpeed;
   missX: number;
   missY: number;
+  remainingDistance?: number;     // feet from hole after miss
 }
 
 interface PuttStepCardProps {
@@ -139,6 +140,15 @@ export function PuttStepCard({
               onChange={(missX, missY) => update({ missX, missY })}
             />
           )}
+
+          {/* Distance from hole after miss */}
+          <TextInput
+            label="Distance from Hole (ft)"
+            value={putt.remainingDistance ? String(putt.remainingDistance) : ""}
+            onChangeText={(t) => update({ remainingDistance: parseInt(t) || 0 })}
+            keyboardType="number-pad"
+            placeholder="3"
+          />
         </>
       )}
 

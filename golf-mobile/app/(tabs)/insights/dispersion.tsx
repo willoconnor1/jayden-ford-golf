@@ -12,6 +12,8 @@ import {
   getUsedLies,
 } from "@/lib/stats/dispersion";
 import { Card } from "@/components/ui/Card";
+import { ScreenBackground } from "@/components/ui/ScreenBackground";
+import { BACKGROUNDS } from "@/lib/background-images";
 
 // ── Filter Pill ───────────────────────────────────────────────
 
@@ -127,7 +129,9 @@ export default function DispersionScreen() {
 
   if (!hasShots) {
     return (
-      <SafeAreaView style={styles.container} edges={["bottom"]}>
+      <View style={styles.wrapper}>
+        <ScreenBackground image={BACKGROUNDS.dispersion} />
+        <SafeAreaView style={styles.container} edges={["bottom"]}>
         <View style={styles.empty}>
           <Text style={styles.emptyTitle}>No shot data yet</Text>
           <Text style={styles.emptyText}>
@@ -135,13 +139,16 @@ export default function DispersionScreen() {
             click "Track shots" to record where each shot lands relative to your
             target.
           </Text>
-        </View>
-      </SafeAreaView>
+          </View>
+        </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={["bottom"]}>
+    <View style={styles.wrapper}>
+      <ScreenBackground image={BACKGROUNDS.dispersion} />
+      <SafeAreaView style={styles.container} edges={["bottom"]}>
       <ScrollView contentContainerStyle={styles.scroll}>
         {/* Club filter */}
         <View style={styles.filterSection}>
@@ -222,13 +229,15 @@ export default function DispersionScreen() {
             <StatCard label="Avg Target" value={`${stats.avgTargetDistance.toFixed(0)} yds`} />
           </View>
         )}
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#ffffff" },
+  wrapper: { flex: 1 },
+  container: { flex: 1 },
   scroll: { padding: 16, gap: 16 },
   // Empty
   empty: { flex: 1, alignItems: "center", justifyContent: "center", paddingVertical: 60 },

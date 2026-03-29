@@ -47,8 +47,9 @@ function getSystemPrompt(templateType: TemplateType, phase: "shot" | "putt"): st
       '- made: boolean — true if made/sank/drained/holed, false if missed\n' +
       '- missDirection: one of "left", "right", "good-line" — only if missed. "good-line" means the read was correct but speed was off (high side, low side, pro side, on line)\n' +
       '- speed: one of "short", "too-firm", "good-speed" — only if missed. "too-firm" includes long, past, by, blew by\n' +
-      '- missX: number (feet, negative=left, positive=right) — numeric miss distance laterally\n' +
-      '- missY: number (feet, negative=short, positive=long) — numeric miss distance in depth'
+      '- missX: number (feet, negative=left, positive=right) — lateral miss from hole. "short left" = missX negative, missY negative. "long right" = missX positive, missY positive\n' +
+      '- missY: number (feet, negative=short, positive=long) — depth miss from hole\n' +
+      '- remainingDistance: number (feet) — how far from the hole after the miss. Only if missed. E.g. "3 feet from the hole" = 3'
     );
   }
 
@@ -60,7 +61,7 @@ function getSystemPrompt(templateType: TemplateType, phase: "shot" | "putt"): st
         `- club: one of ${CLUBS_LIST}\n` +
         `- result: one of ${RESULTS_LIST}\n` +
         '- direction: array of "left" | "right" — shot direction(s). Infer from "left rough", "right bunker", etc.\n' +
-        '- missX: number (yards, negative=left, positive=right) — lateral miss in yards. E.g. "20 yards left" = -20\n' +
+        '- missX: number (feet, negative=left, positive=right) — lateral miss. Return the number in feet exactly as spoken. "20 yards left" = -60, "15 feet left" = -15\n' +
         '- distanceRemaining: number (yards) — distance to green after shot\n' +
         '- holeShape: one of "straight", "dogleg-left", "dogleg-right"'
       );
@@ -71,9 +72,10 @@ function getSystemPrompt(templateType: TemplateType, phase: "shot" | "putt"): st
         `- club: one of ${CLUBS_LIST}\n` +
         `- result: one of ${RESULTS_LIST}\n` +
         '- direction: array of "left" | "right" | "short" | "long"\n' +
-        '- missX: number (yards, negative=left, positive=right) — lateral miss in yards\n' +
-        '- missY: number (yards, negative=short, positive=long) — depth miss in yards\n' +
-        '- distanceRemaining: number — if result is "green", return feet to hole; otherwise return yards to green'
+        '- missX: number (feet, negative=left, positive=right) — lateral miss from target in feet. "20 yards left" = -60, "15 feet left" = -15\n' +
+        '- missY: number (feet, negative=short, positive=long) — depth miss from target in feet\n' +
+        '- distanceRemaining: number (yards) — distance to green, only for non-green results\n' +
+        '- distanceToHole: number (feet) — distance from the actual hole, only when result is "green"'
       );
     case "approach":
       return (
@@ -83,9 +85,10 @@ function getSystemPrompt(templateType: TemplateType, phase: "shot" | "putt"): st
         `- result: one of ${RESULTS_LIST}\n` +
         '- intent: one of "green", "lay-up", "recovery"\n' +
         '- direction: array of "left" | "right" | "short" | "long"\n' +
-        '- missX: number (yards, negative=left, positive=right) — lateral miss in yards\n' +
-        '- missY: number (yards, negative=short, positive=long) — depth miss in yards\n' +
-        '- distanceRemaining: number — if result is "green", return feet to hole (e.g. "8 feet from the hole" = 8); otherwise return yards to green'
+        '- missX: number (feet, negative=left, positive=right) — lateral miss from target in feet. "20 yards left" = -60, "15 feet left" = -15\n' +
+        '- missY: number (feet, negative=short, positive=long) — depth miss from target in feet\n' +
+        '- distanceRemaining: number (yards) — distance to green, only for non-green results\n' +
+        '- distanceToHole: number (feet) — distance from the actual hole, only when result is "green". E.g. "8 feet from the hole" = 8. This is separate from the target miss.'
       );
     case "chip":
       return (

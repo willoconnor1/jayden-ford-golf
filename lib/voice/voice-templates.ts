@@ -42,6 +42,7 @@ const TEE_PAR3: VoiceTemplate = {
     { label: "Club", example: "7 iron" },
     { label: "Result", example: "on the green" },
     { label: "Miss", example: "10 feet left, 5 feet long", optional: true },
+    { label: "To hole", example: "8 feet from the hole", optional: true },
   ],
 };
 
@@ -51,8 +52,8 @@ const APPROACH: VoiceTemplate = {
   checklistItems: [
     { label: "Club", example: "8 iron" },
     { label: "Result", example: "green" },
-    { label: "Miss", example: "10 feet left, 5 feet long", optional: true },
-    { label: "Distance left", example: "8 feet away", optional: true },
+    { label: "Miss", example: "10 feet left of target", optional: true },
+    { label: "To hole", example: "5 feet from the hole", optional: true },
   ],
 };
 
@@ -73,8 +74,9 @@ const PUTT: VoiceTemplate = {
   checklistItems: [
     { label: "Break", example: "left to right", optional: true },
     { label: "Slope", example: "uphill", optional: true },
-    { label: "Result", example: "made it  /  missed right" },
+    { label: "Result", example: "made it  /  missed short left" },
     { label: "Speed", example: "short", optional: true },
+    { label: "Remaining", example: "3 feet from the hole", optional: true },
   ],
 };
 

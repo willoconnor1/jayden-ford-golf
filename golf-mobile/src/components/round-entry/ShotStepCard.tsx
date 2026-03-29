@@ -194,15 +194,25 @@ export function ShotStepCard({
         />
       )}
 
-      {/* Distance to hole — feet, shown when result is green (carries to first putt) */}
+      {/* Green result — miss from target + distance to hole */}
       {shot.result === "green" && (
-        <TextInput
-          label="Distance to Hole (ft)"
-          value={shot.distanceRemaining ? String(shot.distanceRemaining) : ""}
-          onChangeText={(t) => update({ distanceRemaining: parseInt(t) || 0 })}
-          keyboardType="number-pad"
-          placeholder="20"
-        />
+        <>
+          {/* Miss from target — computed from tracker */}
+          {(shot.missX !== 0 || shot.missY !== 0) && (
+            <Text style={styles.missFromTarget}>
+              Miss from target: {Math.round(Math.sqrt(shot.missX ** 2 + shot.missY ** 2) * 3)} ft
+            </Text>
+          )}
+
+          {/* Distance to hole — carries to first putt */}
+          <TextInput
+            label="Distance to Hole (ft)"
+            value={shot.distanceToHole ? String(shot.distanceToHole) : ""}
+            onChangeText={(t) => update({ distanceToHole: parseInt(t) || 0 })}
+            keyboardType="number-pad"
+            placeholder="20"
+          />
+        </>
       )}
 
       {/* Visual miss tracker — detailed mode only */}
@@ -248,6 +258,7 @@ const styles = StyleSheet.create({
   label: { fontSize: 12, fontWeight: "500", color: "#6b7280" },
   lieText: { textTransform: "capitalize" },
   distanceText: { fontWeight: "600", color: "#6BA3D6" },
+  missFromTarget: { fontSize: 12, color: "rgba(255,255,255,0.5)" },
   fieldLabel: { fontSize: 12, fontWeight: "500", color: "#6b7280", marginBottom: 6 },
   clubButton: {
     flexDirection: "row",

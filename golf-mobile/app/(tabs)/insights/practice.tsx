@@ -10,6 +10,8 @@ import { DRILL_DATABASE } from "@/lib/drills/drill-database";
 import { PracticeFocus, Drill } from "@/lib/types";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
+import { ScreenBackground } from "@/components/ui/ScreenBackground";
+import { BACKGROUNDS } from "@/lib/background-images";
 
 type Tab = "plan" | "drills";
 
@@ -123,8 +125,10 @@ export default function PracticeScreen() {
 
   if (rounds.length === 0 || !sgAverages) {
     return (
-      <SafeAreaView style={styles.container} edges={["bottom"]}>
-        <View style={styles.empty}>
+      <View style={styles.wrapper}>
+        <ScreenBackground image={BACKGROUNDS.practice} />
+        <SafeAreaView style={styles.container} edges={["bottom"]}>
+          <View style={styles.empty}>
           <Text style={styles.emptyTitle}>Need Round Data First</Text>
           <Text style={styles.emptyText}>
             Log a few rounds so we can analyze your game and create a
@@ -136,16 +140,19 @@ export default function PracticeScreen() {
               <Text style={styles.ctaText}>Log a Round</Text>
             </Pressable>
           </Link>
-        </View>
-      </SafeAreaView>
+          </View>
+        </SafeAreaView>
+      </View>
     );
   }
 
   const focuses = analyzePracticeNeeds(sgAverages);
 
   return (
-    <SafeAreaView style={styles.container} edges={["bottom"]}>
-      {/* Tab toggle */}
+    <View style={styles.wrapper}>
+      <ScreenBackground image={BACKGROUNDS.practice} />
+      <SafeAreaView style={styles.container} edges={["bottom"]}>
+        {/* Tab toggle */}
       <View style={styles.tabs}>
         <Pressable
           onPress={() => setTab("plan")}
@@ -187,13 +194,15 @@ export default function PracticeScreen() {
             );
           })
         )}
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#ffffff" },
+  wrapper: { flex: 1 },
+  container: { flex: 1 },
   scroll: { padding: 16, gap: 16 },
   // Tabs
   tabs: {
