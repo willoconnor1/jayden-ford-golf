@@ -4,6 +4,7 @@ import Svg, { Circle, Line, Text as SvgText } from "react-native-svg";
 import { GestureDetector, Gesture } from "react-native-gesture-handler";
 import Animated, { useSharedValue, useAnimatedProps, runOnJS } from "react-native-reanimated";
 import { hapticLight } from "@/lib/platform";
+import { colors } from "@/theme/colors";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -83,14 +84,14 @@ export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
         <View>
           <Svg width={SIZE} height={SIZE}>
             {/* Background */}
-            <Circle cx={CENTER} cy={CENTER} r={CENTER - 2} fill="rgba(74, 222, 128, 0.15)" stroke="#d1d5db" strokeWidth={1} />
+            <Circle cx={CENTER} cy={CENTER} r={CENTER - 2} fill="rgba(74, 222, 128, 0.15)" stroke={colors.border} strokeWidth={1} />
             {/* Rings */}
             {rings.map((r, i) => (
-              <Circle key={i} cx={CENTER} cy={CENTER} r={r} fill="none" stroke="#d1d5db" strokeWidth={0.5} />
+              <Circle key={i} cx={CENTER} cy={CENTER} r={r} fill="none" stroke={colors.border} strokeWidth={0.5} />
             ))}
             {/* Crosshair */}
-            <Line x1={CENTER} y1={4} x2={CENTER} y2={SIZE - 4} stroke="#d1d5db" strokeWidth={0.5} strokeDasharray="3,3" />
-            <Line x1={4} y1={CENTER} x2={SIZE - 4} y2={CENTER} stroke="#d1d5db" strokeWidth={0.5} strokeDasharray="3,3" />
+            <Line x1={CENTER} y1={4} x2={CENTER} y2={SIZE - 4} stroke={colors.inputBorder} strokeWidth={0.5} strokeDasharray="3,3" />
+            <Line x1={4} y1={CENTER} x2={SIZE - 4} y2={CENTER} stroke={colors.inputBorder} strokeWidth={0.5} strokeDasharray="3,3" />
             {/* Cup */}
             <Circle cx={CENTER} cy={CENTER} r={CUP_R} fill="#111827" />
             <Circle cx={CENTER} cy={CENTER} r={CUP_R - 1.5} fill="#374151" />
@@ -118,9 +119,9 @@ export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
         <Pressable onPress={() => setZoom(Math.min(4, zoom * 2))} style={styles.zoomButton}>
           <Text style={styles.zoomText}>+</Text>
         </Pressable>
-        <Text style={styles.zoomLabel}>±{maxRange}ft</Text>
+        <Text style={styles.zoomLabel}>{"\u00b1"}{maxRange}ft</Text>
         <Pressable onPress={() => setZoom(Math.max(0.5, zoom / 2))} style={styles.zoomButton}>
-          <Text style={styles.zoomText}>−</Text>
+          <Text style={styles.zoomText}>{"\u2212"}</Text>
         </Pressable>
       </View>
     </View>
@@ -129,12 +130,12 @@ export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
 
 const styles = StyleSheet.create({
   container: { alignItems: "center", gap: 8 },
-  label: { fontSize: 12, color: "#6b7280", fontWeight: "500" },
+  label: { fontSize: 12, color: colors.textSecondary, fontWeight: "500" },
   zoomRow: { flexDirection: "row", alignItems: "center", gap: 12 },
   zoomButton: {
     width: 28, height: 28, borderRadius: 14, borderWidth: 1,
-    borderColor: "#d1d5db", alignItems: "center", justifyContent: "center",
+    borderColor: colors.inputBorder, alignItems: "center", justifyContent: "center",
   },
-  zoomText: { fontSize: 16, fontWeight: "600", color: "#374151" },
-  zoomLabel: { fontSize: 11, color: "#9ca3af" },
+  zoomText: { fontSize: 16, fontWeight: "600", color: colors.textSecondary },
+  zoomLabel: { fontSize: 11, color: colors.textMuted },
 });

@@ -6,6 +6,7 @@ import { TextInput } from "@/components/ui/TextInput";
 import { PuttMissInput } from "./PuttMissInput";
 import { PUTT_BREAKS, PUTT_SLOPES, PUTT_SPEEDS } from "@/lib/constants-clubs";
 import { hapticLight } from "@/lib/platform";
+import { colors } from "@/theme/colors";
 
 export interface PuttData {
   distance: number;
@@ -68,7 +69,7 @@ export function PuttStepCard({
         value={putt.puttBreak}
         onChange={(v) => update({ puttBreak: v as PuttBreak | undefined })}
         columns={4}
-        activeColor="#6BA3D6"
+        activeColor={colors.primary}
         allowDeselect
       />
 
@@ -170,23 +171,23 @@ export function PuttStepCard({
 
 const styles = StyleSheet.create({
   container: { gap: 16 },
-  label: { fontSize: 12, fontWeight: "500", color: "#6b7280" },
-  fieldLabel: { fontSize: 12, fontWeight: "500", color: "#6b7280", marginBottom: 6 },
+  label: { fontSize: 12, fontWeight: "500", color: colors.textSecondary },
+  fieldLabel: { fontSize: 12, fontWeight: "500", color: colors.textSecondary, marginBottom: 6 },
   madeRow: { flexDirection: "row", gap: 10 },
   madeButton: {
     flex: 1, paddingVertical: 14, borderRadius: 10, borderWidth: 2,
-    borderColor: "#d1d5db", alignItems: "center",
+    borderColor: colors.inputBorder, alignItems: "center",
   },
   madeActive: { backgroundColor: "rgba(74, 222, 128, 0.5)", borderColor: "rgba(74, 222, 128, 0.5)" },
-  madeText: { fontSize: 14, fontWeight: "600", color: "#6b7280" },
-  madeTextActive: { color: "#6b7280" },
+  madeText: { fontSize: 14, fontWeight: "600", color: colors.pillInactiveText },
+  madeTextActive: { color: colors.text },
   missedButton: {
     flex: 1, paddingVertical: 14, borderRadius: 10, borderWidth: 2,
-    borderColor: "#d1d5db", alignItems: "center",
+    borderColor: colors.inputBorder, alignItems: "center",
   },
   missedActive: { backgroundColor: "#dc2626", borderColor: "#dc2626" },
-  missedText: { fontSize: 14, fontWeight: "600", color: "#6b7280" },
-  missedTextActive: { color: "#ffffff" },
+  missedText: { fontSize: 14, fontWeight: "600", color: colors.pillInactiveText },
+  missedTextActive: { color: colors.white },
   navRow: { flexDirection: "row", gap: 10, paddingTop: 8 },
   flex1: { flex: 1 },
 });

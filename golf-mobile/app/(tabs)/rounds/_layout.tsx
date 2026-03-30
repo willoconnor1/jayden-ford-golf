@@ -1,11 +1,14 @@
 import { Stack } from "expo-router";
+import { colors } from "@/theme/colors";
 
 export default function RoundsLayout() {
   return (
     <Stack
       screenOptions={{
         headerShadowVisible: false,
-        headerStyle: { backgroundColor: "rgba(255,255,255,0.85)" },
+        headerStyle: { backgroundColor: colors.background },
+        headerTintColor: colors.text,
+        headerTitleStyle: { color: colors.text },
       }}
     >
       <Stack.Screen name="index" options={{ title: "Rounds" }} />

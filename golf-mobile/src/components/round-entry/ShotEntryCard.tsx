@@ -6,6 +6,7 @@ import { ShotMissInput } from "./ShotMissInput";
 import { DriverMissInput } from "./DriverMissInput";
 import { CLUBS, SHOT_LIES, SHOT_RESULTS, ABNORMAL_DETAILS } from "@/lib/constants-clubs";
 import { hapticLight } from "@/lib/platform";
+import { colors } from "@/theme/colors";
 
 interface ShotEntryCardProps {
   shotIndex: number;
@@ -28,7 +29,7 @@ export function ShotEntryCard({ shotIndex, shot, onChange }: ShotEntryCardProps)
   };
 
   const clubLabel = CLUBS.find((c) => c.value === shot.club)?.label || shot.club;
-  const resultLabel = SHOT_RESULTS.find((r) => r.value === shot.result)?.label || shot.result || "—";
+  const resultLabel = SHOT_RESULTS.find((r) => r.value === shot.result)?.label || shot.result || "\u2014";
 
   return (
     <View style={styles.container}>
@@ -147,36 +148,36 @@ export function ShotEntryCard({ shotIndex, shot, onChange }: ShotEntryCardProps)
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1, borderColor: "#e5e7eb", borderRadius: 10,
-    padding: 12, gap: 10, backgroundColor: "#fff",
+    borderWidth: 1, borderColor: colors.border, borderRadius: 10,
+    padding: 12, gap: 10, backgroundColor: colors.surfaceGlass,
   },
-  label: { fontSize: 12, fontWeight: "500", color: "#6b7280" },
+  label: { fontSize: 12, fontWeight: "500", color: colors.textSecondary },
   row: { flexDirection: "row", gap: 8 },
   halfField: { flex: 1 },
-  fieldLabel: { fontSize: 12, fontWeight: "500", color: "#6b7280", marginBottom: 4 },
+  fieldLabel: { fontSize: 12, fontWeight: "500", color: colors.textSecondary, marginBottom: 4 },
   picker: {
     flexDirection: "row", justifyContent: "space-between", alignItems: "center",
-    height: 36, borderWidth: 1, borderColor: "#d1d5db", borderRadius: 8,
-    paddingHorizontal: 10, backgroundColor: "#fff",
+    height: 36, borderWidth: 1, borderColor: colors.inputBorder, borderRadius: 8,
+    paddingHorizontal: 10, backgroundColor: colors.inputBg,
   },
-  pickerText: { fontSize: 13, color: "#111827" },
-  chevron: { fontSize: 10, color: "#6b7280" },
-  lieText: { fontSize: 13, color: "#6b7280", textTransform: "capitalize", paddingTop: 8 },
+  pickerText: { fontSize: 13, color: colors.text },
+  chevron: { fontSize: 10, color: colors.textSecondary },
+  lieText: { fontSize: 13, color: colors.textSecondary, textTransform: "capitalize", paddingTop: 8 },
   modalOverlay: {
-    flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "flex-end",
+    flex: 1, backgroundColor: colors.overlay, justifyContent: "flex-end",
   },
   modalContent: {
-    backgroundColor: "#fff", borderTopLeftRadius: 16, borderTopRightRadius: 16,
+    backgroundColor: colors.surface, borderTopLeftRadius: 16, borderTopRightRadius: 16,
     maxHeight: "50%", paddingTop: 16, paddingBottom: 32,
   },
   modalTitle: {
-    fontSize: 16, fontWeight: "700", color: "#111827", textAlign: "center", marginBottom: 12,
+    fontSize: 16, fontWeight: "700", color: colors.text, textAlign: "center", marginBottom: 12,
   },
   modalItem: {
     paddingVertical: 12, paddingHorizontal: 20,
-    borderBottomWidth: 1, borderBottomColor: "#f3f4f6",
+    borderBottomWidth: 1, borderBottomColor: colors.border,
   },
-  modalItemActive: { backgroundColor: "rgba(107,163,214,0.08)" },
-  modalItemText: { fontSize: 14, color: "#374151" },
-  modalItemTextActive: { color: "#6BA3D6", fontWeight: "600" },
+  modalItemActive: { backgroundColor: "rgba(107,163,214,0.15)" },
+  modalItemText: { fontSize: 14, color: colors.textSecondary },
+  modalItemTextActive: { color: colors.primary, fontWeight: "600" },
 });

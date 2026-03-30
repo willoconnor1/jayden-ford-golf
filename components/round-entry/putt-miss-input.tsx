@@ -106,7 +106,7 @@ export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
 
   return (
     <div className="flex flex-col items-center gap-1 select-none" onWheel={handleWheel}>
-      <div className="text-xs text-white/60">
+      <div className="text-xs text-muted-foreground">
         Drag ball to miss position ({distanceFt.toFixed(1)}ft, {dirLabel}) · ±{maxFeet}ft
       </div>
       <svg

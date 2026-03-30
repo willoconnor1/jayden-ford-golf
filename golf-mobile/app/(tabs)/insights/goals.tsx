@@ -21,6 +21,7 @@ import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { ScreenBackground } from "@/components/ui/ScreenBackground";
 import { BACKGROUNDS } from "@/lib/background-images";
+import { colors } from "@/theme/colors";
 import { differenceInDays, format } from "date-fns";
 
 // ── Goal Card Component ───────────────────────────────────────
@@ -78,7 +79,7 @@ function GoalCard({ goal }: { goal: Goal }) {
             }}
             hitSlop={8}
           >
-            <Ionicons name="trash-outline" size={18} color="#9ca3af" />
+            <Ionicons name="trash-outline" size={18} color={colors.textMuted} />
           </Pressable>
         </View>
       </View>
@@ -94,7 +95,7 @@ function GoalCard({ goal }: { goal: Goal }) {
         </View>
         <ProgressBar
           value={progress}
-          color={goal.isCompleted ? "#6BA3D6" : "#6BA3D6"}
+          color={colors.primary}
         />
         <Text style={styles.progressPct}>{progress.toFixed(0)}% complete</Text>
       </View>
@@ -218,7 +219,7 @@ export default function GoalsScreen() {
 
         {completedGoals.length > 0 && (
           <View style={styles.section}>
-            <Text style={[styles.sectionTitle, { color: "#6BA3D6" }]}>
+            <Text style={[styles.sectionTitle, { color: colors.primary }]}>
               Completed
             </Text>
             {completedGoals.map((g) => (
@@ -239,7 +240,7 @@ export default function GoalsScreen() {
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>Create a Goal</Text>
             <Pressable onPress={() => setModalVisible(false)}>
-              <Ionicons name="close" size={24} color="#6b7280" />
+              <Ionicons name="close" size={24} color={colors.textSecondary} />
             </Pressable>
           </View>
 
@@ -263,7 +264,7 @@ export default function GoalsScreen() {
                 statCategory.startsWith("sg") ? "e.g., 0.50" : "e.g., 65"
               }
               keyboardType="decimal-pad"
-              placeholderTextColor="#9ca3af"
+              placeholderTextColor={colors.textMuted}
             />
 
             <Text style={styles.fieldLabel}>Target date (YYYY-MM-DD)</Text>
@@ -273,7 +274,7 @@ export default function GoalsScreen() {
               onChangeText={setTargetDate}
               placeholder="2026-06-01"
               keyboardType="numbers-and-punctuation"
-              placeholderTextColor="#9ca3af"
+              placeholderTextColor={colors.textMuted}
             />
 
             <Pressable style={styles.createBtn} onPress={handleCreate}>
@@ -297,74 +298,74 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 6,
-    backgroundColor: "#6BA3D6",
+    backgroundColor: colors.primary,
     paddingVertical: 12,
     borderRadius: 10,
   },
   addBtnText: { color: "#ffffff", fontSize: 15, fontWeight: "600" },
   // Empty
   empty: { paddingVertical: 40, alignItems: "center" },
-  emptyText: { fontSize: 14, color: "#6b7280", textAlign: "center" },
+  emptyText: { fontSize: 14, color: colors.textSecondary, textAlign: "center" },
   // Section
   section: { gap: 10 },
-  sectionTitle: { fontSize: 16, fontWeight: "600", color: "#111827" },
+  sectionTitle: { fontSize: 16, fontWeight: "600", color: colors.text },
   // Goal card
   goalCard: { padding: 14, gap: 12 },
-  goalCardCompleted: { borderColor: "rgba(107, 163, 214, 0.3)", backgroundColor: "rgba(230, 240, 250, 0.5)" },
+  goalCardCompleted: { borderColor: "rgba(107, 163, 214, 0.3)", backgroundColor: "rgba(107, 163, 214, 0.10)" },
   goalHeader: { flexDirection: "row", justifyContent: "space-between", gap: 8 },
-  goalStat: { fontSize: 14, fontWeight: "600", color: "#111827" },
-  goalTarget: { fontSize: 12, color: "#6b7280", marginTop: 2 },
+  goalStat: { fontSize: 14, fontWeight: "600", color: colors.text },
+  goalTarget: { fontSize: 12, color: colors.textSecondary, marginTop: 2 },
   goalBadges: { flexDirection: "row", alignItems: "center", gap: 8 },
-  badgeDone: { backgroundColor: "#6BA3D6", paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
+  badgeDone: { backgroundColor: colors.primary, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
   badgeDoneText: { fontSize: 11, fontWeight: "600", color: "#ffffff" },
-  badgeOverdue: { backgroundColor: "#fef2f2", paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-  badgeOverdueText: { fontSize: 11, fontWeight: "600", color: "#dc2626" },
-  badgeDays: { backgroundColor: "#f3f4f6", paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-  badgeDaysText: { fontSize: 11, fontWeight: "600", color: "#6b7280" },
+  badgeOverdue: { backgroundColor: "rgba(220,38,38,0.15)", paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
+  badgeOverdueText: { fontSize: 11, fontWeight: "600", color: colors.danger },
+  badgeDays: { backgroundColor: colors.inputBg, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
+  badgeDaysText: { fontSize: 11, fontWeight: "600", color: colors.textSecondary },
   // Progress
   progressSection: { gap: 4 },
   progressLabels: { flexDirection: "row", justifyContent: "space-between" },
-  progressText: { fontSize: 11, color: "#6b7280" },
-  progressPct: { fontSize: 11, color: "#6b7280", textAlign: "right" },
+  progressText: { fontSize: 11, color: colors.textSecondary },
+  progressPct: { fontSize: 11, color: colors.textSecondary, textAlign: "right" },
   // Picker
   pickerRow: { gap: 6, paddingVertical: 4 },
   pill: {
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: 20,
-    backgroundColor: "#f3f4f6",
+    backgroundColor: colors.pillInactiveBg,
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: colors.pillInactiveBorder,
   },
-  pillActive: { backgroundColor: "#6BA3D6", borderColor: "#6BA3D6" },
-  pillText: { fontSize: 12, fontWeight: "500", color: "#6b7280" },
+  pillActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  pillText: { fontSize: 12, fontWeight: "500", color: colors.pillInactiveText },
   pillTextActive: { color: "#ffffff" },
   // Modal
-  modalContainer: { flex: 1, backgroundColor: "#ffffff" },
+  modalContainer: { flex: 1, backgroundColor: colors.background },
   modalHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
+    borderBottomColor: colors.border,
   },
-  modalTitle: { fontSize: 18, fontWeight: "700", color: "#111827" },
+  modalTitle: { fontSize: 18, fontWeight: "700", color: colors.text },
   modalContent: { padding: 16, gap: 12 },
-  fieldLabel: { fontSize: 14, fontWeight: "600", color: "#111827", marginTop: 4 },
-  fieldHint: { fontSize: 12, color: "#6b7280" },
+  fieldLabel: { fontSize: 14, fontWeight: "600", color: colors.text, marginTop: 4 },
+  fieldHint: { fontSize: 12, color: colors.textSecondary },
   input: {
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: colors.inputBorder,
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 15,
-    color: "#111827",
-    backgroundColor: "#f9fafb",
+    color: colors.text,
+    backgroundColor: colors.inputBg,
   },
   createBtn: {
-    backgroundColor: "#6BA3D6",
+    backgroundColor: colors.primary,
     paddingVertical: 14,
     borderRadius: 10,
     alignItems: "center",

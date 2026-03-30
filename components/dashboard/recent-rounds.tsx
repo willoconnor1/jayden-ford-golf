@@ -42,7 +42,7 @@ export function RecentRounds({ rounds }: RecentRoundsProps) {
             >
               <div className="min-w-0">
                 <p className="font-medium text-sm truncate">{round.course.name}</p>
-                <p className="text-xs text-white/60">
+                <p className="text-xs text-muted-foreground">
                   {format(new Date(round.date), "MMM d, yyyy")}
                 </p>
               </div>

@@ -12,6 +12,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useAuthStore } from "@/stores/auth-store";
+import { colors } from "@/theme/colors";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -50,6 +51,7 @@ export default function LoginScreen() {
         <TextInput
           style={styles.input}
           placeholder="Email"
+          placeholderTextColor={colors.textMuted}
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
@@ -59,6 +61,7 @@ export default function LoginScreen() {
         <TextInput
           style={styles.input}
           placeholder="Password"
+          placeholderTextColor={colors.textMuted}
           value={password}
           onChangeText={setPassword}
           secureTextEntry
@@ -89,7 +92,7 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
+  container: { flex: 1, backgroundColor: colors.background },
   inner: {
     flex: 1,
     justifyContent: "center",
@@ -100,7 +103,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: "#6BA3D6",
+    backgroundColor: colors.primary,
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
@@ -110,31 +113,32 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: "700",
-    color: "#111827",
+    color: colors.text,
     textAlign: "center",
   },
   subtitle: {
     fontSize: 14,
-    color: "#6b7280",
+    color: colors.textSecondary,
     textAlign: "center",
     marginBottom: 8,
   },
   error: {
-    color: "#dc2626",
+    color: colors.danger,
     fontSize: 13,
     textAlign: "center",
   },
   input: {
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: colors.inputBorder,
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 16,
-    backgroundColor: "#f9fafb",
+    backgroundColor: colors.inputBg,
+    color: colors.text,
   },
   button: {
-    backgroundColor: "#6BA3D6",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     paddingVertical: 14,
     alignItems: "center",
@@ -143,10 +147,10 @@ const styles = StyleSheet.create({
   buttonDisabled: { opacity: 0.6 },
   buttonText: { color: "#fff", fontSize: 16, fontWeight: "600" },
   link: {
-    color: "#6b7280",
+    color: colors.textSecondary,
     fontSize: 14,
     textAlign: "center",
     marginTop: 8,
   },
-  linkBold: { color: "#6BA3D6", fontWeight: "600" },
+  linkBold: { color: colors.primary, fontWeight: "600" },
 });

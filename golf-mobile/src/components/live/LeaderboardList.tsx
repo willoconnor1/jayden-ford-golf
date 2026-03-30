@@ -8,6 +8,7 @@ import {
   formatRank,
 } from "@/lib/live-leaderboard";
 import type { LiveEventData } from "@/lib/types";
+import { colors } from "@/theme/colors";
 
 interface LeaderboardListProps {
   data: LiveEventData;
@@ -44,12 +45,12 @@ export function LeaderboardList({ data, onRefresh, refreshing }: LeaderboardList
         const rankStr = formatRank(item.rank, entries);
         const scoreColor =
           item.thru === 0
-            ? "#9ca3af"
+            ? colors.textMuted
             : item.scoreToPar < 0
-            ? "#ef4444"
+            ? colors.birdie
             : item.scoreToPar > 0
-            ? "#2563eb"
-            : "#6b7280";
+            ? colors.info
+            : colors.textSecondary;
 
         return (
           <Pressable
@@ -89,20 +90,20 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
+    borderBottomColor: colors.border,
   },
-  headerCell: { fontSize: 11, fontWeight: "600", color: "#9ca3af", textTransform: "uppercase" },
+  headerCell: { fontSize: 11, fontWeight: "600", color: colors.textMuted, textTransform: "uppercase" },
   row: {
     flexDirection: "row",
     paddingVertical: 14,
     paddingHorizontal: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#f3f4f6",
+    borderBottomColor: colors.border,
   },
-  cell: { fontSize: 15, color: "#111827" },
+  cell: { fontSize: 15, color: colors.text },
   rankCol: { width: 40 },
   nameCol: { flex: 1 },
   scoreCol: { width: 50, textAlign: "center" },
-  thruCol: { width: 40, textAlign: "center", color: "#6b7280" },
-  totalCol: { width: 36, textAlign: "right", color: "#6b7280" },
+  thruCol: { width: 40, textAlign: "center", color: colors.textSecondary },
+  totalCol: { width: 36, textAlign: "right", color: colors.textSecondary },
 });

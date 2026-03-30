@@ -1,6 +1,7 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { EntryMode } from "@/lib/types";
 import { hapticLight } from "@/lib/platform";
+import { colors } from "@/theme/colors";
 
 interface EntryModeSelectorProps {
   value: EntryMode;
@@ -46,22 +47,23 @@ export function EntryModeSelector({ value, onChange }: EntryModeSelectorProps) {
 }
 
 const styles = StyleSheet.create({
-  label: { fontSize: 14, fontWeight: "600", color: "#111827", marginBottom: 8 },
-  row: { flexDirection: "row", gap: 8 },
+  label: { fontSize: 14, fontWeight: "600", color: colors.text, marginBottom: 8 },
+  row: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   card: {
-    flex: 1,
+    width: "47%",
+    flexGrow: 1,
     alignItems: "center",
-    padding: 12,
+    padding: 10,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#e5e7eb",
+    borderColor: colors.inputBorder,
     gap: 4,
   },
   cardActive: {
-    borderColor: "#6BA3D6",
-    backgroundColor: "rgba(107,163,214,0.05)",
+    borderColor: colors.primary,
+    backgroundColor: "rgba(107,163,214,0.12)",
   },
-  title: { fontSize: 14, fontWeight: "700", color: "#374151" },
-  titleActive: { color: "#6BA3D6" },
-  subtitle: { fontSize: 10, color: "#6b7280", textAlign: "center", lineHeight: 13 },
+  title: { fontSize: 13, fontWeight: "700", color: colors.textSecondary },
+  titleActive: { color: colors.primary },
+  subtitle: { fontSize: 10, color: colors.textMuted, textAlign: "center", lineHeight: 13 },
 });

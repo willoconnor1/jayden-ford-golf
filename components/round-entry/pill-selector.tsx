@@ -71,7 +71,7 @@ export function PillSelector<T extends string>(props: PillSelectorProps<T>) {
   return (
     <div className="space-y-1.5">
       {label && (
-        <div className="text-xs font-medium text-white/60">{label}</div>
+        <div className="text-xs font-medium text-muted-foreground">{label}</div>
       )}
       <div
         className="grid gap-1.5"
@@ -90,7 +90,7 @@ export function PillSelector<T extends string>(props: PillSelectorProps<T>) {
                 "min-h-[36px] active:scale-95",
                 active
                   ? `${optColor} text-white border-transparent`
-                  : "bg-background border-border text-white/60 hover:text-foreground"
+                  : "bg-background border-border text-muted-foreground hover:text-foreground"
               )}
             >
               {opt.label}

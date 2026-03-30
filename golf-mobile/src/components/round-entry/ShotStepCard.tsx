@@ -16,6 +16,7 @@ import {
   APPROACH_SHOT_RESULTS,
 } from "@/lib/constants-clubs";
 import { hapticLight } from "@/lib/platform";
+import { colors } from "@/theme/colors";
 
 interface ShotStepCardProps {
   shotNumber: number;
@@ -255,31 +256,31 @@ export function ShotStepCard({
 
 const styles = StyleSheet.create({
   container: { gap: 16 },
-  label: { fontSize: 12, fontWeight: "500", color: "#6b7280" },
+  label: { fontSize: 12, fontWeight: "500", color: colors.textSecondary },
   lieText: { textTransform: "capitalize" },
-  distanceText: { fontWeight: "600", color: "#6BA3D6" },
-  missFromTarget: { fontSize: 12, color: "rgba(255,255,255,0.5)" },
-  fieldLabel: { fontSize: 12, fontWeight: "500", color: "#6b7280", marginBottom: 6 },
+  distanceText: { fontWeight: "600", color: colors.primary },
+  missFromTarget: { fontSize: 12, color: colors.textMuted },
+  fieldLabel: { fontSize: 12, fontWeight: "500", color: colors.textSecondary, marginBottom: 6 },
   clubButton: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     height: 44,
     borderWidth: 1,
-    borderColor: "#d1d5db",
+    borderColor: colors.inputBorder,
     borderRadius: 10,
     paddingHorizontal: 14,
-    backgroundColor: "#fff",
+    backgroundColor: colors.inputBg,
   },
-  clubButtonText: { fontSize: 15, color: "#111827" },
-  chevron: { fontSize: 12, color: "#6b7280" },
+  clubButtonText: { fontSize: 15, color: colors.text },
+  chevron: { fontSize: 12, color: colors.textSecondary },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: colors.overlay,
     justifyContent: "flex-end",
   },
   modalContent: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     maxHeight: "60%",
@@ -289,7 +290,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#111827",
+    color: colors.text,
     textAlign: "center",
     marginBottom: 12,
   },
@@ -297,11 +298,11 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: "#f3f4f6",
+    borderBottomColor: colors.border,
   },
-  clubItemActive: { backgroundColor: "rgba(107,163,214,0.08)" },
-  clubItemText: { fontSize: 15, color: "#374151" },
-  clubItemTextActive: { color: "#6BA3D6", fontWeight: "600" },
+  clubItemActive: { backgroundColor: "rgba(107,163,214,0.15)" },
+  clubItemText: { fontSize: 15, color: colors.textSecondary },
+  clubItemTextActive: { color: colors.primary, fontWeight: "600" },
   navRow: { flexDirection: "row", gap: 10, paddingTop: 8 },
   flex1: { flex: 1 },
 });

@@ -4,14 +4,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { SyncProvider } from "@/components/SyncProvider";
 import { BlurView } from "expo-blur";
 import { StyleSheet } from "react-native";
+import { colors } from "@/theme/colors";
 
 export default function TabLayout() {
   return (
     <SyncProvider>
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#6BA3D6",
-        tabBarInactiveTintColor: "#9ca3af",
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textMuted,
         headerShown: false,
         tabBarStyle: {
           position: "absolute",
@@ -22,7 +23,7 @@ export default function TabLayout() {
         tabBarBackground: () => (
           <BlurView
             intensity={80}
-            tint="light"
+            tint="dark"
             style={StyleSheet.absoluteFill}
           />
         ),

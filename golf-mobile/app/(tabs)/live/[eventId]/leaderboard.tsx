@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useLiveEvent } from "@/hooks/use-live-event";
 import { LeaderboardList } from "@/components/live/LeaderboardList";
+import { colors } from "@/theme/colors";
 
 export default function LeaderboardScreen() {
   const { eventId } = useLocalSearchParams<{ eventId: string }>();
@@ -10,7 +11,7 @@ export default function LeaderboardScreen() {
   if (isLoading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color="#6BA3D6" />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -53,9 +54,9 @@ export default function LeaderboardScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#ffffff" },
-  center: { flex: 1, alignItems: "center", justifyContent: "center" },
-  errorText: { fontSize: 15, color: "#9ca3af" },
+  container: { flex: 1, backgroundColor: colors.background },
+  center: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.background },
+  errorText: { fontSize: 15, color: colors.textMuted },
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -63,16 +64,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
+    borderBottomColor: colors.border,
   },
-  eventName: { fontSize: 15, fontWeight: "600", color: "#111827" },
+  eventName: { fontSize: 15, fontWeight: "600", color: colors.text },
   badge: {
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 10,
-    backgroundColor: "#f3f4f6",
+    backgroundColor: colors.inputBg,
   },
-  liveBadge: { backgroundColor: "#dbeafe" },
-  badgeText: { fontSize: 11, fontWeight: "600", color: "#6b7280" },
-  liveBadgeText: { color: "#6BA3D6" },
+  liveBadge: { backgroundColor: "rgba(107,163,214,0.15)" },
+  badgeText: { fontSize: 11, fontWeight: "600", color: colors.textSecondary },
+  liveBadgeText: { color: colors.primary },
 });

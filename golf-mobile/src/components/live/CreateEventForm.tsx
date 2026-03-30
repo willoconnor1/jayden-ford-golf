@@ -8,6 +8,7 @@ import { toast } from "@/components/ui/Toast";
 import { hapticLight } from "@/lib/platform";
 import { createEvent } from "@/lib/live-api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { colors } from "@/theme/colors";
 
 const DEFAULT_PARS = [4, 4, 4, 3, 5, 4, 4, 3, 5, 4, 4, 4, 3, 5, 4, 4, 3, 5];
 
@@ -111,18 +112,18 @@ export function CreateEventForm() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   parsCard: { marginTop: 16, padding: 16 },
-  parsTitle: { fontSize: 15, fontWeight: "600", color: "#111827" },
-  parTotal: { fontSize: 13, fontWeight: "400", color: "#6b7280" },
-  parsHint: { fontSize: 12, color: "#9ca3af", marginTop: 2, marginBottom: 12 },
-  nineLabel: { fontSize: 12, fontWeight: "600", color: "#6b7280", marginBottom: 6, marginTop: 4 },
+  parsTitle: { fontSize: 15, fontWeight: "600", color: colors.text },
+  parTotal: { fontSize: 13, fontWeight: "400", color: colors.textSecondary },
+  parsHint: { fontSize: 12, color: colors.textMuted, marginTop: 2, marginBottom: 12 },
+  nineLabel: { fontSize: 12, fontWeight: "600", color: colors.textSecondary, marginBottom: 6, marginTop: 4 },
   parsRow: { flexDirection: "row", gap: 4, marginBottom: 8 },
   parCell: {
     flex: 1,
     alignItems: "center",
     paddingVertical: 8,
     borderRadius: 8,
-    backgroundColor: "#f3f4f6",
+    backgroundColor: colors.inputBg,
   },
-  holeNum: { fontSize: 10, color: "#9ca3af", marginBottom: 2 },
-  parValue: { fontSize: 16, fontWeight: "700", color: "#111827" },
+  holeNum: { fontSize: 10, color: colors.textMuted, marginBottom: 2 },
+  parValue: { fontSize: 16, fontWeight: "700", color: colors.text },
 });

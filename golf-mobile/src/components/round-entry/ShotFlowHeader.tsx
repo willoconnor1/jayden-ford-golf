@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import { ProgressBar } from "@/components/ui/ProgressBar";
+import { colors } from "@/theme/colors";
 
 interface ShotFlowHeaderProps {
   holeNumber: number;
@@ -32,7 +33,7 @@ export function ShotFlowHeader({
 
 const styles = StyleSheet.create({
   container: { gap: 6 },
-  heading: { fontSize: 14, fontWeight: "600", color: "#111827" },
-  details: { fontWeight: "400", color: "#6b7280" },
-  subtitle: { fontSize: 12, color: "#6b7280" },
+  heading: { fontSize: 14, fontWeight: "600", color: colors.text },
+  details: { fontWeight: "400", color: colors.textSecondary },
+  subtitle: { fontSize: 12, color: colors.textSecondary },
 });

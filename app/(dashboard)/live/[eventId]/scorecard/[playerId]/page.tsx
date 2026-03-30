@@ -23,7 +23,7 @@ export default function PlayerScorecardPage({
   if (error || !data) {
     return (
       <div className="text-center py-12">
-        <p className="text-white/70">{error || "Event not found"}</p>
+        <p className="text-muted-foreground">{error || "Event not found"}</p>
         <Link href="/live" className={buttonVariants({ variant: "outline" }) + " mt-4"}>
           Back to Live Events
         </Link>

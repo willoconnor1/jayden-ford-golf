@@ -56,7 +56,7 @@ export default function NewRoundPage() {
           <CardContent className="pt-6 space-y-4">
             <div className="text-center space-y-2">
               <p className="text-lg font-medium">You have an unfinished round</p>
-              <p className="text-sm text-white/60">
+              <p className="text-sm text-muted-foreground">
                 {draft.wizard.course.name || "Unnamed course"} &middot;{" "}
                 {draft.wizard.entryMode} mode &middot;{" "}
                 {formatTimeAgo(draft.savedAt)}

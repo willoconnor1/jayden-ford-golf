@@ -1,11 +1,15 @@
 "use client";
 
 import { EntryMode } from "@/lib/types";
+import { Switch } from "@/components/ui/switch";
+import { Mic } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface EntryModeSelectorProps {
   value: EntryMode;
   onChange: (mode: EntryMode) => void;
+  voiceEnabled: boolean;
+  onVoiceToggle: (enabled: boolean) => void;
 }
 
 const MODES: { value: EntryMode; title: string; subtitle: string }[] = [
@@ -24,18 +28,15 @@ const MODES: { value: EntryMode; title: string; subtitle: string }[] = [
     title: "Detailed",
     subtitle: "Shot-by-shot + visual miss trackers",
   },
-  {
-    value: "voice",
-    title: "Voice (Beta)",
-    subtitle: "Speak your stats shot-by-shot",
-  },
 ];
 
-export function EntryModeSelector({ value, onChange }: EntryModeSelectorProps) {
+export function EntryModeSelector({ value, onChange, voiceEnabled, onVoiceToggle }: EntryModeSelectorProps) {
+  const isShotByShot = value === "standard" || value === "detailed";
+
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       <div className="text-sm font-medium">Entry Mode</div>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-3 gap-2">
         {MODES.map((mode) => (
           <button
             key={mode.value}
@@ -49,12 +50,25 @@ export function EntryModeSelector({ value, onChange }: EntryModeSelectorProps) {
             )}
           >
             <span className="text-sm font-semibold">{mode.title}</span>
-            <span className="text-[10px] leading-tight text-white/60">
+            <span className="text-[10px] leading-tight text-muted-foreground">
               {mode.subtitle}
             </span>
           </button>
         ))}
       </div>
+
+      {isShotByShot && (
+        <div className="flex items-center justify-between rounded-lg border border-border px-3 py-2.5">
+          <div className="flex items-center gap-2">
+            <Mic className="h-4 w-4 text-primary" />
+            <div>
+              <span className="text-sm font-medium">Voice Input</span>
+              <span className="ml-1.5 text-[10px] text-muted-foreground font-medium">BETA</span>
+            </div>
+          </div>
+          <Switch checked={voiceEnabled} onCheckedChange={onVoiceToggle} />
+        </div>
+      )}
     </div>
   );
 }

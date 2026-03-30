@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageHeader } from "@/components/layout/page-header";
-import { PageBackground } from "@/components/layout/page-background";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { useRoundStore } from "@/stores/round-store";
 import { useGoalStore } from "@/stores/goal-store";
 import { Download, Upload, Trash2 } from "lucide-react";
@@ -98,8 +98,7 @@ export default function SettingsPage() {
 
   return (
     <>
-      <PageBackground image="/royal-18th.jpg" />
-      <div className="relative z-10">
+      <div>
         <PageHeader
           title="Settings"
           description="Manage your data and preferences"
@@ -108,10 +107,22 @@ export default function SettingsPage() {
         <div className="space-y-6 max-w-2xl">
           <Card>
             <CardHeader>
+              <CardTitle className="text-lg">Appearance</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Choose your preferred theme for the dashboard.
+              </p>
+              <ThemeToggle />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
               <CardTitle className="text-lg">Data Backup</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-white/60">
+              <p className="text-sm text-muted-foreground">
                 Export your rounds and goals as a JSON file for safekeeping.
                 Import to restore data on a new device or after clearing your
                 browser.
@@ -138,7 +149,7 @@ export default function SettingsPage() {
               <CardTitle className="text-lg">Demo Data</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-white/60">
+              <p className="text-sm text-muted-foreground">
                 Remove the 10 pre-loaded demo rounds. This only deletes seed
                 data — your manually entered rounds are kept.
               </p>

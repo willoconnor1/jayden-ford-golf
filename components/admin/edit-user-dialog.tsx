@@ -109,7 +109,7 @@ export function EditUserDialog({
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Leave blank to keep current"
             />
-            <p className="text-xs text-white/50">
+            <p className="text-xs text-muted-foreground">
               Only fill this if you want to change the password
             </p>
           </div>

@@ -33,7 +33,7 @@ export default function RoundDetailPage({
   if (!round) {
     return (
       <div className="text-center py-12">
-        <p className="text-white/70">Round not found.</p>
+        <p className="text-muted-foreground">Round not found.</p>
         <Link href="/rounds" className={buttonVariants({ variant: "outline" }) + " mt-4"}>
           Back to Rounds
         </Link>
@@ -85,7 +85,7 @@ export default function RoundDetailPage({
             <table className="w-full text-xs text-center tabular-nums" style={{ minWidth: "340px" }}>
               <thead>
                 <tr className="border-b">
-                  <th className="py-1.5 px-1 text-left text-white/60">Hole</th>
+                  <th className="py-1.5 px-1 text-left text-muted-foreground">Hole</th>
                   {round.holes.slice(0, 9).map((_, i) => (
                     <th key={i} className="py-1.5 px-0.5 w-7">{i + 1}</th>
                   ))}
@@ -93,7 +93,7 @@ export default function RoundDetailPage({
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-b text-white/60">
+                <tr className="border-b text-muted-foreground">
                   <td className="py-1.5 px-1 text-left">Par</td>
                   {round.holes.slice(0, 9).map((h, i) => (
                     <td key={i} className="py-1.5 px-0.5">{h.par}</td>
@@ -113,7 +113,7 @@ export default function RoundDetailPage({
                     {round.holes.slice(0, 9).reduce((s, h) => s + h.score, 0)}
                   </td>
                 </tr>
-                <tr className="border-b text-white/60">
+                <tr className="border-b text-muted-foreground">
                   <td className="py-1.5 px-1 text-left">Putts</td>
                   {round.holes.slice(0, 9).map((h, i) => (
                     <td key={i} className="py-1.5 px-0.5">{h.putts}</td>
@@ -128,7 +128,7 @@ export default function RoundDetailPage({
             <table className="w-full text-xs text-center tabular-nums mt-3" style={{ minWidth: "380px" }}>
               <thead>
                 <tr className="border-b">
-                  <th className="py-1.5 px-1 text-left text-white/60">Hole</th>
+                  <th className="py-1.5 px-1 text-left text-muted-foreground">Hole</th>
                   {round.holes.slice(9, 18).map((_, i) => (
                     <th key={i} className="py-1.5 px-0.5 w-7">{i + 10}</th>
                   ))}
@@ -137,7 +137,7 @@ export default function RoundDetailPage({
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-b text-white/60">
+                <tr className="border-b text-muted-foreground">
                   <td className="py-1.5 px-1 text-left">Par</td>
                   {round.holes.slice(9, 18).map((h, i) => (
                     <td key={i} className="py-1.5 px-0.5">{h.par}</td>
@@ -161,7 +161,7 @@ export default function RoundDetailPage({
                   </td>
                   <td className="py-1.5 px-1 font-bold">{stats.totalScore}</td>
                 </tr>
-                <tr className="border-b text-white/60">
+                <tr className="border-b text-muted-foreground">
                   <td className="py-1.5 px-1 text-left">Putts</td>
                   {round.holes.slice(9, 18).map((h, i) => (
                     <td key={i} className="py-1.5 px-0.5">{h.putts}</td>
@@ -180,50 +180,50 @@ export default function RoundDetailPage({
         <div className="grid grid-cols-2 gap-3">
           <Card>
             <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
-              <CardTitle className="text-xs sm:text-sm text-white/60">Fairways</CardTitle>
+              <CardTitle className="text-xs sm:text-sm text-muted-foreground">Fairways</CardTitle>
             </CardHeader>
             <CardContent className="pb-3 px-3 sm:px-6">
               <p className="text-xl sm:text-2xl font-bold">
                 {stats.fairwaysHit}/{stats.fairwaysAttempted}
               </p>
-              <p className="text-xs sm:text-sm text-white/60">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {stats.fairwayPercentage.toFixed(1)}%
               </p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
-              <CardTitle className="text-xs sm:text-sm text-white/60">Greens in Reg</CardTitle>
+              <CardTitle className="text-xs sm:text-sm text-muted-foreground">Greens in Reg</CardTitle>
             </CardHeader>
             <CardContent className="pb-3 px-3 sm:px-6">
               <p className="text-xl sm:text-2xl font-bold">
                 {stats.greensInRegulation}/18
               </p>
-              <p className="text-xs sm:text-sm text-white/60">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {stats.girPercentage.toFixed(1)}%
               </p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
-              <CardTitle className="text-xs sm:text-sm text-white/60">Total Putts</CardTitle>
+              <CardTitle className="text-xs sm:text-sm text-muted-foreground">Total Putts</CardTitle>
             </CardHeader>
             <CardContent className="pb-3 px-3 sm:px-6">
               <p className="text-xl sm:text-2xl font-bold">{stats.totalPutts}</p>
-              <p className="text-xs sm:text-sm text-white/60">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {stats.puttsPerGir.toFixed(2)} per GIR
               </p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
-              <CardTitle className="text-xs sm:text-sm text-white/60">Scrambling</CardTitle>
+              <CardTitle className="text-xs sm:text-sm text-muted-foreground">Scrambling</CardTitle>
             </CardHeader>
             <CardContent className="pb-3 px-3 sm:px-6">
               <p className="text-xl sm:text-2xl font-bold">
                 {stats.scramblingPercentage.toFixed(0)}%
               </p>
-              <p className="text-xs sm:text-sm text-white/60">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {stats.upAndDownConversions}/{stats.upAndDownAttempts} up & down
               </p>
             </CardContent>
@@ -248,7 +248,7 @@ export default function RoundDetailPage({
                 <span
                   className={cn(
                     "font-bold tabular-nums",
-                    item.value >= 0 ? "text-primary" : "text-red-500"
+                    item.value >= 0 ? "text-green-500" : "text-red-500"
                   )}
                 >
                   {item.value > 0 ? "+" : ""}
@@ -265,7 +265,7 @@ export default function RoundDetailPage({
               <CardTitle className="text-base sm:text-lg">Notes</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-white/60 whitespace-pre-wrap">
+              <p className="text-sm text-muted-foreground whitespace-pre-wrap">
                 {round.notes}
               </p>
             </CardContent>

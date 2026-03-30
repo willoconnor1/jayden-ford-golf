@@ -13,14 +13,31 @@ interface AuthUser {
   userId: string;
   email: string;
   name: string;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
+}
+
+interface ProfileData {
+  birthdate?: string;
+  handicap?: number;
+  homeClub?: string;
+  city: string;
+  state?: string;
+  country: string;
+  isCollegePlayer?: boolean;
+  collegeName?: string;
+  isTourPlayer?: boolean;
+  tourName?: string;
 }
 
 interface AuthContextType {
   user: AuthUser | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string, profile?: ProfileData) => Promise<void>;
   logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -54,11 +71,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 
   const register = useCallback(
-    async (name: string, email: string, password: string) => {
+    async (name: string, email: string, password: string, profile?: ProfileData) => {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, ...profile }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Registration failed");
@@ -74,8 +91,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.push("/login");
   }, [router]);
 
+  const refreshUser = useCallback(async () => {
+    const res = await fetch("/api/auth/me");
+    const data = res.ok ? await res.json() : null;
+    setUser(data?.user ?? null);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, login, register, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

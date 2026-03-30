@@ -1,5 +1,6 @@
 import { View, Text, Pressable, StyleSheet, ViewStyle } from "react-native";
 import { hapticLight } from "@/lib/platform";
+import { colors } from "@/theme/colors";
 
 interface PillOption<T extends string> {
   value: T;
@@ -24,7 +25,7 @@ export function PillSelector<T extends string>({
   value,
   onChange,
   columns = 3,
-  activeColor = "#6BA3D6",
+  activeColor = colors.primary,
   activeColorMap,
   label,
   allowDeselect = true,
@@ -71,15 +72,15 @@ export function PillSelector<T extends string>({
                 {
                   width: `${(100 / columns) - 2}%` as unknown as number,
                   flexBasis: `${(100 / columns) - 2}%` as unknown as number,
-                  backgroundColor: active ? optColor : "#ffffff",
-                  borderColor: active ? optColor : "#d1d5db",
+                  backgroundColor: active ? optColor : colors.pillInactiveBg,
+                  borderColor: active ? optColor : colors.pillInactiveBorder,
                 },
               ]}
             >
               <Text
                 style={[
                   styles.pillText,
-                  { color: active ? "#ffffff" : "#6b7280" },
+                  { color: active ? "#ffffff" : colors.pillInactiveText },
                 ]}
                 numberOfLines={1}
               >
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 12,
     fontWeight: "500",
-    color: "#6b7280",
+    color: colors.textMuted,
     marginBottom: 6,
   },
   grid: {

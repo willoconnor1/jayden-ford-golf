@@ -8,6 +8,7 @@ import {
   Platform,
   Pressable,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import * as Crypto from "expo-crypto";
 import { Card } from "@/components/ui/Card";
@@ -25,6 +26,7 @@ import { HoleData, CourseInfo, Round, EntryMode } from "@/lib/types";
 import { DEFAULT_HOLE_PARS } from "@/lib/constants";
 import { calculateRoundStats } from "@/lib/stats/calculate-stats";
 import { hapticSuccess } from "@/lib/platform";
+import { colors } from "@/theme/colors";
 
 const SIMPLE_STEPS = ["Course Info", "Front 9", "Back 9", "Summary"];
 const FLOW_STEPS = ["Course Info", "Shot Flow", "Summary"];
@@ -123,6 +125,7 @@ export function RoundEntryWizard() {
     updatedAt: "",
   };
   const stats = calculateRoundStats(tempRound);
+  const insets = useSafeAreaInsets();
 
   const Wrapper = Platform.OS === "ios" ? KeyboardAvoidingView : View;
   const wrapperProps = Platform.OS === "ios" ? { behavior: "padding" as const, style: { flex: 1 } } : { style: { flex: 1 } };
@@ -131,7 +134,7 @@ export function RoundEntryWizard() {
     <Wrapper {...wrapperProps}>
       <ScrollView
         style={styles.scroll}
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 100 }]}
         keyboardShouldPersistTaps="handled"
       >
         {/* Progress */}
@@ -473,53 +476,53 @@ export function RoundEntryWizard() {
 }
 
 const styles = StyleSheet.create({
-  scroll: { flex: 1, backgroundColor: "#fff" },
+  scroll: { flex: 1, backgroundColor: colors.background },
   content: { padding: 16, gap: 12, paddingBottom: 40 },
   progressRow: { flexDirection: "row", justifyContent: "space-between" },
-  stepLabel: { fontSize: 13, color: "#6b7280", paddingVertical: 4 },
-  stepLabelActive: { color: "#6BA3D6", fontWeight: "600" },
+  stepLabel: { fontSize: 13, color: colors.textMuted, paddingVertical: 4 },
+  stepLabelActive: { color: colors.primary, fontWeight: "600" },
   runningTotal: {
-    backgroundColor: "#f9fafb",
+    backgroundColor: colors.surfaceGlass,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: colors.border,
     padding: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  runningScore: { fontSize: 14, color: "#111827" },
+  runningScore: { fontSize: 14, color: colors.text },
   bold: { fontWeight: "700" },
-  runningStats: { fontSize: 12, color: "#6b7280" },
+  runningStats: { fontSize: 12, color: colors.textSecondary },
   cardPadding: { padding: 16, gap: 16 },
-  sectionTitle: { fontSize: 18, fontWeight: "700", color: "#111827" },
-  fieldLabel: { fontSize: 13, fontWeight: "500", color: "#6b7280" },
+  sectionTitle: { fontSize: 18, fontWeight: "700", color: colors.text },
+  fieldLabel: { fontSize: 13, fontWeight: "500", color: colors.textMuted },
   threeCol: { flexDirection: "row", gap: 8 },
   flex1: { flex: 1 },
   holeCards: { gap: 12 },
-  holeHeader: { flexDirection: "row", alignItems: "center", gap: 8, paddingVertical: 4, borderBottomWidth: 1, borderBottomColor: "#e5e7eb" },
-  holeCol: { fontSize: 12, color: "#6b7280", fontWeight: "500", textAlign: "center" },
-  holeRow: { flexDirection: "row", alignItems: "center", gap: 8, paddingVertical: 4, borderBottomWidth: 1, borderBottomColor: "#f3f4f6" },
-  holeNum: { fontSize: 12, color: "#6b7280", fontWeight: "500", textAlign: "center" },
+  holeHeader: { flexDirection: "row", alignItems: "center", gap: 8, paddingVertical: 4, borderBottomWidth: 1, borderBottomColor: colors.border },
+  holeCol: { fontSize: 12, color: colors.textMuted, fontWeight: "500", textAlign: "center" },
+  holeRow: { flexDirection: "row", alignItems: "center", gap: 8, paddingVertical: 4, borderBottomWidth: 1, borderBottomColor: colors.border },
+  holeNum: { fontSize: 12, color: colors.textMuted, fontWeight: "500", textAlign: "center" },
   parPicker: { flexDirection: "row", gap: 2, width: 50 },
   parButton: {
     flex: 1, alignItems: "center", paddingVertical: 4,
-    borderRadius: 4, borderWidth: 1, borderColor: "#d1d5db",
+    borderRadius: 4, borderWidth: 1, borderColor: colors.inputBorder,
   },
-  parButtonActive: { backgroundColor: "#6BA3D6", borderColor: "#6BA3D6" },
-  parButtonText: { fontSize: 12, color: "#6b7280" },
+  parButtonActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  parButtonText: { fontSize: 12, color: colors.textMuted },
   parButtonTextActive: { color: "#fff", fontWeight: "600" },
   summaryScore: { alignItems: "center", paddingVertical: 16 },
-  bigScore: { fontSize: 48, fontWeight: "700", color: "#111827" },
-  summarySubtext: { fontSize: 14, color: "#6b7280", marginTop: 4 },
-  scorecardRow: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#e5e7eb" },
-  scorecardLabel: { width: 44, fontSize: 11, color: "#6b7280", paddingVertical: 6, paddingHorizontal: 4 },
-  scorecardCell: { width: 28, fontSize: 12, textAlign: "center", paddingVertical: 6 },
+  bigScore: { fontSize: 48, fontWeight: "700", color: colors.text },
+  summarySubtext: { fontSize: 14, color: colors.textSecondary, marginTop: 4 },
+  scorecardRow: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: colors.border },
+  scorecardLabel: { width: 44, fontSize: 11, color: colors.textMuted, paddingVertical: 6, paddingHorizontal: 4 },
+  scorecardCell: { width: 28, fontSize: 12, color: colors.text, textAlign: "center", paddingVertical: 6 },
   scorecardCellView: { width: 28, alignItems: "center", justifyContent: "center", paddingVertical: 4 },
-  dimText: { color: "#6b7280" },
+  dimText: { color: colors.textMuted },
   statsGrid: { gap: 4 },
   statRow: { flexDirection: "row", justifyContent: "space-between", paddingVertical: 4 },
-  statLabel: { fontSize: 13, color: "#6b7280" },
-  statValue: { fontSize: 13, fontWeight: "600", color: "#111827" },
-  navRow: { flexDirection: "row", gap: 10, paddingTop: 4 },
+  statLabel: { fontSize: 13, color: colors.textSecondary },
+  statValue: { fontSize: 13, fontWeight: "600", color: colors.text },
+  navRow: { flexDirection: "row", gap: 10, paddingTop: 8 },
 });

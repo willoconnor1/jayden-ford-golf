@@ -7,6 +7,7 @@ import { hapticSuccess } from "@/lib/platform";
 import { updateEvent } from "@/lib/live-api";
 import type { LiveEventData } from "@/lib/types";
 import { useState } from "react";
+import { colors } from "@/theme/colors";
 
 interface EventLobbyProps {
   data: LiveEventData;
@@ -184,15 +185,15 @@ export function EventLobby({
 const styles = StyleSheet.create({
   container: { flex: 1 },
   codeCard: { padding: 20, alignItems: "center" },
-  codeLabel: { fontSize: 12, color: "#9ca3af", marginBottom: 4 },
+  codeLabel: { fontSize: 12, color: colors.textMuted, marginBottom: 4 },
   codeValue: {
     fontSize: 32,
     fontWeight: "800",
-    color: "#6BA3D6",
+    color: colors.primary,
     fontFamily: "monospace",
     letterSpacing: 6,
   },
-  codeTap: { fontSize: 11, color: "#9ca3af", marginTop: 4 },
+  codeTap: { fontSize: 11, color: colors.textMuted, marginTop: 4 },
   statusRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -204,17 +205,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
-    backgroundColor: "#f3f4f6",
+    backgroundColor: colors.inputBg,
   },
-  activeBadge: { backgroundColor: "#dbeafe" },
-  statusText: { fontSize: 12, fontWeight: "600", color: "#6b7280" },
-  activeText: { color: "#6BA3D6" },
-  playerCount: { fontSize: 13, color: "#6b7280" },
+  activeBadge: { backgroundColor: "rgba(107,163,214,0.15)" },
+  statusText: { fontSize: 12, fontWeight: "600", color: colors.textSecondary },
+  activeText: { color: colors.primary },
+  playerCount: { fontSize: 13, color: colors.textSecondary },
   actionRow: { flexDirection: "row", gap: 12, marginBottom: 16 },
   sectionTitle: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#6b7280",
+    color: colors.textSecondary,
     marginBottom: 8,
   },
   playerCard: { padding: 12, marginBottom: 8 },
@@ -223,19 +224,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  playerName: { fontSize: 15, fontWeight: "600", color: "#111827", flex: 1 },
-  groupLabel: { fontSize: 13, color: "#9ca3af" },
+  playerName: { fontSize: 15, fontWeight: "600", color: colors.text, flex: 1 },
+  groupLabel: { fontSize: 13, color: colors.textMuted },
   groupPicker: { flexDirection: "row", gap: 4 },
   groupBtn: {
     width: 28,
     height: 28,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: "#d1d5db",
+    borderColor: colors.border,
     alignItems: "center",
     justifyContent: "center",
   },
-  groupBtnActive: { backgroundColor: "#6BA3D6", borderColor: "#6BA3D6" },
-  groupBtnText: { fontSize: 12, fontWeight: "600", color: "#6b7280" },
-  groupBtnTextActive: { color: "#ffffff" },
+  groupBtnActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  groupBtnText: { fontSize: 12, fontWeight: "600", color: colors.textSecondary },
+  groupBtnTextActive: { color: colors.white },
 });

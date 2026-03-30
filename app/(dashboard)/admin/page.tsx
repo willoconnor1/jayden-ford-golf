@@ -101,7 +101,7 @@ export default function AdminPage() {
     return (
       <div className="text-center py-12">
         <p className="text-destructive text-lg font-medium">{error}</p>
-        <p className="text-white/70 mt-2">
+        <p className="text-muted-foreground mt-2">
           Admin access is required to view this page.
         </p>
       </div>

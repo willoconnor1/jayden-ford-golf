@@ -1132,6 +1132,24 @@ export function getSeedRounds(): Round[] {
   return roundDefs.map((def, i) => buildRound(def, i));
 }
 
+// ── Exported helpers for seed scripts ───────────────────────────
+
+export const seedCourses = courses;
+
+export function buildRoundFromScores(
+  course: CourseInfo,
+  scores: number[],
+  seed: number,
+  date: string,
+  notes: string,
+  id: string,
+): Round {
+  const holes = generateHoleData(course, scores, seed);
+  const totalScore = scores.reduce((a, b) => a + b, 0);
+  const createdAt = new Date(date + "T10:00:00Z").toISOString();
+  return { id, date, course, holes, totalScore, notes, createdAt, updatedAt: createdAt };
+}
+
 // ── Seed Goals ─────────────────────────────────────────────────
 
 export function getSeedGoals(): Goal[] {

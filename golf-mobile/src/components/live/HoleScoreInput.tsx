@@ -1,6 +1,7 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { hapticLight } from "@/lib/platform";
 import { holeScoreColor } from "@/lib/utils";
+import { colors } from "@/theme/colors";
 
 interface HoleScoreInputProps {
   playerName: string;
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#f3f4f6",
+    borderBottomColor: colors.border,
   },
   nameRow: {
     flexDirection: "row",
@@ -67,8 +68,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 8,
   },
-  name: { fontSize: 15, fontWeight: "600", color: "#111827", flex: 1 },
-  parLabel: { fontSize: 13, color: "#9ca3af" },
+  name: { fontSize: 15, fontWeight: "600", color: colors.text, flex: 1 },
+  parLabel: { fontSize: 13, color: colors.textMuted },
   scoreRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -80,15 +81,15 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 24,
     borderWidth: 1.5,
-    borderColor: "#d1d5db",
+    borderColor: colors.border,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.surfaceGlass,
   },
   disabled: { opacity: 0.3 },
-  buttonText: { fontSize: 24, fontWeight: "600", color: "#374151" },
-  disabledText: { color: "#9ca3af" },
+  buttonText: { fontSize: 24, fontWeight: "600", color: colors.text },
+  disabledText: { color: colors.textMuted },
   valueBox: { alignItems: "center", minWidth: 48 },
-  valueText: { fontSize: 32, fontWeight: "700", color: "#111827" },
+  valueText: { fontSize: 32, fontWeight: "700", color: colors.text },
   diffText: { fontSize: 13, fontWeight: "600", marginTop: 2 },
 });

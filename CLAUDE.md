@@ -86,7 +86,7 @@
 - `sync-provider.tsx` — sync polling provider
 
 ### Dashboard
-- `dashboard/stat-card.tsx`, `stat-grid.tsx`, `recent-rounds.tsx`
+- `dashboard/stat-card.tsx`, `hero-stat-card.tsx`, `recent-rounds.tsx`
 
 ### Round Entry (`round-entry/`)
 - `round-entry-wizard.tsx` — main wizard (step 1: course, step 2: holes, step 3: review)

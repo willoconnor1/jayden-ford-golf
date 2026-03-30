@@ -80,7 +80,7 @@ export function SGTrendChart({ data }: SGTrendChartProps) {
             y1={toY(v)}
             x2={chartWidth - paddingRight}
             y2={toY(v)}
-            stroke={v === 0 ? "#9ca3af" : "#e5e7eb"}
+            stroke={v === 0 ? colors.textMuted : colors.border}
             strokeWidth={v === 0 ? 1 : 0.5}
             strokeDasharray={v === 0 ? undefined : "3,3"}
           />
@@ -96,7 +96,7 @@ export function SGTrendChart({ data }: SGTrendChartProps) {
               y={toY(v) + 3}
               textAnchor="end"
               fontSize={9}
-              fill="#9ca3af"
+              fill={colors.textMuted}
             >
               {v.toFixed(1)}
             </SvgText>
@@ -114,7 +114,7 @@ export function SGTrendChart({ data }: SGTrendChartProps) {
               y={chartHeight - 6}
               textAnchor="middle"
               fontSize={9}
-              fill="#9ca3af"
+              fill={colors.textMuted}
             >
               {d.date}
             </SvgText>

@@ -188,7 +188,7 @@ export default function AdminRoundDetailPage({
     >
       <thead>
         <tr className="border-b">
-          <th className="py-1.5 px-1 text-left text-white/60">Hole</th>
+          <th className="py-1.5 px-1 text-left text-muted-foreground">Hole</th>
           {holes.map((_, i) => (
             <th key={i} className="py-1.5 px-0.5 w-7">
               {startIndex + i + 1}
@@ -203,7 +203,7 @@ export default function AdminRoundDetailPage({
         </tr>
       </thead>
       <tbody>
-        <tr className="border-b text-white/60">
+        <tr className="border-b text-muted-foreground">
           <td className="py-1.5 px-1 text-left">Par</td>
           {holes.map((h, i) => (
             <td key={i} className="py-1.5 px-0.5">
@@ -246,7 +246,7 @@ export default function AdminRoundDetailPage({
             <td className="py-1.5 px-1 font-bold">{displayTotalScore}</td>
           )}
         </tr>
-        <tr className="border-b text-white/60">
+        <tr className="border-b text-muted-foreground">
           <td className="py-1.5 px-1 text-left">Putts</td>
           {holes.map((h, i) => (
             <td key={i} className="py-1.5 px-0.5">
@@ -378,7 +378,7 @@ export default function AdminRoundDetailPage({
         <div className="grid grid-cols-2 gap-3">
           <Card>
             <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
-              <CardTitle className="text-xs sm:text-sm text-white/60">
+              <CardTitle className="text-xs sm:text-sm text-muted-foreground">
                 Fairways
               </CardTitle>
             </CardHeader>
@@ -386,14 +386,14 @@ export default function AdminRoundDetailPage({
               <p className="text-xl sm:text-2xl font-bold">
                 {stats.fairwaysHit}/{stats.fairwaysAttempted}
               </p>
-              <p className="text-xs sm:text-sm text-white/60">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {stats.fairwayPercentage.toFixed(1)}%
               </p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
-              <CardTitle className="text-xs sm:text-sm text-white/60">
+              <CardTitle className="text-xs sm:text-sm text-muted-foreground">
                 Greens in Reg
               </CardTitle>
             </CardHeader>
@@ -401,14 +401,14 @@ export default function AdminRoundDetailPage({
               <p className="text-xl sm:text-2xl font-bold">
                 {stats.greensInRegulation}/18
               </p>
-              <p className="text-xs sm:text-sm text-white/60">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {stats.girPercentage.toFixed(1)}%
               </p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
-              <CardTitle className="text-xs sm:text-sm text-white/60">
+              <CardTitle className="text-xs sm:text-sm text-muted-foreground">
                 Total Putts
               </CardTitle>
             </CardHeader>
@@ -416,14 +416,14 @@ export default function AdminRoundDetailPage({
               <p className="text-xl sm:text-2xl font-bold">
                 {stats.totalPutts}
               </p>
-              <p className="text-xs sm:text-sm text-white/60">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {stats.puttsPerGir.toFixed(2)} per GIR
               </p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="pb-1 pt-3 px-3 sm:px-6">
-              <CardTitle className="text-xs sm:text-sm text-white/60">
+              <CardTitle className="text-xs sm:text-sm text-muted-foreground">
                 Scrambling
               </CardTitle>
             </CardHeader>
@@ -431,7 +431,7 @@ export default function AdminRoundDetailPage({
               <p className="text-xl sm:text-2xl font-bold">
                 {stats.scramblingPercentage.toFixed(0)}%
               </p>
-              <p className="text-xs sm:text-sm text-white/60">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {stats.upAndDownConversions}/{stats.upAndDownAttempts} up &
                 down
               </p>
@@ -462,7 +462,7 @@ export default function AdminRoundDetailPage({
                 <span
                   className={cn(
                     "font-bold tabular-nums",
-                    item.value >= 0 ? "text-primary" : "text-red-500"
+                    item.value >= 0 ? "text-green-500" : "text-red-500"
                   )}
                 >
                   {item.value > 0 ? "+" : ""}
@@ -487,7 +487,7 @@ export default function AdminRoundDetailPage({
                 placeholder="Add notes about this round..."
               />
             ) : displayNotes ? (
-              <p className="text-sm text-white/60 whitespace-pre-wrap">
+              <p className="text-sm text-muted-foreground whitespace-pre-wrap">
                 {displayNotes}
               </p>
             ) : (

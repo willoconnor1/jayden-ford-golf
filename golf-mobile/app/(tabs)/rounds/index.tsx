@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRoundStore } from "@/stores/round-store";
 import { ScreenBackground } from "@/components/ui/ScreenBackground";
 import { BACKGROUNDS } from "@/lib/background-images";
+import { colors } from "@/theme/colors";
 
 export default function RoundsListScreen() {
   const rounds = useRoundStore((s) => s.rounds);
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#6BA3D6",
+    backgroundColor: colors.primary,
     margin: 16,
     padding: 14,
     borderRadius: 12,
@@ -76,21 +77,21 @@ const styles = StyleSheet.create({
   },
   addButtonText: { color: "#fff", fontSize: 16, fontWeight: "600" },
   empty: { flex: 1, alignItems: "center", justifyContent: "center", padding: 32 },
-  emptyText: { fontSize: 16, color: "rgba(255,255,255,0.7)", textAlign: "center" },
+  emptyText: { fontSize: 16, color: colors.textSecondary, textAlign: "center" },
   card: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     padding: 16,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.surfaceGlass,
     borderRadius: 12,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: colors.border,
   },
-  courseName: { fontSize: 16, fontWeight: "600", color: "#111827" },
-  date: { fontSize: 14, color: "#6b7280", marginTop: 4 },
+  courseName: { fontSize: 16, fontWeight: "600", color: colors.text },
+  date: { fontSize: 14, color: colors.textMuted, marginTop: 4 },
   scoreContainer: { alignItems: "flex-end" },
-  score: { fontSize: 24, fontWeight: "700", color: "#111827" },
-  scoreToPar: { fontSize: 14, fontWeight: "600", color: "#6b7280" },
+  score: { fontSize: 24, fontWeight: "700", color: colors.text },
+  scoreToPar: { fontSize: 14, fontWeight: "600", color: colors.textSecondary },
 });

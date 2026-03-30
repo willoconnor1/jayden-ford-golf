@@ -66,14 +66,14 @@ export function DriverMissInput({ missX, onChange }: DriverMissInputProps) {
 
   return (
     <div className="flex flex-col items-center gap-1 select-none">
-      <div className="text-xs text-white/60">
+      <div className="text-xs text-muted-foreground">
         Drag to mark miss ({Math.round(absMiss)}yds {dirLabel}) · ±{maxYards}yds
       </div>
       <div className="flex items-center gap-2">
         <button
           type="button"
           onClick={zoomIn}
-          className="flex items-center justify-center w-7 h-7 rounded-md border bg-background text-white/60 hover:bg-muted transition-colors"
+          className="flex items-center justify-center w-7 h-7 rounded-md border bg-background text-muted-foreground hover:bg-muted transition-colors"
           aria-label="Decrease range"
         >
           <Minus className="w-3.5 h-3.5" />
@@ -129,13 +129,13 @@ export function DriverMissInput({ missX, onChange }: DriverMissInputProps) {
         <button
           type="button"
           onClick={zoomOut}
-          className="flex items-center justify-center w-7 h-7 rounded-md border bg-background text-white/60 hover:bg-muted transition-colors"
+          className="flex items-center justify-center w-7 h-7 rounded-md border bg-background text-muted-foreground hover:bg-muted transition-colors"
           aria-label="Increase range"
         >
           <Plus className="w-3.5 h-3.5" />
         </button>
       </div>
-      <div className="text-[10px] text-white/60/60">
+      <div className="text-[10px] text-muted-foreground/60">
         Use +/− to adjust range
       </div>
     </div>

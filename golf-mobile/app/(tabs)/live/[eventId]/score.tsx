@@ -4,6 +4,7 @@ import { useLiveEvent } from "@/hooks/use-live-event";
 import { useLiveSession } from "@/hooks/use-live-session";
 import { ScoreEntryForm } from "@/components/live/ScoreEntryForm";
 import { Button } from "@/components/ui/Button";
+import { colors } from "@/theme/colors";
 
 export default function ScoreEntryScreen() {
   const { eventId } = useLocalSearchParams<{ eventId: string }>();
@@ -14,7 +15,7 @@ export default function ScoreEntryScreen() {
   if (isLoading || !loaded) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color="#6BA3D6" />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -67,7 +68,7 @@ export default function ScoreEntryScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#ffffff" },
-  center: { flex: 1, alignItems: "center", justifyContent: "center", padding: 16 },
-  errorText: { fontSize: 15, color: "#9ca3af", textAlign: "center" },
+  container: { flex: 1, padding: 16, backgroundColor: colors.background },
+  center: { flex: 1, alignItems: "center", justifyContent: "center", padding: 16, backgroundColor: colors.background },
+  errorText: { fontSize: 15, color: colors.textMuted, textAlign: "center" },
 });

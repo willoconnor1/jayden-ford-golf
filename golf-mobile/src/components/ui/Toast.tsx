@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { View, Text, StyleSheet, Animated, Platform } from "react-native";
+import { colors } from "@/theme/colors";
 
 interface ToastMessage {
   id: number;
@@ -17,9 +18,9 @@ export const toast = {
 };
 
 const typeColors = {
-  success: "#6BA3D6",
-  error: "#dc2626",
-  info: "#2563eb",
+  success: colors.primary,
+  error: colors.danger,
+  info: colors.info,
 };
 
 function ToastItem({ message, onDone }: { message: ToastMessage; onDone: () => void }) {
@@ -79,19 +80,21 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   toast: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.surface,
     borderRadius: 10,
     padding: 14,
     borderLeftWidth: 4,
+    borderWidth: 1,
+    borderColor: colors.border,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 4,
   },
   toastText: {
     fontSize: 14,
-    color: "#111827",
+    color: colors.text,
     fontWeight: "500",
   },
 });

@@ -1,4 +1,4 @@
-import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import { DarkTheme, ThemeProvider } from "@react-navigation/native";
 import {
   useFonts,
   Inter_400Regular,
@@ -13,6 +13,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar, InputAccessoryView, View, Text, Pressable, Keyboard, StyleSheet, Platform, ActivityIndicator } from "react-native";
 import { ToastProvider } from "@/components/ui/Toast";
 import { useAuthStore } from "@/stores/auth-store";
+import { colors } from "@/theme/colors";
 import "react-native-reanimated";
 
 export { ErrorBoundary } from "expo-router";
@@ -40,14 +41,14 @@ if (originalRender) {
 }
 
 const golfTheme = {
-  ...DefaultTheme,
+  ...DarkTheme,
   colors: {
-    ...DefaultTheme.colors,
-    primary: "#6BA3D6",
-    background: "#ffffff",
-    card: "#ffffff",
-    text: "#111827",
-    border: "#e5e7eb",
+    ...DarkTheme.colors,
+    primary: colors.primary,
+    background: colors.background,
+    card: colors.surface,
+    text: colors.text,
+    border: colors.border,
   },
 };
 
@@ -79,15 +80,15 @@ export default function RootLayout() {
 
   if (!loaded || isAuthLoading) {
     return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#fff" }}>
-        <ActivityIndicator size="large" color="#6BA3D6" />
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.background }}>
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
       <ToastProvider>
         <ThemeProvider value={golfTheme}>
           <Stack>
@@ -117,9 +118,9 @@ const kbStyles = StyleSheet.create({
   bar: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f1f1f1",
+    backgroundColor: colors.surface,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: "#c8c8c8",
+    borderTopColor: colors.border,
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
@@ -130,6 +131,6 @@ const kbStyles = StyleSheet.create({
   btnText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#6BA3D6",
+    color: colors.primary,
   },
 });

@@ -1,5 +1,6 @@
 import { View, Text, Pressable, StyleSheet, ViewStyle } from "react-native";
 import { hapticLight } from "@/lib/platform";
+import { colors } from "@/theme/colors";
 
 interface NumberStepperProps {
   value: number;
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 13,
     fontWeight: "500",
-    color: "#6b7280",
+    color: colors.textMuted,
     width: 48,
   },
   stepper: {
@@ -79,10 +80,10 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#d1d5db",
+    borderColor: colors.inputBorder,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.inputBg,
   },
   disabled: {
     opacity: 0.4,
@@ -90,10 +91,10 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#374151",
+    color: colors.text,
   },
   disabledText: {
-    color: "#9ca3af",
+    color: colors.disabledText,
   },
   valueContainer: {
     width: 36,
@@ -103,6 +104,6 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 18,
     fontWeight: "700",
-    color: "#111827",
+    color: colors.text,
   },
 });

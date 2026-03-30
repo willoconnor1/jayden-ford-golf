@@ -5,6 +5,7 @@ import { CreateEventForm } from "@/components/live/CreateEventForm";
 import { JoinEventForm } from "@/components/live/JoinEventForm";
 import { ScreenBackground } from "@/components/ui/ScreenBackground";
 import { BACKGROUNDS } from "@/lib/background-images";
+import { colors } from "@/theme/colors";
 
 type Tab = "join" | "create";
 
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginTop: 8,
     borderRadius: 10,
-    backgroundColor: "#f3f4f6",
+    backgroundColor: colors.inputBg,
     padding: 3,
   },
   tab: {
@@ -59,8 +60,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 8,
   },
-  activeTab: { backgroundColor: "#ffffff", shadowOpacity: 0.08, shadowRadius: 2, shadowOffset: { width: 0, height: 1 } },
-  tabText: { fontSize: 14, fontWeight: "600", color: "#9ca3af" },
-  activeTabText: { color: "#111827" },
+  activeTab: { backgroundColor: colors.surfaceGlass, shadowOpacity: 0.08, shadowRadius: 2, shadowOffset: { width: 0, height: 1 } },
+  tabText: { fontSize: 14, fontWeight: "600", color: colors.textMuted },
+  activeTabText: { color: colors.text },
   content: { flex: 1, padding: 16, paddingBottom: 100 },
 });

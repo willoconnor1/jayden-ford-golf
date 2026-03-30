@@ -11,6 +11,9 @@ export interface AuthUser {
   userId: string;
   email: string;
   name: string;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
 }
 
 // ── Password ───────────────────────────────────────────────────────
@@ -31,6 +34,9 @@ export async function createToken(user: AuthUser): Promise<string> {
     sub: user.userId,
     email: user.email,
     name: user.name,
+    city: user.city ?? null,
+    state: user.state ?? null,
+    country: user.country ?? null,
   })
     .setProtectedHeader({ alg: "HS256" })
     .setExpirationTime(TOKEN_EXPIRY)
@@ -45,6 +51,9 @@ export async function verifyToken(token: string): Promise<AuthUser | null> {
       userId: payload.sub!,
       email: payload.email as string,
       name: payload.name as string,
+      city: (payload.city as string) ?? null,
+      state: (payload.state as string) ?? null,
+      country: (payload.country as string) ?? null,
     };
   } catch {
     return null;

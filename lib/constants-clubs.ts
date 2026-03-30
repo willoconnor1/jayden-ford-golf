@@ -134,6 +134,36 @@ export const PUTT_BREAKS: { value: PuttBreak; label: string }[] = [
   { value: "multiple", label: "Multiple" },
 ];
 
+// ── Club Colors for Dispersion Visualization ───────────────────
+// Grouped by family: woods = warm, hybrids = teal, irons = blue/purple, wedges = green
+
+export const CLUB_COLORS: Record<Club, string> = {
+  // Woods
+  "driver":    "#ef4444",
+  "3-wood":    "#f97316",
+  "5-wood":    "#f59e0b",
+  "7-wood":    "#eab308",
+  // Hybrids
+  "2-hybrid":  "#06b6d4",
+  "3-hybrid":  "#0891b2",
+  "4-hybrid":  "#0d9488",
+  "5-hybrid":  "#14b8a6",
+  // Irons
+  "2-iron":    "#3b82f6",
+  "3-iron":    "#6366f1",
+  "4-iron":    "#2563eb",
+  "5-iron":    "#818cf8",
+  "6-iron":    "#8b5cf6",
+  "7-iron":    "#a855f7",
+  "8-iron":    "#c084fc",
+  "9-iron":    "#d946ef",
+  // Wedges
+  "pw":        "#22c55e",
+  "gw":        "#84cc16",
+  "sw":        "#a3e635",
+  "lw":        "#4ade80",
+};
+
 // ── Default club distance ranges (yards) for auto-suggestion ────
 // Ordered from longest to shortest so the first match wins.
 

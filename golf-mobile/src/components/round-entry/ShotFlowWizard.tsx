@@ -8,6 +8,7 @@ import { PuttStepCard, PuttData } from "./PuttStepCard";
 import { HoleSummaryCard } from "./HoleSummaryCard";
 import { deriveHoleData, resultToNextLie } from "./derive-hole-data";
 import { getClubForDistance } from "@/lib/constants-clubs";
+import { colors } from "@/theme/colors";
 
 type Phase = "shot" | "putt" | "summary";
 

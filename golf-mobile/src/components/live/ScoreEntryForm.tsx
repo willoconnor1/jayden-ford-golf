@@ -7,6 +7,7 @@ import { hapticLight, hapticSuccess } from "@/lib/platform";
 import { submitScores } from "@/lib/live-api";
 import { HoleScoreInput } from "./HoleScoreInput";
 import type { LiveEventData } from "@/lib/types";
+import { colors } from "@/theme/colors";
 
 interface ScoreEntryFormProps {
   data: LiveEventData;
@@ -96,7 +97,7 @@ export function ScoreEntryForm({ data, playerId }: ScoreEntryFormProps) {
           disabled={currentHole <= 1}
           style={[styles.navBtn, currentHole <= 1 && styles.navBtnDisabled]}
         >
-          <Text style={styles.navBtnText}>‹</Text>
+          <Text style={styles.navBtnText}>&#8249;</Text>
         </Pressable>
         <View style={styles.holeInfo}>
           <Text style={styles.holeTitle}>Hole {currentHole}</Text>
@@ -107,7 +108,7 @@ export function ScoreEntryForm({ data, playerId }: ScoreEntryFormProps) {
           disabled={currentHole >= 18}
           style={[styles.navBtn, currentHole >= 18 && styles.navBtnDisabled]}
         >
-          <Text style={styles.navBtnText}>›</Text>
+          <Text style={styles.navBtnText}>&#8250;</Text>
         </Pressable>
       </View>
 
@@ -182,15 +183,15 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 22,
     borderWidth: 1,
-    borderColor: "#d1d5db",
+    borderColor: colors.border,
     alignItems: "center",
     justifyContent: "center",
   },
   navBtnDisabled: { opacity: 0.3 },
-  navBtnText: { fontSize: 28, fontWeight: "300", color: "#374151" },
+  navBtnText: { fontSize: 28, fontWeight: "300", color: colors.text },
   holeInfo: { alignItems: "center" },
-  holeTitle: { fontSize: 20, fontWeight: "700", color: "#111827" },
-  holePar: { fontSize: 14, color: "#6b7280" },
+  holeTitle: { fontSize: 20, fontWeight: "700", color: colors.text },
+  holePar: { fontSize: 14, color: colors.textSecondary },
   holeProgress: { marginBottom: 16 },
   holeProgressContent: { gap: 4, paddingHorizontal: 2 },
   holeBtn: {
@@ -198,14 +199,14 @@ const styles = StyleSheet.create({
     height: 32,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: colors.border,
     alignItems: "center",
     justifyContent: "center",
   },
-  holeBtnComplete: { backgroundColor: "#dbeafe", borderColor: "#93c5fd" },
-  holeBtnCurrent: { backgroundColor: "#6BA3D6", borderColor: "#6BA3D6" },
-  holeBtnText: { fontSize: 12, fontWeight: "600", color: "#9ca3af" },
-  holeBtnTextComplete: { color: "#6BA3D6" },
-  holeBtnTextCurrent: { color: "#ffffff" },
+  holeBtnComplete: { backgroundColor: "rgba(107,163,214,0.15)", borderColor: colors.primaryLight },
+  holeBtnCurrent: { backgroundColor: colors.primary, borderColor: colors.primary },
+  holeBtnText: { fontSize: 12, fontWeight: "600", color: colors.textMuted },
+  holeBtnTextComplete: { color: colors.primary },
+  holeBtnTextCurrent: { color: colors.white },
   scoresCard: { padding: 16 },
 });

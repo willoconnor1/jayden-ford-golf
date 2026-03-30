@@ -97,7 +97,7 @@ export function JoinEventForm() {
           <CardContent className="pt-4 space-y-3">
             <div>
               <p className="font-semibold">{foundEvent.name}</p>
-              <p className="text-sm text-white/60">{foundEvent.courseName}</p>
+              <p className="text-sm text-muted-foreground">{foundEvent.courseName}</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="player-name">Your Name</Label>

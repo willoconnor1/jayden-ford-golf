@@ -8,6 +8,7 @@ import { toast } from "@/components/ui/Toast";
 import { lookupEventByCode, joinEvent } from "@/lib/live-api";
 import type { LiveEvent } from "@/lib/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { colors } from "@/theme/colors";
 
 export function JoinEventForm() {
   const router = useRouter();
@@ -112,6 +113,6 @@ export function JoinEventForm() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   eventCard: { padding: 16, alignItems: "center" },
-  eventName: { fontSize: 18, fontWeight: "700", color: "#111827" },
-  courseName: { fontSize: 14, color: "#6b7280", marginTop: 4 },
+  eventName: { fontSize: 18, fontWeight: "700", color: colors.text },
+  courseName: { fontSize: 14, color: colors.textSecondary, marginTop: 4 },
 });

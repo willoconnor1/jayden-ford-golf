@@ -14,6 +14,7 @@ import {
 import { Card } from "@/components/ui/Card";
 import { ScreenBackground } from "@/components/ui/ScreenBackground";
 import { BACKGROUNDS } from "@/lib/background-images";
+import { colors } from "@/theme/colors";
 
 // ── Filter Pill ───────────────────────────────────────────────
 
@@ -70,18 +71,18 @@ function ScatterPlot({
   return (
     <Svg width={size} height={size}>
       {/* Background */}
-      <Rect x={0} y={0} width={size} height={size} fill="#f9fafb" rx={8} />
+      <Rect x={0} y={0} width={size} height={size} fill={colors.inputBg} rx={8} />
       {/* Grid lines */}
-      <Line x1={padding} y1={cy} x2={size - padding} y2={cy} stroke="#d1d5db" strokeWidth={0.5} />
-      <Line x1={cx} y1={padding} x2={cx} y2={size - padding} stroke="#d1d5db" strokeWidth={0.5} />
+      <Line x1={padding} y1={cy} x2={size - padding} y2={cy} stroke={colors.border} strokeWidth={0.5} />
+      <Line x1={cx} y1={padding} x2={cx} y2={size - padding} stroke={colors.border} strokeWidth={0.5} />
       {/* Crosshair */}
-      <Line x1={cx - 6} y1={cy} x2={cx + 6} y2={cy} stroke="#6b7280" strokeWidth={1.5} />
-      <Line x1={cx} y1={cy - 6} x2={cx} y2={cy + 6} stroke="#6b7280" strokeWidth={1.5} />
+      <Line x1={cx - 6} y1={cy} x2={cx + 6} y2={cy} stroke={colors.textSecondary} strokeWidth={1.5} />
+      <Line x1={cx} y1={cy - 6} x2={cx} y2={cy + 6} stroke={colors.textSecondary} strokeWidth={1.5} />
       {/* Axis labels */}
-      <SvgText x={size - padding + 4} y={cy + 4} fontSize={9} fill="#9ca3af">R</SvgText>
-      <SvgText x={padding - 10} y={cy + 4} fontSize={9} fill="#9ca3af">L</SvgText>
-      <SvgText x={cx + 4} y={padding - 4} fontSize={9} fill="#9ca3af">Long</SvgText>
-      <SvgText x={cx + 4} y={size - padding + 14} fontSize={9} fill="#9ca3af">Short</SvgText>
+      <SvgText x={size - padding + 4} y={cy + 4} fontSize={9} fill={colors.textMuted}>R</SvgText>
+      <SvgText x={padding - 10} y={cy + 4} fontSize={9} fill={colors.textMuted}>L</SvgText>
+      <SvgText x={cx + 4} y={padding - 4} fontSize={9} fill={colors.textMuted}>Long</SvgText>
+      <SvgText x={cx + 4} y={size - padding + 14} fontSize={9} fill={colors.textMuted}>Short</SvgText>
       {/* Dots */}
       {data.map((d, i) => (
         <Circle
@@ -89,9 +90,9 @@ function ScatterPlot({
           cx={cx + d.x * scale}
           cy={cy - d.y * scale}
           r={4.5}
-          fill="#6BA3D6"
+          fill={colors.primary}
           fillOpacity={0.6}
-          stroke="#6BA3D6"
+          stroke={colors.primary}
           strokeWidth={0.5}
         />
       ))}
@@ -242,34 +243,34 @@ const styles = StyleSheet.create({
   // Empty
   empty: { flex: 1, alignItems: "center", justifyContent: "center", paddingVertical: 60 },
   emptyIcon: { fontSize: 40, marginBottom: 12 },
-  emptyTitle: { fontSize: 20, fontWeight: "700", color: "#111827", marginBottom: 6 },
-  emptyText: { fontSize: 14, color: "#6b7280", textAlign: "center", paddingHorizontal: 32, lineHeight: 20 },
+  emptyTitle: { fontSize: 20, fontWeight: "700", color: colors.text, marginBottom: 6 },
+  emptyText: { fontSize: 14, color: colors.textSecondary, textAlign: "center", paddingHorizontal: 32, lineHeight: 20 },
   // Filters
   filterSection: { gap: 6 },
-  filterLabel: { fontSize: 12, fontWeight: "600", color: "#6b7280" },
+  filterLabel: { fontSize: 12, fontWeight: "600", color: colors.textSecondary },
   filterRow: { gap: 6 },
   filterPill: {
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: 20,
-    backgroundColor: "#f9fafb",
+    backgroundColor: colors.pillInactiveBg,
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: colors.pillInactiveBorder,
   },
-  filterPillActive: { backgroundColor: "#6BA3D6", borderColor: "#6BA3D6" },
-  filterPillText: { fontSize: 12, fontWeight: "500", color: "#6b7280" },
+  filterPillActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  filterPillText: { fontSize: 12, fontWeight: "500", color: colors.pillInactiveText },
   filterPillTextActive: { color: "#ffffff" },
   // Plot
   plotCard: { padding: 16 },
   plotHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 12 },
-  plotTitle: { fontSize: 16, fontWeight: "600", color: "#111827" },
-  plotCount: { fontSize: 13, color: "#6b7280" },
+  plotTitle: { fontSize: 16, fontWeight: "600", color: colors.text },
+  plotCount: { fontSize: 13, color: colors.textSecondary },
   plotContainer: { alignItems: "center" },
   plotEmpty: { alignItems: "center", justifyContent: "center" },
-  plotEmptyText: { fontSize: 14, color: "#9ca3af" },
+  plotEmptyText: { fontSize: 14, color: colors.textMuted },
   // Stats
   statsGrid: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   statCard: { width: "48%", padding: 12 },
-  statLabel: { fontSize: 11, color: "#6b7280", marginBottom: 2 },
-  statValue: { fontSize: 14, fontWeight: "700", color: "#111827", fontVariant: ["tabular-nums"] },
+  statLabel: { fontSize: 11, color: colors.textSecondary, marginBottom: 2 },
+  statValue: { fontSize: 14, fontWeight: "700", color: colors.text, fontVariant: ["tabular-nums"] },
 });

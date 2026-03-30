@@ -2,6 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { HoleData } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
 import { holeScoreColor } from "@/lib/utils";
+import { colors } from "@/theme/colors";
 
 interface HoleSummaryCardProps {
   hole: HoleData;
@@ -87,7 +88,7 @@ export function HoleSummaryCard({ hole, isLastHole, onNext, onBack }: HoleSummar
                 {i + 1}. {s.club.replace("-", " ")}
                 {s.result && (
                   <Text style={{ fontWeight: "600", color: isGoodResult ? "#22c55e" : "#f87171" }}>
-                    {" → "}{s.result.replace("-", " ")}
+                    {" \u2192 "}{s.result.replace("-", " ")}
                   </Text>
                 )}
               </Text>
@@ -116,21 +117,21 @@ export function HoleSummaryCard({ hole, isLastHole, onNext, onBack }: HoleSummar
 
 const styles = StyleSheet.create({
   container: { gap: 16 },
-  sectionLabel: { fontSize: 12, fontWeight: "500", color: "#6b7280" },
+  sectionLabel: { fontSize: 12, fontWeight: "500", color: colors.textSecondary },
   scoreRow: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 12, paddingVertical: 12 },
   bigScore: { fontSize: 40, fontWeight: "700" },
   scoreLabel: { fontSize: 14, fontWeight: "600" },
-  parLabel: { fontSize: 12, color: "#6b7280" },
+  parLabel: { fontSize: 12, color: colors.textSecondary },
   statsGrid: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   statBox: {
     flexDirection: "row", justifyContent: "space-between", alignItems: "center",
-    borderWidth: 1, borderColor: "#e5e7eb", borderRadius: 8,
+    borderWidth: 1, borderColor: colors.border, borderRadius: 8,
     paddingHorizontal: 12, paddingVertical: 8, flexBasis: "47%", flexGrow: 1,
   },
-  statLabel: { fontSize: 12, color: "#6b7280" },
-  statValue: { fontSize: 12, fontWeight: "600", color: "#111827" },
+  statLabel: { fontSize: 12, color: colors.textSecondary },
+  statValue: { fontSize: 12, fontWeight: "600", color: colors.text },
   shotsSection: { gap: 4 },
-  shotLine: { fontSize: 12, color: "#6b7280", textTransform: "capitalize" },
+  shotLine: { fontSize: 12, color: colors.textSecondary, textTransform: "capitalize" },
   navRow: { flexDirection: "row", gap: 10, paddingTop: 8 },
   flex1: { flex: 1 },
 });

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { type ColumnDef, DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { CreateUserDialog } from "./create-user-dialog";
 import { EditUserDialog } from "./edit-user-dialog";
 import { ConfirmDialog } from "./confirm-dialog";
@@ -26,10 +27,96 @@ interface AdminUsersTabProps {
 }
 
 export function AdminUsersTab({ users, refresh }: AdminUsersTabProps) {
+  const router = useRouter();
   const [createOpen, setCreateOpen] = useState(false);
   const [editUser, setEditUser] = useState<AdminUser | null>(null);
   const [deleteUser, setDeleteUser] = useState<AdminUser | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [search, setSearch] = useState("");
+
+  const filteredUsers = useMemo(() => {
+    if (!search.trim()) return users;
+    const q = search.toLowerCase();
+    return users.filter(
+      (u) =>
+        u.name.toLowerCase().includes(q) ||
+        u.email.toLowerCase().includes(q)
+    );
+  }, [users, search]);
+
+  const columns: ColumnDef<AdminUser, unknown>[] = useMemo(
+    () => [
+      {
+        accessorKey: "name",
+        header: "Name",
+        cell: ({ row }) => (
+          <span className="font-semibold">{row.original.name}</span>
+        ),
+      },
+      {
+        accessorKey: "email",
+        header: "Email",
+        cell: ({ row }) => (
+          <span className="text-muted-foreground">{row.original.email}</span>
+        ),
+      },
+      {
+        accessorKey: "createdAt",
+        header: "Joined",
+        cell: ({ row }) => (
+          <span className="text-muted-foreground tabular-nums">
+            {format(new Date(row.original.createdAt), "MMM d, yyyy")}
+          </span>
+        ),
+      },
+      {
+        accessorKey: "roundCount",
+        header: "Rounds",
+        cell: ({ row }) => (
+          <span className="tabular-nums">{row.original.roundCount}</span>
+        ),
+      },
+      {
+        accessorKey: "goalCount",
+        header: "Goals",
+        cell: ({ row }) => (
+          <span className="tabular-nums">{row.original.goalCount}</span>
+        ),
+      },
+      {
+        id: "actions",
+        header: "",
+        enableSorting: false,
+        cell: ({ row }) => (
+          <div className="flex gap-1 justify-end">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 text-muted-foreground hover:text-foreground"
+              onClick={(e) => {
+                e.stopPropagation();
+                setEditUser(row.original);
+              }}
+            >
+              <Pencil className="h-3.5 w-3.5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 text-muted-foreground hover:text-destructive"
+              onClick={(e) => {
+                e.stopPropagation();
+                setDeleteUser(row.original);
+              }}
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        ),
+      },
+    ],
+    []
+  );
 
   const handleDelete = async () => {
     if (!deleteUser) return;
@@ -57,59 +144,34 @@ export function AdminUsersTab({ users, refresh }: AdminUsersTabProps) {
 
   return (
     <>
-      <div className="flex justify-between items-center mb-4">
-        <p className="text-sm text-white/60">
-          {users.length} user{users.length === 1 ? "" : "s"}
-        </p>
-        <Button size="sm" onClick={() => setCreateOpen(true)}>
-          <Plus className="mr-1.5 h-3.5 w-3.5" />
-          Create User
-        </Button>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {users.map((u) => (
-          <Card key={u.id}>
-            <CardContent className="p-4">
-              <div className="flex justify-between items-start">
-                <div className="min-w-0">
-                  <p className="font-semibold truncate">{u.name}</p>
-                  <p className="text-xs text-white/60 truncate">{u.email}</p>
-                </div>
-                <div className="flex gap-1 shrink-0 ml-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7 text-white/50 hover:text-foreground"
-                    onClick={() => setEditUser(u)}
-                  >
-                    <Pencil className="h-3.5 w-3.5" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7 text-white/50 hover:text-destructive"
-                    onClick={() => setDeleteUser(u)}
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
-                </div>
-              </div>
-              <div className="flex gap-2 mt-3">
-                <Badge variant="secondary">
-                  {u.roundCount} round{u.roundCount === 1 ? "" : "s"}
-                </Badge>
-                <Badge variant="secondary">
-                  {u.goalCount} goal{u.goalCount === 1 ? "" : "s"}
-                </Badge>
-              </div>
-              <p className="text-xs text-white/40 mt-2">
-                Joined {format(new Date(u.createdAt), "MMM d, yyyy")}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <DataTable
+        columns={columns}
+        data={filteredUsers}
+        onRowClick={(user) => router.push(`/admin/users/${user.id}`)}
+        emptyMessage="No users found."
+        toolbar={
+          <>
+            <div className="relative flex-1 min-w-[200px] max-w-sm">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+              <Input
+                placeholder="Search users..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-8 h-8 text-sm"
+              />
+            </div>
+            <div className="flex items-center gap-2 ml-auto">
+              <span className="text-xs text-muted-foreground">
+                {filteredUsers.length} user{filteredUsers.length === 1 ? "" : "s"}
+              </span>
+              <Button size="sm" className="h-8" onClick={() => setCreateOpen(true)}>
+                <Plus className="mr-1.5 h-3.5 w-3.5" />
+                Create User
+              </Button>
+            </div>
+          </>
+        }
+      />
 
       <CreateUserDialog
         open={createOpen}

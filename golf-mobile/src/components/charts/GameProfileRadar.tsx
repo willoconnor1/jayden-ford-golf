@@ -63,7 +63,7 @@ export function GameProfileRadar({ data }: GameProfileRadarProps) {
             key={scale}
             points={ringPoints(scale)}
             fill="none"
-            stroke="#e5e7eb"
+            stroke={colors.border}
             strokeWidth={0.5}
           />
         ))}
@@ -78,7 +78,7 @@ export function GameProfileRadar({ data }: GameProfileRadarProps) {
               y1={cy}
               x2={x}
               y2={y}
-              stroke="#e5e7eb"
+              stroke={colors.border}
               strokeWidth={0.5}
             />
           );
@@ -113,7 +113,7 @@ export function GameProfileRadar({ data }: GameProfileRadarProps) {
               y={y + 4}
               textAnchor="middle"
               fontSize={11}
-              fill="#6b7280"
+              fill={colors.textSecondary}
             >
               {d.stat}
             </SvgText>

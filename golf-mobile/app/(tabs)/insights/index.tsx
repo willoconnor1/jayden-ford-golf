@@ -6,6 +6,7 @@ import { useRoundStore } from "@/stores/round-store";
 import { useStrokesGained } from "@/hooks/use-strokes-gained";
 import { useStats } from "@/hooks/use-stats";
 import { Card } from "@/components/ui/Card";
+import { colors } from "@/theme/colors";
 
 const SECTIONS = [
   {
@@ -13,32 +14,32 @@ const SECTIONS = [
     title: "Strokes Gained",
     description: "See where you gain and lose strokes vs PGA Tour average",
     icon: "trending-up-outline" as const,
-    color: "#6BA3D6",
-    bgColor: "#eff6ff",
+    color: colors.primary,
+    bgColor: "rgba(107,163,214,0.15)",
   },
   {
     href: "/insights/goals" as const,
     title: "Goals",
     description: "Set targets and track your improvement over time",
     icon: "flag-outline" as const,
-    color: "#2563eb",
-    bgColor: "#eff6ff",
+    color: colors.info,
+    bgColor: "rgba(37,99,235,0.15)",
   },
   {
     href: "/insights/practice" as const,
     title: "Practice",
     description: "Personalized practice plans based on your weaknesses",
     icon: "fitness-outline" as const,
-    color: "#d97706",
-    bgColor: "#fffbeb",
+    color: colors.warning,
+    bgColor: "rgba(217,119,6,0.15)",
   },
   {
     href: "/insights/dispersion" as const,
     title: "Dispersion",
     description: "Analyze your shot patterns and miss tendencies",
     icon: "locate-outline" as const,
-    color: "#7c3aed",
-    bgColor: "#f5f3ff",
+    color: colors.violet,
+    bgColor: "rgba(124,58,237,0.15)",
   },
 ];
 
@@ -62,7 +63,7 @@ export default function InsightsHub() {
               <Text style={styles.summaryValue}>
                 {aggregateStats.scoringAverage > 0
                   ? aggregateStats.scoringAverage.toFixed(1)
-                  : "—"}
+                  : "\u2014"}
               </Text>
             </Card>
             <Card style={styles.summaryCard}>
@@ -71,13 +72,13 @@ export default function InsightsHub() {
                 style={[
                   styles.summaryValue,
                   sgAverages
-                    ? { color: sgAverages.sgTotal >= 0 ? "#6BA3D6" : "#dc2626" }
+                    ? { color: sgAverages.sgTotal >= 0 ? colors.primary : colors.danger }
                     : undefined,
                 ]}
               >
                 {sgAverages
                   ? `${sgAverages.sgTotal >= 0 ? "+" : ""}${sgAverages.sgTotal.toFixed(2)}`
-                  : "—"}
+                  : "\u2014"}
               </Text>
             </Card>
           </View>
@@ -95,7 +96,7 @@ export default function InsightsHub() {
                   <Text style={styles.sectionTitle}>{section.title}</Text>
                   <Text style={styles.sectionDesc}>{section.description}</Text>
                 </View>
-                <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
+                <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
               </Card>
             </Pressable>
           </Link>
@@ -106,12 +107,12 @@ export default function InsightsHub() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#ffffff" },
+  container: { flex: 1, backgroundColor: colors.background },
   scroll: { padding: 16, paddingBottom: 100, gap: 12 },
   summaryRow: { flexDirection: "row", gap: 8, marginBottom: 4 },
   summaryCard: { flex: 1, padding: 12, alignItems: "center" },
-  summaryLabel: { fontSize: 11, fontWeight: "500", color: "#6b7280", marginBottom: 2 },
-  summaryValue: { fontSize: 18, fontWeight: "700", color: "#111827" },
+  summaryLabel: { fontSize: 11, fontWeight: "500", color: colors.textSecondary, marginBottom: 2 },
+  summaryValue: { fontSize: 18, fontWeight: "700", color: colors.text },
   sectionCard: {
     flexDirection: "row",
     alignItems: "center",
@@ -126,6 +127,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   sectionText: { flex: 1, gap: 2 },
-  sectionTitle: { fontSize: 16, fontWeight: "600", color: "#111827" },
-  sectionDesc: { fontSize: 13, color: "#6b7280", lineHeight: 18 },
+  sectionTitle: { fontSize: 16, fontWeight: "600", color: colors.text },
+  sectionDesc: { fontSize: 13, color: colors.textSecondary, lineHeight: 18 },
 });

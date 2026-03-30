@@ -3,6 +3,7 @@ import { useLocalSearchParams, Stack } from "expo-router";
 import { useLiveEvent } from "@/hooks/use-live-event";
 import { useLiveSession } from "@/hooks/use-live-session";
 import { EventLobby } from "@/components/live/EventLobby";
+import { colors } from "@/theme/colors";
 
 export default function EventLobbyScreen() {
   const { eventId } = useLocalSearchParams<{ eventId: string }>();
@@ -12,7 +13,7 @@ export default function EventLobbyScreen() {
   if (isLoading || !loaded) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color="#6BA3D6" />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -48,8 +49,8 @@ export default function EventLobbyScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#ffffff" },
-  center: { flex: 1, alignItems: "center", justifyContent: "center" },
-  subtitle: { fontSize: 14, color: "#6b7280", marginBottom: 16 },
-  errorText: { fontSize: 15, color: "#9ca3af" },
+  container: { flex: 1, padding: 16, backgroundColor: colors.background },
+  center: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.background },
+  subtitle: { fontSize: 14, color: colors.textSecondary, marginBottom: 16 },
+  errorText: { fontSize: 15, color: colors.textMuted },
 });

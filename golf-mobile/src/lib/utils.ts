@@ -2,7 +2,7 @@
 export function holeScoreColor(scoreToPar: number): string {
   if (scoreToPar <= -2) return "#b91c1c"; // eagle or better — red-700
   if (scoreToPar === -1) return "#ef4444"; // birdie — red-500
-  if (scoreToPar === 0) return "#6b7280";  // even — gray-500
+  if (scoreToPar === 0) return "#9ca3af";  // even — gray-400 (visible on dark)
   if (scoreToPar === 1) return "#0ea5e9";  // bogey — sky-500
   return "#1d4ed8";                        // double+ — blue-700
 }
@@ -11,7 +11,7 @@ export function holeScoreColor(scoreToPar: number): string {
  * Round-level score-to-par badge colors { bg, text }.
  */
 export function roundBadgeColor(scoreToPar: number): { bg: string; text: string } {
-  if (scoreToPar === 0) return { bg: "#e5e7eb", text: "#6b7280" };
+  if (scoreToPar === 0) return { bg: "rgba(255,255,255,0.15)", text: "#9ca3af" };
 
   if (scoreToPar < 0) {
     const abs = Math.abs(scoreToPar);

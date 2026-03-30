@@ -10,6 +10,7 @@ import { ScreenBackground } from "@/components/ui/ScreenBackground";
 import { BACKGROUNDS } from "@/lib/background-images";
 import { SGTrendChart } from "@/components/charts/SGTrendChart";
 import { GameProfileRadar } from "@/components/charts/GameProfileRadar";
+import { colors } from "@/theme/colors";
 import { format } from "date-fns";
 
 const SG_CATEGORIES = [
@@ -33,13 +34,13 @@ function SGBarChart({ data }: { data: { label: string; value: number }[] }) {
   return (
     <Svg width={chartWidth} height={chartHeight}>
       {/* Center line */}
-      <Line x1={centerX} y1={8} x2={centerX} y2={chartHeight - 8} stroke="#d1d5db" strokeWidth={1} />
+      <Line x1={centerX} y1={8} x2={centerX} y2={chartHeight - 8} stroke={colors.border} strokeWidth={1} />
       {data.map((item, i) => {
         const y = 12 + i * (barHeight + gap);
         const barW = (Math.abs(item.value) / maxAbs) * (chartArea / 2 - 10);
         const isPositive = item.value >= 0;
         const barX = isPositive ? centerX : centerX - barW;
-        const fill = isPositive ? "#6BA3D6" : "#ef4444";
+        const fill = isPositive ? colors.primary : "#ef4444";
 
         return (
           <View key={item.label}>
@@ -48,7 +49,7 @@ function SGBarChart({ data }: { data: { label: string; value: number }[] }) {
               y={y + barHeight / 2 + 4}
               textAnchor="end"
               fontSize={11}
-              fill="#6b7280"
+              fill={colors.textSecondary}
             >
               {item.label}
             </SvgText>
@@ -124,7 +125,7 @@ export default function StrokesGainedScreen() {
                   <Text
                     style={[
                       styles.sgCardValue,
-                      { color: value >= 0 ? "#6BA3D6" : "#ef4444" },
+                      { color: value >= 0 ? colors.primary : "#ef4444" },
                     ]}
                   >
                     {value >= 0 ? "+" : ""}
@@ -215,13 +216,13 @@ const styles = StyleSheet.create({
   // Empty state
   empty: { flex: 1, alignItems: "center", justifyContent: "center", paddingVertical: 60 },
   emptyIcon: { fontSize: 40, marginBottom: 12 },
-  emptyTitle: { fontSize: 20, fontWeight: "700", color: "#111827", marginBottom: 6 },
-  emptyText: { fontSize: 14, color: "#6b7280", textAlign: "center", marginBottom: 16, paddingHorizontal: 40 },
+  emptyTitle: { fontSize: 20, fontWeight: "700", color: colors.text, marginBottom: 6 },
+  emptyText: { fontSize: 14, color: colors.textSecondary, textAlign: "center", marginBottom: 16, paddingHorizontal: 40 },
   cta: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    backgroundColor: "#6BA3D6",
+    backgroundColor: colors.primary,
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 10,
@@ -231,16 +232,16 @@ const styles = StyleSheet.create({
   cardGrid: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   sgCard: { width: "48%", padding: 12 },
   sgCardTotal: { width: "100%" },
-  sgCardLabel: { fontSize: 11, fontWeight: "500", color: "#6b7280", marginBottom: 2 },
+  sgCardLabel: { fontSize: 11, fontWeight: "500", color: colors.textSecondary, marginBottom: 2 },
   sgCardValue: { fontSize: 22, fontWeight: "700", fontVariant: ["tabular-nums"] },
   // Chart
   chartCard: { padding: 16 },
-  chartTitle: { fontSize: 16, fontWeight: "600", color: "#111827", marginBottom: 12 },
+  chartTitle: { fontSize: 16, fontWeight: "600", color: colors.text, marginBottom: 12 },
   chartContainer: { alignItems: "center" },
-  chartFooter: { fontSize: 11, color: "#9ca3af", textAlign: "center", marginTop: 8 },
+  chartFooter: { fontSize: 11, color: colors.textMuted, textAlign: "center", marginTop: 8 },
   // Info
   infoCard: { padding: 16, gap: 8 },
-  infoTitle: { fontSize: 16, fontWeight: "600", color: "#111827" },
-  infoText: { fontSize: 13, color: "#6b7280", lineHeight: 19 },
-  bold: { fontWeight: "600", color: "#374151" },
+  infoTitle: { fontSize: 16, fontWeight: "600", color: colors.text },
+  infoText: { fontSize: 13, color: colors.textSecondary, lineHeight: 19 },
+  bold: { fontWeight: "600", color: colors.text },
 });

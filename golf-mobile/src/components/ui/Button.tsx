@@ -1,5 +1,6 @@
 import { Pressable, Text, StyleSheet, ViewStyle, TextStyle, ActivityIndicator } from "react-native";
 import { hapticLight } from "@/lib/platform";
+import { colors } from "@/theme/colors";
 
 type Variant = "primary" | "outline" | "ghost" | "danger";
 
@@ -14,10 +15,10 @@ interface ButtonProps {
 }
 
 const variantStyles: Record<Variant, { bg: string; bgPressed: string; text: string; border: string }> = {
-  primary: { bg: "#6BA3D6", bgPressed: "#4A7FB5", text: "#ffffff", border: "#6BA3D6" },
-  outline: { bg: "#ffffff", bgPressed: "#f3f4f6", text: "#374151", border: "#d1d5db" },
-  ghost: { bg: "transparent", bgPressed: "#f3f4f6", text: "#374151", border: "transparent" },
-  danger: { bg: "#dc2626", bgPressed: "#b91c1c", text: "#ffffff", border: "#dc2626" },
+  primary: { bg: colors.primary, bgPressed: colors.primaryDark, text: "#ffffff", border: colors.primary },
+  outline: { bg: "transparent", bgPressed: "rgba(255,255,255,0.08)", text: colors.text, border: colors.inputBorder },
+  ghost: { bg: "transparent", bgPressed: "rgba(255,255,255,0.08)", text: colors.text, border: "transparent" },
+  danger: { bg: colors.danger, bgPressed: "#b91c1c", text: "#ffffff", border: colors.danger },
 };
 
 const sizeStyles: Record<string, { height: number; px: number; fontSize: number }> = {
@@ -49,9 +50,9 @@ export function Button({
         {
           height: s.height,
           paddingHorizontal: s.px,
-          backgroundColor: disabled ? "#d1d5db" : pressed ? v.bgPressed : v.bg,
+          backgroundColor: disabled ? colors.disabledBg : pressed ? v.bgPressed : v.bg,
           borderWidth: 1,
-          borderColor: disabled ? "#d1d5db" : v.border,
+          borderColor: disabled ? colors.disabledBg : v.border,
           borderRadius: 10,
           alignItems: "center" as const,
           justifyContent: "center" as const,
@@ -67,7 +68,7 @@ export function Button({
       ) : (
         <Text
           style={{
-            color: disabled ? "#9ca3af" : v.text,
+            color: disabled ? colors.disabledText : v.text,
             fontSize: s.fontSize,
             fontWeight: "600",
           }}

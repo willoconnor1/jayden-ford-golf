@@ -21,7 +21,7 @@ export function LeaderboardTable({ data }: LeaderboardTableProps) {
 
   if (entries.length === 0) {
     return (
-      <p className="text-sm text-white/60 text-center py-8">
+      <p className="text-sm text-muted-foreground text-center py-8">
         No players yet
       </p>
     );
@@ -31,7 +31,7 @@ export function LeaderboardTable({ data }: LeaderboardTableProps) {
     <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
       <table className="w-full text-sm" style={{ minWidth: "320px" }}>
         <thead>
-          <tr className="border-b text-white/60 text-xs">
+          <tr className="border-b text-muted-foreground text-xs">
             <th className="py-2 px-2 text-left w-10">Pos</th>
             <th className="py-2 px-2 text-left">Player</th>
             <th className="py-2 px-2 text-center w-16">Score</th>
@@ -44,7 +44,7 @@ export function LeaderboardTable({ data }: LeaderboardTableProps) {
             const scoreStr = formatScoreToPar(entry.scoreToPar, entry.thru);
             return (
               <tr key={entry.playerId} className="border-b last:border-0">
-                <td className="py-3 px-2 text-white/60 text-xs">
+                <td className="py-3 px-2 text-muted-foreground text-xs">
                   {formatRank(entry.rank, entries)}
                 </td>
                 <td className="py-3 px-2">
@@ -63,16 +63,16 @@ export function LeaderboardTable({ data }: LeaderboardTableProps) {
                         "tabular-nums font-bold text-xs px-2",
                         entry.scoreToPar < 0 && "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
                         entry.scoreToPar > 0 && "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
-                        entry.scoreToPar === 0 && "bg-muted text-white/60"
+                        entry.scoreToPar === 0 && "bg-muted text-muted-foreground"
                       )}
                     >
                       {scoreStr}
                     </Badge>
                   ) : (
-                    <span className="text-white/60">-</span>
+                    <span className="text-muted-foreground">-</span>
                   )}
                 </td>
-                <td className="py-3 px-2 text-center text-white/60 tabular-nums text-xs">
+                <td className="py-3 px-2 text-center text-muted-foreground tabular-nums text-xs">
                   {formatThru(entry.thru)}
                 </td>
                 <td className="py-3 px-2 text-center tabular-nums text-xs">

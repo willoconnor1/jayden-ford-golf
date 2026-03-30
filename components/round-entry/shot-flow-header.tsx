@@ -22,12 +22,12 @@ export function ShotFlowHeader({
       <div className="flex items-baseline justify-between">
         <div className="text-sm font-semibold">
           Hole {holeNumber} of {totalHoles}
-          <span className="text-white/60 font-normal">
+          <span className="text-muted-foreground font-normal">
             {" "}· Par {par} · {distance} yds
           </span>
         </div>
       </div>
-      <div className="text-xs text-white/60">{subtitle}</div>
+      <div className="text-xs text-muted-foreground">{subtitle}</div>
       <div className="h-1 bg-muted rounded-full overflow-hidden">
         <div
           className="h-full bg-primary rounded-full transition-all duration-300"

@@ -9,6 +9,7 @@ import { PuttMissInput } from "./PuttMissInput";
 import { ShotEntryCard } from "./ShotEntryCard";
 import { holeScoreColor } from "@/lib/utils";
 import { hapticLight } from "@/lib/platform";
+import { colors } from "@/theme/colors";
 
 const MISS_DIRECTIONS: { value: PuttMissDirection; label: string }[] = [
   { value: "left", label: "Left" },
@@ -105,14 +106,14 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
           {(["yes", "no", "na"] as const).map((val) => {
             const isActive = hole.fairwayHit === val;
             const bg = isActive
-              ? val === "yes" ? "#6BA3D6" : val === "no" ? "#ef4444" : "#e5e7eb"
-              : "#ffffff";
-            const textColor = isActive && val !== "na" ? "#ffffff" : isActive ? "#374151" : "#6b7280";
+              ? val === "yes" ? colors.primary : val === "no" ? "#ef4444" : colors.inputBg
+              : colors.pillInactiveBg;
+            const textColor = isActive && val !== "na" ? "#ffffff" : isActive ? colors.text : colors.pillInactiveText;
             return (
               <Pressable
                 key={val}
                 onPress={() => { hapticLight(); update({ fairwayHit: val }); }}
-                style={[styles.smallPill, { backgroundColor: bg, borderColor: isActive ? bg : "#d1d5db" }]}
+                style={[styles.smallPill, { backgroundColor: bg, borderColor: isActive ? bg : colors.pillInactiveBorder }]}
               >
                 <Text style={[styles.smallPillText, { color: textColor }]}>
                   {val === "na" ? "N/A" : val === "yes" ? "Yes" : "No"}
@@ -129,14 +130,14 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
         <View style={styles.pillRow}>
           {[true, false].map((val) => {
             const isActive = hole.greenInRegulation === val;
-            const bg = isActive ? (val ? "#6BA3D6" : "#ef4444") : "#ffffff";
+            const bg = isActive ? (val ? colors.primary : "#ef4444") : colors.pillInactiveBg;
             return (
               <Pressable
                 key={String(val)}
                 onPress={() => { hapticLight(); update({ greenInRegulation: val }); }}
-                style={[styles.smallPill, { backgroundColor: bg, borderColor: isActive ? bg : "#d1d5db" }]}
+                style={[styles.smallPill, { backgroundColor: bg, borderColor: isActive ? bg : colors.pillInactiveBorder }]}
               >
-                <Text style={[styles.smallPillText, { color: isActive ? "#ffffff" : "#6b7280" }]}>
+                <Text style={[styles.smallPillText, { color: isActive ? "#ffffff" : colors.pillInactiveText }]}>
                   {val ? "Yes" : "No"}
                 </Text>
               </Pressable>
@@ -260,7 +261,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
             <Switch
               value={hole.upAndDownAttempt}
               onValueChange={(v) => update({ upAndDownAttempt: v, upAndDownConverted: false })}
-              trackColor={{ true: "#6BA3D6", false: "#d1d5db" }}
+              trackColor={{ true: colors.primary, false: colors.inputBorder }}
             />
           </View>
           {hole.upAndDownAttempt && (
@@ -269,7 +270,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
               <Switch
                 value={hole.upAndDownConverted}
                 onValueChange={(v) => update({ upAndDownConverted: v })}
-                trackColor={{ true: "#6BA3D6", false: "#d1d5db" }}
+                trackColor={{ true: colors.primary, false: colors.inputBorder }}
               />
             </View>
           )}
@@ -279,7 +280,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
             <Switch
               value={hole.sandSaveAttempt}
               onValueChange={(v) => update({ sandSaveAttempt: v, sandSaveConverted: false })}
-              trackColor={{ true: "#6BA3D6", false: "#d1d5db" }}
+              trackColor={{ true: colors.primary, false: colors.inputBorder }}
             />
           </View>
           {hole.sandSaveAttempt && (
@@ -288,7 +289,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
               <Switch
                 value={hole.sandSaveConverted}
                 onValueChange={(v) => update({ sandSaveConverted: v })}
-                trackColor={{ true: "#6BA3D6", false: "#d1d5db" }}
+                trackColor={{ true: colors.primary, false: colors.inputBorder }}
               />
             </View>
           )}
@@ -350,17 +351,17 @@ const styles = StyleSheet.create({
   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   headerLeft: { flexDirection: "row", alignItems: "center", gap: 8 },
   holeBadge: {
-    width: 28, height: 28, borderRadius: 14, backgroundColor: "#6BA3D6",
+    width: 28, height: 28, borderRadius: 14, backgroundColor: colors.primary,
     alignItems: "center", justifyContent: "center",
   },
   holeBadgeText: { color: "#fff", fontSize: 13, fontWeight: "700" },
-  parText: { fontSize: 13, color: "#6b7280" },
-  distText: { fontSize: 12, color: "#9ca3af" },
+  parText: { fontSize: 13, color: colors.textSecondary },
+  distText: { fontSize: 12, color: colors.textMuted },
   headerRight: { flexDirection: "row", alignItems: "baseline", gap: 4 },
   scoreText: { fontSize: 20, fontWeight: "700" },
   scoreToParText: { fontSize: 12, fontWeight: "500" },
   row: { flexDirection: "row", alignItems: "center", gap: 8 },
-  rowLabel: { fontSize: 13, fontWeight: "500", color: "#6b7280", width: 48 },
+  rowLabel: { fontSize: 13, fontWeight: "500", color: colors.textMuted, width: 48 },
   pillRow: { flexDirection: "row", gap: 6 },
   smallPill: {
     paddingHorizontal: 14, paddingVertical: 8, borderRadius: 8,
@@ -371,15 +372,15 @@ const styles = StyleSheet.create({
   puttSection: { gap: 8 },
   puttRow: { flexDirection: "row", alignItems: "center", gap: 8 },
   missDetails: { gap: 12, paddingTop: 4 },
-  puttLabel: { fontSize: 12, color: "#6b7280", width: 56 },
-  missLabel: { fontSize: 12, color: "#d97706", fontWeight: "500" },
-  madeLabel: { fontSize: 12, color: "#6BA3D6", fontWeight: "500" },
+  puttLabel: { fontSize: 12, color: colors.textMuted, width: 56 },
+  missLabel: { fontSize: 12, color: colors.warning, fontWeight: "500" },
+  madeLabel: { fontSize: 12, color: colors.primary, fontWeight: "500" },
   expandToggle: { paddingVertical: 4 },
-  expandText: { fontSize: 12, color: "#6b7280" },
-  expandedSection: { borderTopWidth: 1, borderTopColor: "#e5e7eb", paddingTop: 12, gap: 12 },
+  expandText: { fontSize: 12, color: colors.textMuted },
+  expandedSection: { borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 12, gap: 12 },
   switchRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
-  switchLabel: { fontSize: 13, color: "#6b7280" },
-  shotTrackingSection: { borderTopWidth: 1, borderTopColor: "#e5e7eb", paddingTop: 12, gap: 8 },
-  shotTrackingToggle: { fontSize: 12, color: "#6b7280" },
+  switchLabel: { fontSize: 13, color: colors.textSecondary },
+  shotTrackingSection: { borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 12, gap: 8 },
+  shotTrackingToggle: { fontSize: 12, color: colors.textMuted },
   shotsList: { gap: 8 },
 });

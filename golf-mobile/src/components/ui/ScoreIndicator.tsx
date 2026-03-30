@@ -13,7 +13,7 @@ export function ScoreIndicator({ score, par, size = 24 }: ScoreIndicatorProps) {
 
   // Par — plain number
   if (diff === 0) {
-    return <Text style={[styles.text, { fontSize: size * 0.58, color: "#6b7280" }]}>{score}</Text>;
+    return <Text style={[styles.text, { fontSize: size * 0.58, color: "#9ca3af" }]}>{score}</Text>;
   }
 
   // Birdie — single circle

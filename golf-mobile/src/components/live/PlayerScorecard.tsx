@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Card } from "@/components/ui/Card";
 import { ScoreIndicator } from "@/components/ui/ScoreIndicator";
 import type { LiveEventData } from "@/lib/types";
+import { colors } from "@/theme/colors";
 
 interface PlayerScorecardProps {
   data: LiveEventData;
@@ -97,12 +98,12 @@ export function PlayerScorecard({ data, playerId }: PlayerScorecardProps) {
               {
                 color:
                   thru === 0
-                    ? "#9ca3af"
+                    ? colors.textMuted
                     : totalScore - totalPar < 0
-                    ? "#ef4444"
+                    ? colors.birdie
                     : totalScore - totalPar > 0
-                    ? "#2563eb"
-                    : "#6b7280",
+                    ? colors.info
+                    : colors.textSecondary,
               },
             ]}
           >
@@ -139,23 +140,23 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   summaryItem: { alignItems: "center" },
-  summaryLabel: { fontSize: 12, color: "#9ca3af", marginBottom: 4 },
-  summaryValue: { fontSize: 24, fontWeight: "700", color: "#111827" },
+  summaryLabel: { fontSize: 12, color: colors.textMuted, marginBottom: 4 },
+  summaryValue: { fontSize: 24, fontWeight: "700", color: colors.text },
   nineCard: { padding: 12, marginBottom: 12 },
-  nineLabel: { fontSize: 13, fontWeight: "600", color: "#6b7280", marginBottom: 8 },
+  nineLabel: { fontSize: 13, fontWeight: "600", color: colors.textSecondary, marginBottom: 8 },
   tableRow: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 6,
     borderBottomWidth: 1,
-    borderBottomColor: "#f3f4f6",
+    borderBottomColor: colors.border,
   },
   labelCol: { width: 40 },
   holeCol: { flex: 1, alignItems: "center", justifyContent: "center", minHeight: 24 },
   totalCol: { width: 36, alignItems: "center" },
-  headerText: { fontSize: 11, fontWeight: "600", color: "#9ca3af" },
-  rowLabel: { fontSize: 11, fontWeight: "500", color: "#6b7280" },
-  parText: { fontSize: 13, color: "#6b7280" },
-  emptyScore: { fontSize: 13, color: "#d1d5db" },
-  totalText: { fontSize: 14, fontWeight: "700", color: "#111827" },
+  headerText: { fontSize: 11, fontWeight: "600", color: colors.textMuted },
+  rowLabel: { fontSize: 11, fontWeight: "500", color: colors.textSecondary },
+  parText: { fontSize: 13, color: colors.textSecondary },
+  emptyScore: { fontSize: 13, color: colors.textMuted },
+  totalText: { fontSize: 14, fontWeight: "700", color: colors.text },
 });

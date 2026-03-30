@@ -65,7 +65,7 @@ export function ShotStepCard({
   return (
     <div className="space-y-4">
       {/* Shot label */}
-      <div className="text-xs font-medium text-white/60">
+      <div className="text-xs font-medium text-muted-foreground">
         Shot {shotNumber}
         {!isTeeShot && (
           <span className="ml-1 capitalize">· {shot.lie.replace("-", " ")}</span>
@@ -89,7 +89,7 @@ export function ShotStepCard({
 
       {/* Club selector */}
       <div className="space-y-1">
-        <div className="text-xs font-medium text-white/60">Club</div>
+        <div className="text-xs font-medium text-muted-foreground">Club</div>
         <select
           value={shot.club}
           onChange={(e) => update({ club: e.target.value as Club })}
@@ -155,7 +155,7 @@ export function ShotStepCard({
       {/* Distance remaining — yards to green for non-green results */}
       {shot.result && shot.result !== "green" && shot.result !== "holed" && (
         <div className="space-y-1">
-          <div className="text-xs font-medium text-white/60">
+          <div className="text-xs font-medium text-muted-foreground">
             Distance Remaining (yds)
           </div>
           <Input
@@ -177,14 +177,14 @@ export function ShotStepCard({
         <>
           {/* Miss from target — computed from tracker */}
           {(shot.missX !== 0 || shot.missY !== 0) && (
-            <div className="text-xs text-white/50">
+            <div className="text-xs text-muted-foreground">
               Miss from target: {Math.round(Math.sqrt(shot.missX ** 2 + shot.missY ** 2) * 3)} ft
             </div>
           )}
 
           {/* Distance to hole — carries to first putt */}
           <div className="space-y-1">
-            <div className="text-xs font-medium text-white/60">
+            <div className="text-xs font-medium text-muted-foreground">
               Distance to Hole (ft)
             </div>
             <Input

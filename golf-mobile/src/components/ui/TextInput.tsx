@@ -6,6 +6,7 @@ import {
   TextInputProps as RNTextInputProps,
   ViewStyle,
 } from "react-native";
+import { colors } from "@/theme/colors";
 
 interface TextInputProps extends RNTextInputProps {
   label?: string;
@@ -20,7 +21,7 @@ export function TextInput({ label, suffix, containerStyle, style, ...props }: Te
       <View style={styles.row}>
         <RNTextInput
           style={[styles.input, suffix ? styles.inputWithSuffix : null, style]}
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor={colors.textMuted}
           {...props}
         />
         {suffix && <Text style={styles.suffix}>{suffix}</Text>}
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 13,
     fontWeight: "500",
-    color: "#6b7280",
+    color: colors.textMuted,
     marginBottom: 6,
   },
   row: {
@@ -44,12 +45,12 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     borderWidth: 1,
-    borderColor: "#d1d5db",
+    borderColor: colors.inputBorder,
     borderRadius: 8,
     paddingHorizontal: 12,
     fontSize: 15,
-    color: "#111827",
-    backgroundColor: "#ffffff",
+    color: colors.text,
+    backgroundColor: colors.inputBg,
   },
   inputWithSuffix: {
     borderTopRightRadius: 0,
@@ -60,12 +61,12 @@ const styles = StyleSheet.create({
     height: 40,
     lineHeight: 40,
     paddingHorizontal: 10,
-    backgroundColor: "#f3f4f6",
+    backgroundColor: "rgba(255,255,255,0.05)",
     borderWidth: 1,
-    borderColor: "#d1d5db",
+    borderColor: colors.inputBorder,
     borderTopRightRadius: 8,
     borderBottomRightRadius: 8,
     fontSize: 13,
-    color: "#6b7280",
+    color: colors.textSecondary,
   },
 });
