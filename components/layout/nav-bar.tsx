@@ -67,7 +67,7 @@ export function NavBar() {
           {/* Logo */}
           <Link
             href="/"
-            className="text-xl font-bold text-foreground drop-shadow-sm font-[var(--font-logo)]"
+            className="text-xl font-bold text-foreground drop-shadow-sm font-logo"
           >
             jolf.
           </Link>
@@ -147,7 +147,7 @@ export function NavBar() {
       <header className={cn("md:hidden fixed left-0 right-0 z-50 flex items-center justify-between px-4 pt-3 pb-2", impersonating ? "top-10" : "top-0")}>
         <Link
           href="/"
-          className="text-lg font-bold text-foreground drop-shadow-sm font-[var(--font-logo)]"
+          className="text-lg font-bold text-foreground drop-shadow-sm font-logo"
         >
           jolf.
         </Link>

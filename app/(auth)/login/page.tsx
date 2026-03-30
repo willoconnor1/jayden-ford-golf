@@ -37,7 +37,7 @@ export default function LoginPage() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader className="text-center">
-        <div className="mx-auto mb-2 text-2xl font-bold text-foreground font-[var(--font-logo)]">
+        <div className="mx-auto mb-2 text-2xl font-bold text-foreground font-logo">
           jolf.
         </div>
         <CardTitle className="text-xl">Welcome back</CardTitle>
