@@ -37,8 +37,8 @@ export default function LoginPage() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader className="text-center">
-        <div className="mx-auto mb-2 bg-primary text-primary-foreground rounded-full w-12 h-12 flex items-center justify-center text-lg font-bold">
-          J
+        <div className="mx-auto mb-2 text-2xl font-bold text-foreground font-[var(--font-logo)]">
+          jolf.
         </div>
         <CardTitle className="text-xl">Welcome back</CardTitle>
         <CardDescription>Sign in to Jolf</CardDescription>
