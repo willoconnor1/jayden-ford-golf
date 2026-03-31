@@ -14,6 +14,8 @@ export interface AuthUser {
   city?: string | null;
   state?: string | null;
   country?: string | null;
+  distanceUnit: "yards" | "meters";
+  benchmarkLevel: string;
 }
 
 // ── Password ───────────────────────────────────────────────────────
@@ -37,6 +39,8 @@ export async function createToken(user: AuthUser): Promise<string> {
     city: user.city ?? null,
     state: user.state ?? null,
     country: user.country ?? null,
+    distanceUnit: user.distanceUnit ?? "yards",
+    benchmarkLevel: user.benchmarkLevel ?? "pga-tour",
   })
     .setProtectedHeader({ alg: "HS256" })
     .setExpirationTime(TOKEN_EXPIRY)
@@ -54,6 +58,8 @@ export async function verifyToken(token: string): Promise<AuthUser | null> {
       city: (payload.city as string) ?? null,
       state: (payload.state as string) ?? null,
       country: (payload.country as string) ?? null,
+      distanceUnit: ((payload.distanceUnit as string) ?? "yards") as "yards" | "meters",
+      benchmarkLevel: (payload.benchmarkLevel as string) ?? "pga-tour",
     };
   } catch {
     return null;

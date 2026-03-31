@@ -7,9 +7,10 @@ import { PageHeader } from "@/components/layout/page-header";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useRoundStore } from "@/stores/round-store";
 import { useGoalStore } from "@/stores/goal-store";
+import { useAuth } from "@/components/auth-provider";
 import { Download, Upload, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { Round, Goal } from "@/lib/types";
+import { Round, Goal, BENCHMARK_LEVELS, BENCHMARK_LABELS, BenchmarkLevel } from "@/lib/types";
 
 interface ExportData {
   version: number;
@@ -24,7 +25,60 @@ export default function SettingsPage() {
   const clearSeedData = useRoundStore((s) => s.clearSeedData);
   const goals = useGoalStore((s) => s.goals);
   const addGoal = useGoalStore((s) => s.addGoal);
+  const { user, refreshUser } = useAuth();
   const [importing, setImporting] = useState(false);
+  const [updatingUnit, setUpdatingUnit] = useState(false);
+  const [updatingBenchmark, setUpdatingBenchmark] = useState(false);
+
+  const handleDistanceUnitChange = async (unit: "yards" | "meters") => {
+    if (unit === user?.distanceUnit) return;
+    setUpdatingUnit(true);
+    try {
+      const res = await fetch("/api/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: user?.name ?? "",
+          city: user?.city ?? "",
+          country: user?.country ?? "",
+          distanceUnit: unit,
+        }),
+      });
+      if (res.ok) {
+        await refreshUser();
+        toast.success(`Distance units set to ${unit}`);
+      }
+    } catch {
+      toast.error("Failed to update distance unit");
+    } finally {
+      setUpdatingUnit(false);
+    }
+  };
+
+  const handleBenchmarkChange = async (level: BenchmarkLevel) => {
+    if (level === user?.benchmarkLevel) return;
+    setUpdatingBenchmark(true);
+    try {
+      const res = await fetch("/api/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: user?.name ?? "",
+          city: user?.city ?? "",
+          country: user?.country ?? "",
+          benchmarkLevel: level,
+        }),
+      });
+      if (res.ok) {
+        await refreshUser();
+        toast.success(`Benchmark set to ${BENCHMARK_LABELS[level]}`);
+      }
+    } catch {
+      toast.error("Failed to update benchmark level");
+    } finally {
+      setUpdatingBenchmark(false);
+    }
+  };
 
   const handleExport = () => {
     const data: ExportData = {
@@ -114,6 +168,58 @@ export default function SettingsPage() {
                 Choose your preferred theme for the dashboard.
               </p>
               <ThemeToggle />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Distance Units</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Choose whether distances are shown in yards/feet or meters.
+              </p>
+              <div className="flex gap-3">
+                <Button
+                  variant={user?.distanceUnit !== "meters" ? "default" : "outline"}
+                  onClick={() => handleDistanceUnitChange("yards")}
+                  disabled={updatingUnit}
+                >
+                  Yards / Feet
+                </Button>
+                <Button
+                  variant={user?.distanceUnit === "meters" ? "default" : "outline"}
+                  onClick={() => handleDistanceUnitChange("meters")}
+                  disabled={updatingUnit}
+                >
+                  Meters
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Benchmark Level</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Choose who you compare your Strokes Gained against. Change this as your game improves.
+              </p>
+              <div className="grid grid-cols-3 gap-2">
+                {BENCHMARK_LEVELS.map((level) => (
+                  <Button
+                    key={level}
+                    variant={(user?.benchmarkLevel ?? "pga-tour") === level ? "default" : "outline"}
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => handleBenchmarkChange(level)}
+                    disabled={updatingBenchmark}
+                  >
+                    {BENCHMARK_LABELS[level]}
+                  </Button>
+                ))}
+              </div>
             </CardContent>
           </Card>
 

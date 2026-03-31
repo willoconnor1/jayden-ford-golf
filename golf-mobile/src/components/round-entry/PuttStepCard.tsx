@@ -7,6 +7,7 @@ import { PuttMissInput } from "./PuttMissInput";
 import { PUTT_BREAKS, PUTT_SLOPES, PUTT_SPEEDS } from "@/lib/constants-clubs";
 import { hapticLight } from "@/lib/platform";
 import { colors } from "@/theme/colors";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 export interface PuttData {
   distance: number;
@@ -43,6 +44,7 @@ export function PuttStepCard({
   onBack,
   isDetailed,
 }: PuttStepCardProps) {
+  const { dFeet, iFeet, fLabel } = useDistanceUnit();
   const update = (partial: Partial<PuttData>) => {
     onChange({ ...putt, ...partial });
   };
@@ -55,9 +57,9 @@ export function PuttStepCard({
 
       {/* Distance */}
       <TextInput
-        label="Distance (feet)"
-        value={putt.distance ? String(putt.distance) : ""}
-        onChangeText={(t) => update({ distance: parseInt(t) || 0 })}
+        label={`Distance (${fLabel})`}
+        value={putt.distance ? String(dFeet(putt.distance)) : ""}
+        onChangeText={(t) => update({ distance: iFeet(parseInt(t) || 0) })}
         keyboardType="number-pad"
         placeholder="20"
       />
@@ -144,9 +146,9 @@ export function PuttStepCard({
 
           {/* Distance from hole after miss */}
           <TextInput
-            label="Distance from Hole (ft)"
-            value={putt.remainingDistance ? String(putt.remainingDistance) : ""}
-            onChangeText={(t) => update({ remainingDistance: parseInt(t) || 0 })}
+            label={`Distance from Hole (${fLabel})`}
+            value={putt.remainingDistance ? String(dFeet(putt.remainingDistance)) : ""}
+            onChangeText={(t) => update({ remainingDistance: iFeet(parseInt(t) || 0) })}
             keyboardType="number-pad"
             placeholder="3"
           />

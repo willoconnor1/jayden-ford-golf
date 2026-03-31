@@ -1,5 +1,7 @@
 "use client";
 
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
+
 interface ShotFlowHeaderProps {
   holeNumber: number;
   totalHoles: number;
@@ -17,13 +19,14 @@ export function ShotFlowHeader({
   subtitle,
   progress,
 }: ShotFlowHeaderProps) {
+  const { dYards, yLabel } = useDistanceUnit();
   return (
     <div className="space-y-2">
       <div className="flex items-baseline justify-between">
         <div className="text-sm font-semibold">
           Hole {holeNumber} of {totalHoles}
           <span className="text-muted-foreground font-normal">
-            {" "}· Par {par} · {distance} yds
+            {" "}· Par {par} · {dYards(distance)} {yLabel}
           </span>
         </div>
       </div>

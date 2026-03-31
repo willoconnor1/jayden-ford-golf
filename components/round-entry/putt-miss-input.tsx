@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useCallback } from "react";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 interface PuttMissInputProps {
   missX: number;
@@ -21,6 +22,7 @@ function getRings(maxFeet: number): number[] {
 }
 
 export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
+  const { dFeet, fLabel } = useDistanceUnit();
   const svgRef = useRef<SVGSVGElement>(null);
   const [dragging, setDragging] = useState(false);
   const [zoomIndex, setZoomIndex] = useState(DEFAULT_ZOOM_INDEX);
@@ -107,7 +109,7 @@ export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
   return (
     <div className="flex flex-col items-center gap-1 select-none" onWheel={handleWheel}>
       <div className="text-xs text-muted-foreground">
-        Drag ball to miss position ({distanceFt.toFixed(1)}ft, {dirLabel}) · ±{maxFeet}ft
+        Drag ball to miss position ({dFeet(distanceFt).toFixed(1)}{fLabel}, {dirLabel}) · ±{dFeet(maxFeet)}{fLabel}
       </div>
       <svg
         ref={svgRef}
@@ -126,7 +128,7 @@ export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
         ))}
         {rings.map((r) => (
           <text key={r} x={CENTER + toPixel(r) + 2} y={CENTER - 2}
-            fontSize={8} fill="currentColor" opacity={0.3}>{r}ft</text>
+            fontSize={8} fill="currentColor" opacity={0.3}>{dFeet(r)}{fLabel}</text>
         ))}
 
         <line x1={CENTER} y1={SIZE - 10} x2={CENTER} y2={CENTER}
@@ -149,7 +151,7 @@ export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
               stroke="rgba(74, 222, 128, 0.7)" strokeWidth={1.5} strokeDasharray="4 2" />
             <text x={labelX} y={labelY} textAnchor="middle"
               fontSize={10} fontWeight="bold" fill="rgba(34, 197, 94, 0.8)">
-              {distanceFt.toFixed(1)}ft
+              {dFeet(distanceFt).toFixed(1)}{fLabel}
             </text>
           </>
         )}

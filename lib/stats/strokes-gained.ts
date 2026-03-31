@@ -9,8 +9,9 @@ import {
   ShotResult,
   ShotData,
   LieType,
+  BenchmarkLevel,
 } from "@/lib/types";
-import { getExpectedStrokes } from "./benchmarks";
+import { getExpectedStrokesForLevel } from "./benchmarks";
 
 // ── Lie-mapping helpers ─────────────────────────────────────────
 
@@ -115,7 +116,7 @@ function estimateDistanceAfterShot(
 
 // ── Shot-level SG (Standard/Detailed mode) ──────────────────────
 
-function calculateShotLevelSG(hole: HoleData): StrokesGainedDetail {
+function calculateShotLevelSG(hole: HoleData, level: BenchmarkLevel = "pga-tour"): StrokesGainedDetail {
   const shots = hole.shots!;
   const holeDistance = inferHoleDistance(hole);
   const puttDistances = hole.puttDistances ?? [];
@@ -134,12 +135,12 @@ function calculateShotLevelSG(hole: HoleData): StrokesGainedDetail {
     // Expected strokes BEFORE this shot
     let expectedBefore: number;
     if (i === 0) {
-      expectedBefore = getExpectedStrokes("tee", holeDistance);
+      expectedBefore = getExpectedStrokesForLevel("tee", holeDistance, level);
     } else {
       const lieType = shotLieToLieType(shot.lie);
       const prevShot = shots[i - 1];
       const distFromPrev = estimateDistanceAfterShot(prevShot, holeDistance, i - 1);
-      expectedBefore = getExpectedStrokes(lieType, distFromPrev);
+      expectedBefore = getExpectedStrokesForLevel(lieType, distFromPrev, level);
     }
 
     // Expected strokes AFTER this shot + penalty handling
@@ -149,7 +150,7 @@ function calculateShotLevelSG(hole: HoleData): StrokesGainedDetail {
     if (shot.result === "holed") {
       expectedAfter = 0;
     } else if (shot.result === "green") {
-      expectedAfter = getExpectedStrokes("green", puttDistances[0] ?? 20);
+      expectedAfter = getExpectedStrokesForLevel("green", puttDistances[0] ?? 20, level);
     } else if (shot.result === "out-of-bounds") {
       // OB: 1 penalty stroke, re-hit from same position
       penaltyStrokes = 1;
@@ -159,12 +160,12 @@ function calculateShotLevelSG(hole: HoleData): StrokesGainedDetail {
       penaltyStrokes = 1;
       const nextLie = resultToLieType(shot.result);
       const distAfter = estimateDistanceAfterShot(shot, holeDistance, i);
-      expectedAfter = getExpectedStrokes(nextLie, distAfter);
+      expectedAfter = getExpectedStrokesForLevel(nextLie, distAfter, level);
     } else {
       // Normal result
       const nextLie = resultToLieType(shot.result);
       const distAfter = estimateDistanceAfterShot(shot, holeDistance, i);
-      expectedAfter = getExpectedStrokes(nextLie, distAfter);
+      expectedAfter = getExpectedStrokesForLevel(nextLie, distAfter, level);
     }
 
     const sg = expectedBefore - (1 + penaltyStrokes) - expectedAfter;
@@ -189,7 +190,7 @@ function calculateShotLevelSG(hole: HoleData): StrokesGainedDetail {
   // --- Process putts ---
   for (let i = 0; i < hole.putts; i++) {
     const puttDist = puttDistances[i] ?? (i === 0 ? 20 : 3);
-    const expectedBefore = getExpectedStrokes("green", puttDist);
+    const expectedBefore = getExpectedStrokesForLevel("green", puttDist, level);
 
     let expectedAfter: number;
     if (i === hole.putts - 1) {
@@ -197,7 +198,7 @@ function calculateShotLevelSG(hole: HoleData): StrokesGainedDetail {
       expectedAfter = 0;
     } else {
       const nextPuttDist = puttDistances[i + 1] ?? 3;
-      expectedAfter = getExpectedStrokes("green", nextPuttDist);
+      expectedAfter = getExpectedStrokesForLevel("green", nextPuttDist, level);
     }
 
     const sg = expectedBefore - 1 - expectedAfter;
@@ -246,9 +247,9 @@ function estimateApproachDistance(par: number, distance: number): number {
   return 150;
 }
 
-function calculateHoleStrokesGainedSimple(hole: HoleData): StrokesGainedDetail {
+function calculateHoleStrokesGainedSimple(hole: HoleData, level: BenchmarkLevel = "pga-tour"): StrokesGainedDetail {
   const holeDistance = inferHoleDistance(hole);
-  const expectedFromTee = getExpectedStrokes("tee", holeDistance);
+  const expectedFromTee = getExpectedStrokesForLevel("tee", holeDistance, level);
   const sgTotal = expectedFromTee - hole.score;
   const firstPuttDist = hole.puttDistances?.[0] || 20;
 
@@ -257,14 +258,14 @@ function calculateHoleStrokesGainedSimple(hole: HoleData): StrokesGainedDetail {
   if (hole.putts > 0 && firstPuttDist > 0) {
     for (let i = 0; i < hole.putts; i++) {
       const dist = hole.puttDistances?.[i] ?? (i === 0 ? firstPuttDist : 3);
-      const before = getExpectedStrokes("green", dist);
+      const before = getExpectedStrokesForLevel("green", dist, level);
       const after = i === hole.putts - 1
         ? 0
-        : getExpectedStrokes("green", hole.puttDistances?.[i + 1] ?? 3);
+        : getExpectedStrokesForLevel("green", hole.puttDistances?.[i + 1] ?? 3, level);
       sgPutting += before - 1 - after;
     }
   } else {
-    const expectedPutts = getExpectedStrokes("green", firstPuttDist);
+    const expectedPutts = getExpectedStrokesForLevel("green", firstPuttDist, level);
     sgPutting = expectedPutts - hole.putts;
   }
 
@@ -284,7 +285,7 @@ function calculateHoleStrokesGainedSimple(hole: HoleData): StrokesGainedDetail {
       approachLie = "rough";
     }
 
-    const expectedAfterDrive = getExpectedStrokes(approachLie, remainingDistance);
+    const expectedAfterDrive = getExpectedStrokesForLevel(approachLie, remainingDistance, level);
     sgOffTheTee = expectedFromTee - 1 - expectedAfterDrive;
   }
 
@@ -302,15 +303,15 @@ function calculateHoleStrokesGainedSimple(hole: HoleData): StrokesGainedDetail {
 
     const expectedBeforeApproach = hole.par === 3
       ? expectedFromTee
-      : getExpectedStrokes(approachLie, approachStartDistance);
+      : getExpectedStrokesForLevel(approachLie, approachStartDistance, level);
 
     let expectedAfterApproach: number;
     if (hole.greenInRegulation) {
-      expectedAfterApproach = getExpectedStrokes("green", firstPuttDist);
+      expectedAfterApproach = getExpectedStrokesForLevel("green", firstPuttDist, level);
     } else {
       // Missed the green — estimate around-green position
       const aroundGreenLie: LieType = hole.sandSaveAttempt ? "sand" : "rough";
-      expectedAfterApproach = getExpectedStrokes(aroundGreenLie, 15);
+      expectedAfterApproach = getExpectedStrokesForLevel(aroundGreenLie, 15, level);
     }
 
     sgApproach = expectedBeforeApproach - 1 - expectedAfterApproach;
@@ -326,11 +327,12 @@ function calculateHoleStrokesGainedSimple(hole: HoleData): StrokesGainedDetail {
 
 export function calculateHoleStrokesGained(
   hole: HoleData,
+  benchmarkLevel: BenchmarkLevel = "pga-tour",
 ): StrokesGainedDetail {
   if (hole.shots && hole.shots.length > 0) {
-    return calculateShotLevelSG(hole);
+    return calculateShotLevelSG(hole, benchmarkLevel);
   }
-  return calculateHoleStrokesGainedSimple(hole);
+  return calculateHoleStrokesGainedSimple(hole, benchmarkLevel);
 }
 
 function sum(nums: number[]): number {
@@ -339,8 +341,9 @@ function sum(nums: number[]): number {
 
 export function calculateRoundStrokesGained(
   round: Round,
+  benchmarkLevel: BenchmarkLevel = "pga-tour",
 ): StrokesGainedResult {
-  const holeSGs = round.holes.map(calculateHoleStrokesGained);
+  const holeSGs = round.holes.map((h) => calculateHoleStrokesGained(h, benchmarkLevel));
   return {
     sgOffTheTee: sum(holeSGs.map((h) => h.sgOffTheTee)),
     sgApproach: sum(holeSGs.map((h) => h.sgApproach)),

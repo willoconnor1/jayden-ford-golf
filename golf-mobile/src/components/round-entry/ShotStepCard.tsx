@@ -17,6 +17,7 @@ import {
 } from "@/lib/constants-clubs";
 import { hapticLight } from "@/lib/platform";
 import { colors } from "@/theme/colors";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 interface ShotStepCardProps {
   shotNumber: number;
@@ -43,6 +44,7 @@ export function ShotStepCard({
   onBack,
   isDetailed,
 }: ShotStepCardProps) {
+  const { dYards, dFeet, iYards, iFeet, yLabel, fLabel } = useDistanceUnit();
   const [clubModalVisible, setClubModalVisible] = useState(false);
   const isPar3Tee = isTeeShot && par === 3;
   const isPar45Tee = isTeeShot && par >= 4;
@@ -73,7 +75,7 @@ export function ShotStepCard({
           <Text style={styles.lieText}> · {shot.lie.replace("-", " ")}</Text>
         )}
         {!isTeeShot && shot.targetDistance > 0 && (
-          <Text style={styles.distanceText}> · {shot.targetDistance} yds to pin</Text>
+          <Text style={styles.distanceText}> · {dYards(shot.targetDistance)} {yLabel} to pin</Text>
         )}
       </Text>
 
@@ -187,9 +189,9 @@ export function ShotStepCard({
       {/* Distance remaining — yards to green for non-green results */}
       {shot.result && shot.result !== "green" && shot.result !== "holed" && (
         <TextInput
-          label="Distance Remaining (yds)"
-          value={shot.distanceRemaining ? String(shot.distanceRemaining) : ""}
-          onChangeText={(t) => update({ distanceRemaining: parseInt(t) || 0 })}
+          label={`Distance Remaining (${yLabel})`}
+          value={shot.distanceRemaining ? String(dYards(shot.distanceRemaining)) : ""}
+          onChangeText={(t) => update({ distanceRemaining: iYards(parseInt(t) || 0) })}
           keyboardType="number-pad"
           placeholder="150"
         />
@@ -201,15 +203,15 @@ export function ShotStepCard({
           {/* Miss from target — computed from tracker */}
           {(shot.missX !== 0 || shot.missY !== 0) && (
             <Text style={styles.missFromTarget}>
-              Miss from target: {Math.round(Math.sqrt(shot.missX ** 2 + shot.missY ** 2) * 3)} ft
+              Miss from target: {dFeet(Math.round(Math.sqrt(shot.missX ** 2 + shot.missY ** 2) * 3))} {fLabel}
             </Text>
           )}
 
           {/* Distance to hole — carries to first putt */}
           <TextInput
-            label="Distance to Hole (ft)"
-            value={shot.distanceToHole ? String(shot.distanceToHole) : ""}
-            onChangeText={(t) => update({ distanceToHole: parseInt(t) || 0 })}
+            label={`Distance to Hole (${fLabel})`}
+            value={shot.distanceToHole ? String(dFeet(shot.distanceToHole)) : ""}
+            onChangeText={(t) => update({ distanceToHole: iFeet(parseInt(t) || 0) })}
             keyboardType="number-pad"
             placeholder="20"
           />

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { PillSelector } from "./pill-selector";
 import { DriverMissInput } from "./driver-miss-input";
 import { ShotMissInput } from "./shot-miss-input";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 import {
   CLUBS,
   HOLE_SHAPES,
@@ -41,6 +42,7 @@ export function ShotStepCard({
   onBack,
   isDetailed,
 }: ShotStepCardProps) {
+  const { dYards, dFeet, iYards, iFeet, yLabel, fLabel } = useDistanceUnit();
   const isDriver = shot.club === "driver";
   const isPar3Tee = isTeeShot && par === 3;
   const isPar45Tee = isTeeShot && par >= 4;
@@ -71,7 +73,7 @@ export function ShotStepCard({
           <span className="ml-1 capitalize">· {shot.lie.replace("-", " ")}</span>
         )}
         {!isTeeShot && shot.targetDistance > 0 && (
-          <span className="ml-1 font-semibold text-primary">· {shot.targetDistance} yds to pin</span>
+          <span className="ml-1 font-semibold text-primary">· {dYards(shot.targetDistance)} {yLabel} to pin</span>
         )}
       </div>
 
@@ -156,13 +158,13 @@ export function ShotStepCard({
       {shot.result && shot.result !== "green" && shot.result !== "holed" && (
         <div className="space-y-1">
           <div className="text-xs font-medium text-muted-foreground">
-            Distance Remaining (yds)
+            Distance Remaining ({yLabel})
           </div>
           <Input
             type="number"
-            value={shot.distanceRemaining || ""}
+            value={dYards(shot.distanceRemaining || 0) || ""}
             onChange={(e) =>
-              update({ distanceRemaining: parseInt(e.target.value) || 0 })
+              update({ distanceRemaining: iYards(parseInt(e.target.value) || 0) })
             }
             className="h-10 text-sm"
             placeholder="150"
@@ -178,20 +180,20 @@ export function ShotStepCard({
           {/* Miss from target — computed from tracker */}
           {(shot.missX !== 0 || shot.missY !== 0) && (
             <div className="text-xs text-muted-foreground">
-              Miss from target: {Math.round(Math.sqrt(shot.missX ** 2 + shot.missY ** 2) * 3)} ft
+              Miss from target: {dFeet(Math.round(Math.sqrt(shot.missX ** 2 + shot.missY ** 2) * 3))} {fLabel}
             </div>
           )}
 
           {/* Distance to hole — carries to first putt */}
           <div className="space-y-1">
             <div className="text-xs font-medium text-muted-foreground">
-              Distance to Hole (ft)
+              Distance to Hole ({fLabel})
             </div>
             <Input
               type="number"
-              value={shot.distanceToHole ?? ""}
+              value={dFeet(shot.distanceToHole ?? 0) || ""}
               onChange={(e) =>
-                update({ distanceToHole: parseInt(e.target.value) || 0 })
+                update({ distanceToHole: iFeet(parseInt(e.target.value) || 0) })
               }
               className="h-10 text-sm"
               placeholder="20"

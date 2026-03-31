@@ -7,7 +7,8 @@ import { useRoundStore } from "@/stores/round-store";
 import { useStrokesGained } from "@/hooks/use-strokes-gained";
 import { analyzePracticeNeeds } from "@/lib/stats/practice-analyzer";
 import { DRILL_DATABASE } from "@/lib/drills/drill-database";
-import { PracticeFocus, Drill } from "@/lib/types";
+import { PracticeFocus, Drill, BenchmarkLevel } from "@/lib/types";
+import { useAuthStore } from "@/stores/auth-store";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { ScreenBackground } from "@/components/ui/ScreenBackground";
@@ -123,6 +124,8 @@ export default function PracticeScreen() {
   const rounds = useRoundStore((s) => s.rounds);
   const { sgAverages } = useStrokesGained();
   const [tab, setTab] = useState<Tab>("plan");
+  const authUser = useAuthStore((s) => s.user);
+  const benchmarkLevel = (authUser?.benchmarkLevel ?? "pga-tour") as BenchmarkLevel;
 
   if (rounds.length === 0 || !sgAverages) {
     return (
@@ -147,7 +150,7 @@ export default function PracticeScreen() {
     );
   }
 
-  const focuses = analyzePracticeNeeds(sgAverages);
+  const focuses = analyzePracticeNeeds(sgAverages, benchmarkLevel);
 
   return (
     <View style={styles.wrapper}>

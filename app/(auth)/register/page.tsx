@@ -25,6 +25,7 @@ import {
 import { COUNTRIES } from "@/lib/data/countries";
 import { GOLF_TOURS } from "@/lib/data/golf-tours";
 import { COLLEGE_GOLF_TEAMS } from "@/lib/data/colleges";
+import { BENCHMARK_LEVELS, BENCHMARK_LABELS, BenchmarkLevel } from "@/lib/types";
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -42,6 +43,8 @@ export default function RegisterPage() {
   const [collegeName, setCollegeName] = useState("");
   const [isTourPlayer, setIsTourPlayer] = useState(false);
   const [tourName, setTourName] = useState("");
+  const [distanceUnit, setDistanceUnit] = useState<"yards" | "meters">("yards");
+  const [benchmarkLevel, setBenchmarkLevel] = useState<BenchmarkLevel>("pga-tour");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -72,6 +75,8 @@ export default function RegisterPage() {
         collegeName: isCollegePlayer ? collegeName || undefined : undefined,
         isTourPlayer,
         tourName: isTourPlayer ? tourName || undefined : undefined,
+        distanceUnit,
+        benchmarkLevel,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
@@ -231,6 +236,51 @@ export default function RegisterPage() {
                   value={homeClub}
                   onChange={(e) => setHomeClub(e.target.value)}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Distance Units</Label>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant={distanceUnit === "yards" ? "default" : "outline"}
+                    size="sm"
+                    className="flex-1"
+                    onClick={() => setDistanceUnit("yards")}
+                  >
+                    Yards / Feet
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={distanceUnit === "meters" ? "default" : "outline"}
+                    size="sm"
+                    className="flex-1"
+                    onClick={() => setDistanceUnit("meters")}
+                  >
+                    Meters
+                  </Button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Compare your stats against</Label>
+                <div className="grid grid-cols-3 gap-2">
+                  {BENCHMARK_LEVELS.map((level) => (
+                    <Button
+                      key={level}
+                      type="button"
+                      variant={benchmarkLevel === level ? "default" : "outline"}
+                      size="sm"
+                      className="text-xs"
+                      onClick={() => setBenchmarkLevel(level)}
+                    >
+                      {BENCHMARK_LABELS[level]}
+                    </Button>
+                  ))}
+                </div>
+                <p className="text-xs text-white/40">
+                  You can change this later in Settings as your game improves.
+                </p>
               </div>
 
               <div className="space-y-3">

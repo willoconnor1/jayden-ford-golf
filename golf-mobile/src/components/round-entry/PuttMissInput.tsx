@@ -5,6 +5,7 @@ import { GestureDetector, Gesture } from "react-native-gesture-handler";
 import Animated, { useSharedValue, useAnimatedProps, runOnJS } from "react-native-reanimated";
 import { hapticLight } from "@/lib/platform";
 import { colors } from "@/theme/colors";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -21,6 +22,7 @@ const SCALE = 6; // feet (smaller scale than shot miss)
 const CUP_R = 6;
 
 export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
+  const { dFeet, fLabel } = useDistanceUnit();
   const [zoom, setZoom] = useState(1);
   const maxRange = SCALE / zoom;
   const pxPerFoot = CENTER / maxRange;
@@ -78,7 +80,7 @@ export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
       <Text style={styles.label}>
         Miss: {missX === 0 && missY === 0
           ? "In cup"
-          : `${(Math.round(Math.abs(missX) * 2) / 2).toFixed(1)}ft ${missX < 0 ? "L" : "R"}, ${(Math.round(Math.abs(missY) * 2) / 2).toFixed(1)}ft ${missY < 0 ? "Short" : "Long"}`}
+          : `${dFeet(Math.round(Math.abs(missX) * 2) / 2).toFixed(1)}${fLabel} ${missX < 0 ? "L" : "R"}, ${dFeet(Math.round(Math.abs(missY) * 2) / 2).toFixed(1)}${fLabel} ${missY < 0 ? "Short" : "Long"}`}
       </Text>
       <GestureDetector gesture={composed}>
         <View>
@@ -119,7 +121,7 @@ export function PuttMissInput({ missX, missY, onChange }: PuttMissInputProps) {
         <Pressable onPress={() => setZoom(Math.min(4, zoom * 2))} style={styles.zoomButton}>
           <Text style={styles.zoomText}>+</Text>
         </Pressable>
-        <Text style={styles.zoomLabel}>{"\u00b1"}{maxRange}ft</Text>
+        <Text style={styles.zoomLabel}>{"\u00b1"}{dFeet(maxRange)}{fLabel}</Text>
         <Pressable onPress={() => setZoom(Math.max(0.5, zoom / 2))} style={styles.zoomButton}>
           <Text style={styles.zoomText}>{"\u2212"}</Text>
         </Pressable>

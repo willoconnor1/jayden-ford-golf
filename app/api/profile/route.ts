@@ -17,6 +17,8 @@ const profileSchema = z.object({
   collegeName: z.string().max(100).nullable().optional(),
   isTourPlayer: z.boolean().optional(),
   tourName: z.string().max(100).nullable().optional(),
+  distanceUnit: z.enum(["yards", "meters"]).optional(),
+  benchmarkLevel: z.enum(["hdcp-18", "hdcp-13", "hdcp-9", "hdcp-4", "scratch", "pga-tour"]).optional(),
 });
 
 export async function GET(request: Request) {
@@ -45,6 +47,8 @@ export async function GET(request: Request) {
       collegeName: row.collegeName,
       isTourPlayer: row.isTourPlayer ?? false,
       tourName: row.tourName,
+      distanceUnit: row.distanceUnit ?? "yards",
+      benchmarkLevel: row.benchmarkLevel ?? "pga-tour",
       createdAt: row.createdAt,
     });
   } catch {
@@ -80,11 +84,16 @@ export async function PUT(request: Request) {
         collegeName: data.isCollegePlayer ? (data.collegeName ?? null) : null,
         isTourPlayer: data.isTourPlayer ?? false,
         tourName: data.isTourPlayer ? (data.tourName ?? null) : null,
+        distanceUnit: data.distanceUnit ?? undefined,
+        benchmarkLevel: data.benchmarkLevel ?? undefined,
         updatedAt: now,
       })
       .where(eq(users.id, user.userId));
 
-    // Refresh token with updated name/city/country
+    // Refresh token with updated profile data
+    // Read back fields from DB if not in this request
+    const [freshRow] = await db.select({ distanceUnit: users.distanceUnit, benchmarkLevel: users.benchmarkLevel }).from(users).where(eq(users.id, user.userId)).limit(1);
+
     const authUser = {
       userId: user.userId,
       email: user.email,
@@ -92,6 +101,8 @@ export async function PUT(request: Request) {
       city: data.city,
       state: data.state ?? null,
       country: data.country,
+      distanceUnit: (data.distanceUnit ?? freshRow?.distanceUnit ?? "yards") as "yards" | "meters",
+      benchmarkLevel: data.benchmarkLevel ?? freshRow?.benchmarkLevel ?? "pga-tour",
     };
     const token = await createToken(authUser);
     await setAuthCookie(token);

@@ -10,6 +10,7 @@ import { ShotEntryCard } from "./ShotEntryCard";
 import { holeScoreColor } from "@/lib/utils";
 import { hapticLight } from "@/lib/platform";
 import { colors } from "@/theme/colors";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 const MISS_DIRECTIONS: { value: PuttMissDirection; label: string }[] = [
   { value: "left", label: "Left" },
@@ -57,6 +58,7 @@ function resultToLie(result: ShotResult, currentLie: ShotData["lie"]): { lie: Sh
 }
 
 export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
+  const { dYards, dFeet, iFeet, yLabel, fLabel } = useDistanceUnit();
   const [expanded, setExpanded] = useState(false);
   const [showShots, setShowShots] = useState((hole.shots?.length ?? 0) > 0);
   const scoreToPar = hole.score - hole.par;
@@ -83,7 +85,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
           </View>
           <Text style={styles.parText}>Par {hole.par}</Text>
           {hole.distance > 0 && (
-            <Text style={styles.distText}>{hole.distance} yds</Text>
+            <Text style={styles.distText}>{dYards(hole.distance)} {yLabel}</Text>
           )}
         </View>
         <View style={styles.headerRight}>
@@ -186,15 +188,15 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                 <View style={styles.puttRow}>
                   <Text style={styles.puttLabel}>{ordinal} putt</Text>
                   <TextInput
-                    value={String((hole.puttDistances || [])[i] || "")}
+                    value={String(dFeet((hole.puttDistances || [])[i] || 0) || "")}
                     onChangeText={(t) => {
                       const newDists = [...(hole.puttDistances || [])];
                       while (newDists.length <= i) newDists.push(0);
-                      newDists[i] = parseInt(t) || 0;
+                      newDists[i] = iFeet(parseInt(t) || 0);
                       update({ puttDistances: newDists });
                     }}
                     keyboardType="number-pad"
-                    placeholder="ft"
+                    placeholder={fLabel}
                     style={{ width: 60, height: 32, fontSize: 13 }}
                   />
                   {isMiss && <Text style={styles.missLabel}>miss</Text>}

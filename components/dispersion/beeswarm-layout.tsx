@@ -3,6 +3,7 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { EnrichedTeeShot } from "@/lib/stats/dispersion";
 import { CLUB_COLORS, CLUBS } from "@/lib/constants-clubs";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 interface BeeswarmLayoutProps {
   shots: EnrichedTeeShot[];
@@ -15,6 +16,7 @@ interface BeeswarmLayoutProps {
  * In "left-right" mode: X = missX (jittered on Y to avoid overlap)
  */
 export function BeeswarmLayout({ shots, mode }: BeeswarmLayoutProps) {
+  const { dFeet, dYards, fLabel, yLabelShort } = useDistanceUnit();
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(400);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
@@ -161,9 +163,9 @@ export function BeeswarmLayout({ shots, mode }: BeeswarmLayoutProps) {
             {CLUBS.find((c) => c.value === hoveredShot.shot.club)?.label}
           </p>
           <p className="text-muted-foreground">
-            {Math.abs(hoveredShot.shot.missX).toFixed(0)}ft{" "}
+            {dFeet(Math.abs(hoveredShot.shot.missX)).toFixed(0)}{fLabel}{" "}
             {hoveredShot.shot.missX >= 0 ? "R" : "L"}
-            {isFairway && ` · ${hoveredShot.shot.distanceHit.toFixed(0)}yd`}
+            {isFairway && ` · ${dYards(hoveredShot.shot.distanceHit).toFixed(0)}${yLabelShort}`}
           </p>
         </div>
       )}

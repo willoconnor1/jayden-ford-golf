@@ -1,6 +1,21 @@
 export type LieType = "tee" | "fairway" | "rough" | "sand" | "green" | "recovery";
 export type FairwayHit = "yes" | "no" | "na";
 
+export type BenchmarkLevel = "hdcp-18" | "hdcp-13" | "hdcp-9" | "hdcp-4" | "scratch" | "pga-tour";
+
+export const BENCHMARK_LABELS: Record<BenchmarkLevel, string> = {
+  "hdcp-18": "18 Handicap",
+  "hdcp-13": "13 Handicap",
+  "hdcp-9": "9 Handicap",
+  "hdcp-4": "4 Handicap",
+  "scratch": "Scratch",
+  "pga-tour": "PGA Tour",
+};
+
+export const BENCHMARK_LEVELS: BenchmarkLevel[] = [
+  "hdcp-18", "hdcp-13", "hdcp-9", "hdcp-4", "scratch", "pga-tour",
+];
+
 export interface HoleData {
   holeNumber: number;
   par: number;

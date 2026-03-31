@@ -59,12 +59,19 @@ export function getPerRoundChartData(
   const sliced = lastN ? roundStats.slice(0, lastN) : roundStats;
   const pgaAvg = PGA_TOUR_AVERAGES[stat] ?? 0;
 
-  return [...sliced].reverse().map((rs, idx) => ({
-    roundIndex: idx + 1,
-    date: rs.round.date,
-    value: rs.stats[fieldKey] as number,
-    pgaAverage: pgaAvg,
-  }));
+  const chronological = [...sliced].reverse();
+
+  // Show cumulative running average for all stats
+  let runningTotal = 0;
+  return chronological.map((rs, idx) => {
+    runningTotal += rs.stats[fieldKey] as number;
+    return {
+      roundIndex: idx + 1,
+      date: rs.round.date,
+      value: runningTotal / (idx + 1),
+      pgaAverage: pgaAvg,
+    };
+  });
 }
 
 /**

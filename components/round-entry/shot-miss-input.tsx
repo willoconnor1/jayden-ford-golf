@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback } from "react";
 import { Minus, Plus } from "lucide-react";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 type MissUnit = "yards" | "feet";
 
@@ -32,6 +33,7 @@ function getRingsYards(maxYards: number): number[] {
 }
 
 export function ShotMissInput({ missX, missY, onChange }: ShotMissInputProps) {
+  const { fLabel, yLabel } = useDistanceUnit();
   const svgRef = useRef<SVGSVGElement>(null);
   const [dragging, setDragging] = useState(false);
   const [zoomIndex, setZoomIndex] = useState(DEFAULT_ZOOM_INDEX);
@@ -41,7 +43,7 @@ export function ShotMissInput({ missX, missY, onChange }: ShotMissInputProps) {
   const pointersRef = useRef<Map<number, { x: number; y: number }>>(new Map());
 
   const isFeet = unit === "feet";
-  const unitLabel = isFeet ? "ft" : "yds";
+  const unitLabel = isFeet ? fLabel : yLabel;
   const zoomSteps = isFeet ? FEET_ZOOM_STEPS : YARDS_ZOOM_STEPS;
   const maxRange = zoomSteps[zoomIndex];
   const pxPerUnit = (SIZE / 2 - 10) / maxRange;
@@ -131,7 +133,7 @@ export function ShotMissInput({ missX, missY, onChange }: ShotMissInputProps) {
           onClick={toggleUnit}
           className="px-2 py-0.5 rounded border text-[10px] font-medium bg-background hover:bg-muted transition-colors"
         >
-          {isFeet ? "Switch to yds" : "Switch to ft"}
+          {isFeet ? `Switch to ${yLabel}` : `Switch to ${fLabel}`}
         </button>
       </div>
       <div className="flex items-center gap-2">

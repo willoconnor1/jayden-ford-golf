@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback } from "react";
 import { Minus, Plus } from "lucide-react";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 interface DriverMissInputProps {
   missX: number;
@@ -26,6 +27,7 @@ function getTicks(maxYards: number): number[] {
 }
 
 export function DriverMissInput({ missX, onChange }: DriverMissInputProps) {
+  const { dYards, yLabelShort } = useDistanceUnit();
   const svgRef = useRef<SVGSVGElement>(null);
   const [dragging, setDragging] = useState(false);
   const [zoomIndex, setZoomIndex] = useState(DEFAULT_ZOOM_INDEX);
@@ -67,7 +69,7 @@ export function DriverMissInput({ missX, onChange }: DriverMissInputProps) {
   return (
     <div className="flex flex-col items-center gap-1 select-none">
       <div className="text-xs text-muted-foreground">
-        Drag to mark miss ({Math.round(absMiss)}yds {dirLabel}) · ±{maxYards}yds
+        Drag to mark miss ({dYards(Math.round(absMiss))}{yLabelShort} {dirLabel}) · ±{dYards(maxYards)}{yLabelShort}
       </div>
       <div className="flex items-center gap-2">
         <button
@@ -106,7 +108,7 @@ export function DriverMissInput({ missX, onChange }: DriverMissInputProps) {
                   x={CENTER_X + toPixel(t)} y={HEIGHT - 4}
                   textAnchor="middle" fontSize={7} fill="currentColor" opacity={0.3}
                 >
-                  {Math.abs(t)}yds
+                  {dYards(Math.abs(t))}{yLabelShort}
                 </text>
               )}
             </g>

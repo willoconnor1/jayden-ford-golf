@@ -1,4 +1,4 @@
-import { StrokesGainedResult, PracticeFocus, Drill } from "@/lib/types";
+import { StrokesGainedResult, PracticeFocus, Drill, BenchmarkLevel, BENCHMARK_LABELS } from "@/lib/types";
 import { DRILL_DATABASE } from "@/lib/drills/drill-database";
 
 const CATEGORY_MAP: Array<{
@@ -12,15 +12,15 @@ const CATEGORY_MAP: Array<{
   { sgKey: "sgPutting", practiceCategory: "putting", label: "Putting" },
 ];
 
-function generateDescription(label: string, sgValue: number): string {
+function generateDescription(label: string, sgValue: number, benchmarkLabel: string): string {
   const abs = Math.abs(sgValue).toFixed(1);
   if (sgValue < -2)
-    return `${label} is your biggest weakness, costing you ${abs} strokes per round vs PGA Tour. This should be your primary focus.`;
+    return `${label} is your biggest weakness, costing you ${abs} strokes per round vs ${benchmarkLabel}. This should be your primary focus.`;
   if (sgValue < -0.5)
     return `${label} is costing you ${abs} strokes per round. Targeted practice here will yield significant improvement.`;
   if (sgValue < 0)
-    return `${label} is slightly below PGA Tour average by ${abs} strokes. Minor adjustments can help.`;
-  return `${label} is a strength, gaining you ${abs} strokes per round vs PGA Tour. Maintain with periodic practice.`;
+    return `${label} is slightly below ${benchmarkLabel} average by ${abs} strokes. Minor adjustments can help.`;
+  return `${label} is a strength, gaining you ${abs} strokes per round vs ${benchmarkLabel}. Maintain with periodic practice.`;
 }
 
 function generateRecommendation(
@@ -40,8 +40,10 @@ function generateRecommendation(
 }
 
 export function analyzePracticeNeeds(
-  sgAverages: StrokesGainedResult
+  sgAverages: StrokesGainedResult,
+  benchmarkLevel: BenchmarkLevel = "pga-tour"
 ): PracticeFocus[] {
+  const benchmarkLabel = BENCHMARK_LABELS[benchmarkLevel];
   const sorted = CATEGORY_MAP.map((cat) => ({
     ...cat,
     value: sgAverages[cat.sgKey],
@@ -73,7 +75,7 @@ export function analyzePracticeNeeds(
       sgCategory: item.sgKey,
       sgValue: item.value,
       severity,
-      description: generateDescription(item.label, item.value),
+      description: generateDescription(item.label, item.value, benchmarkLabel),
       recommendation: generateRecommendation(item.practiceCategory, item.value),
       suggestedDrills: drills.slice(0, 3),
       practiceTimeAllocation: allocation,

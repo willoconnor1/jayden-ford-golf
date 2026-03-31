@@ -8,9 +8,9 @@ import { Round, RoundStats, StatCategory } from "@/lib/types";
 import { calculateAggregateStats } from "@/lib/stats/calculate-stats";
 import {
   getPerRoundChartData,
-  isTrendImproving,
   isBetterThanPga,
   STAT_LABELS,
+  STAT_DIRECTION,
   PGA_TOUR_AVERAGES,
   formatStat,
 } from "@/lib/stat-helpers";
@@ -94,11 +94,50 @@ export function HeroStatCard({
   const pgaAvg = PGA_TOUR_AVERAGES[stat];
   const formattedPga = pgaAvg !== undefined ? formatStat(pgaAvg, stat) : undefined;
   const betterThanPga = isBetterThanPga(statValue, stat);
-  const improving = chartData.length >= 2 ? isTrendImproving(chartData, stat) : betterThanPga;
 
-  const trendColor = improving
-    ? "hsl(160, 84%, 39%)"
-    : "hsl(0, 84%, 60%)";
+  const GREEN = "hsl(160, 84%, 39%)";
+  const RED = "hsl(0, 84%, 60%)";
+
+  // Build horizontal gradient stops that switch green/red at PGA crossover points
+  const colorStops = useMemo(() => {
+    if (chartData.length < 2 || pgaAvg === undefined) {
+      const c = betterThanPga ? GREEN : RED;
+      return [{ offset: "0%", color: c }, { offset: "100%", color: c }];
+    }
+    const direction = STAT_DIRECTION[stat];
+    const isBetter = (val: number) =>
+      direction === "increase" ? val >= pgaAvg : val <= pgaAvg;
+    const n = chartData.length - 1;
+    const stops: { offset: string; color: string }[] = [];
+
+    for (let i = 0; i <= n; i++) {
+      const val = chartData[i].value;
+      const better = isBetter(val);
+      const color = better ? GREEN : RED;
+      const pct = ((i / n) * 100).toFixed(2) + "%";
+
+      if (i < n) {
+        const nextVal = chartData[i + 1].value;
+        const nextBetter = isBetter(nextVal);
+        if (better !== nextBetter) {
+          // Find exact crossing point via linear interpolation
+          const t = (pgaAvg - val) / (nextVal - val);
+          const crossPct = (((i + t) / n) * 100).toFixed(2) + "%";
+          stops.push({ offset: pct, color });
+          stops.push({ offset: crossPct, color });
+          stops.push({ offset: crossPct, color: nextBetter ? GREEN : RED });
+        } else {
+          stops.push({ offset: pct, color });
+        }
+      } else {
+        stops.push({ offset: pct, color });
+      }
+    }
+    return stops;
+  }, [chartData, pgaAvg, stat, betterThanPga]);
+
+  // Color of the last data point (for activeDot)
+  const lastColor = colorStops[colorStops.length - 1]?.color ?? GREEN;
 
   const yDomain = useMemo(() => {
     if (chartData.length === 0) return [0, 100];
@@ -215,23 +254,37 @@ export function HeroStatCard({
                         stopOpacity={0}
                       />
                     </linearGradient>
+                    {/* Horizontal gradient — switches green/red at PGA crossovers */}
                     <linearGradient
-                      id={`trendGradient-${stat}`}
+                      id={`trendStroke-${stat}`}
                       x1="0"
                       y1="0"
-                      x2="0"
-                      y2="1"
+                      x2="1"
+                      y2="0"
                     >
-                      <stop
-                        offset="0%"
-                        stopColor={trendColor}
-                        stopOpacity={0.3}
-                      />
-                      <stop
-                        offset="100%"
-                        stopColor={trendColor}
-                        stopOpacity={0}
-                      />
+                      {colorStops.map((s, i) => (
+                        <stop
+                          key={i}
+                          offset={s.offset}
+                          stopColor={s.color}
+                        />
+                      ))}
+                    </linearGradient>
+                    <linearGradient
+                      id={`trendFill-${stat}`}
+                      x1="0"
+                      y1="0"
+                      x2="1"
+                      y2="0"
+                    >
+                      {colorStops.map((s, i) => (
+                        <stop
+                          key={i}
+                          offset={s.offset}
+                          stopColor={s.color}
+                          stopOpacity={0.15}
+                        />
+                      ))}
                     </linearGradient>
                   </defs>
                   <XAxis
@@ -273,11 +326,11 @@ export function HeroStatCard({
                   <Area
                     type="monotone"
                     dataKey="value"
-                    stroke={trendColor}
+                    stroke={`url(#trendStroke-${stat})`}
                     strokeWidth={2}
-                    fill={`url(#trendGradient-${stat})`}
+                    fill={`url(#trendFill-${stat})`}
                     dot={false}
-                    activeDot={{ r: 4, fill: trendColor, strokeWidth: 0 }}
+                    activeDot={{ r: 4, fill: lastColor, strokeWidth: 0 }}
                   />
                   <Tooltip
                     content={<CustomTooltip stat={stat} />}

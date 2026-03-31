@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useAuthStore } from "@/stores/auth-store";
 import { colors } from "@/theme/colors";
+import { BENCHMARK_LEVELS, BENCHMARK_LABELS, BenchmarkLevel } from "@/lib/types";
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -22,6 +23,8 @@ export default function RegisterScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [distanceUnit, setDistanceUnit] = useState<"yards" | "meters">("yards");
+  const [benchmarkLevel, setBenchmarkLevel] = useState<BenchmarkLevel>("pga-tour");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -39,7 +42,7 @@ export default function RegisterScreen() {
 
     setLoading(true);
     try {
-      await register(name, email, password);
+      await register(name, email, password, { distanceUnit, benchmarkLevel });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
     } finally {
@@ -104,6 +107,67 @@ export default function RegisterScreen() {
             secureTextEntry
             autoComplete="new-password"
           />
+
+          <View style={styles.unitRow}>
+            <Pressable
+              style={[
+                styles.unitButton,
+                distanceUnit === "yards" && styles.unitButtonActive,
+              ]}
+              onPress={() => setDistanceUnit("yards")}
+            >
+              <Text
+                style={[
+                  styles.unitButtonText,
+                  distanceUnit === "yards" && styles.unitButtonTextActive,
+                ]}
+              >
+                Yards / Feet
+              </Text>
+            </Pressable>
+            <Pressable
+              style={[
+                styles.unitButton,
+                distanceUnit === "meters" && styles.unitButtonActive,
+              ]}
+              onPress={() => setDistanceUnit("meters")}
+            >
+              <Text
+                style={[
+                  styles.unitButtonText,
+                  distanceUnit === "meters" && styles.unitButtonTextActive,
+                ]}
+              >
+                Meters
+              </Text>
+            </Pressable>
+          </View>
+
+          <Text style={styles.sectionLabel}>Compare your stats against</Text>
+          <View style={styles.benchmarkGrid}>
+            {BENCHMARK_LEVELS.map((level) => (
+              <Pressable
+                key={level}
+                style={[
+                  styles.benchmarkButton,
+                  benchmarkLevel === level && styles.benchmarkButtonActive,
+                ]}
+                onPress={() => setBenchmarkLevel(level)}
+              >
+                <Text
+                  style={[
+                    styles.benchmarkButtonText,
+                    benchmarkLevel === level && styles.benchmarkButtonTextActive,
+                  ]}
+                >
+                  {BENCHMARK_LABELS[level]}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+          <Text style={styles.benchmarkHint}>
+            You can change this in settings as you improve your game.
+          </Text>
 
           <Pressable
             style={[styles.button, loading && styles.buttonDisabled]}
@@ -181,6 +245,68 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     alignItems: "center",
     marginTop: 4,
+  },
+  unitRow: {
+    flexDirection: "row" as const,
+    gap: 10,
+  },
+  unitButton: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: colors.inputBorder,
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: "center" as const,
+    backgroundColor: colors.inputBg,
+  },
+  unitButtonActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  unitButtonText: {
+    fontSize: 14,
+    fontWeight: "600" as const,
+    color: colors.textSecondary,
+  },
+  unitButtonTextActive: {
+    color: "#fff",
+  },
+  sectionLabel: {
+    fontSize: 14,
+    fontWeight: "600" as const,
+    color: colors.textSecondary,
+    marginTop: 4,
+  },
+  benchmarkGrid: {
+    flexDirection: "row" as const,
+    flexWrap: "wrap" as const,
+    gap: 8,
+  },
+  benchmarkButton: {
+    width: "31%" as unknown as number,
+    borderWidth: 1,
+    borderColor: colors.inputBorder,
+    borderRadius: 10,
+    paddingVertical: 10,
+    alignItems: "center" as const,
+    backgroundColor: colors.inputBg,
+  },
+  benchmarkButtonActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  benchmarkButtonText: {
+    fontSize: 12,
+    fontWeight: "600" as const,
+    color: colors.textSecondary,
+  },
+  benchmarkButtonTextActive: {
+    color: "#fff",
+  },
+  benchmarkHint: {
+    fontSize: 12,
+    color: colors.textMuted,
+    marginTop: -4,
   },
   buttonDisabled: { opacity: 0.6 },
   buttonText: { color: "#fff", fontSize: 16, fontWeight: "600" },

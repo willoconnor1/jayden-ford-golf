@@ -47,7 +47,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const authUser = { userId: user.id, email: user.email, name: user.name, city: user.city, state: user.state, country: user.country };
+    const authUser = { userId: user.id, email: user.email, name: user.name, city: user.city, state: user.state, country: user.country, distanceUnit: (user.distanceUnit ?? "yards") as "yards" | "meters", benchmarkLevel: user.benchmarkLevel ?? "pga-tour" };
     const token = await createToken(authUser);
     await setAuthCookie(token);
 

@@ -10,6 +10,7 @@ import { HeroStatCard } from "@/components/dashboard/hero-stat-card";
 import { SGBreakdownCard } from "@/components/dashboard/sg-breakdown-card";
 import { GameRadarCard } from "@/components/dashboard/game-radar-card";
 import { GoalRingCard } from "@/components/dashboard/goal-ring-card";
+import { DispersionCard } from "@/components/dashboard/dispersion-card";
 import { RecentRounds } from "@/components/dashboard/recent-rounds";
 import { QuickActions } from "@/components/dashboard/quick-actions";
 import { useStats } from "@/hooks/use-stats";
@@ -118,6 +119,11 @@ export default function DashboardPage() {
           {sgAverages && <SGBreakdownCard sgAverages={sgAverages} />}
           {sgAverages && <GameRadarCard sgAverages={sgAverages} />}
           {activeGoals.length > 0 && <GoalRingCard goals={activeGoals} />}
+        </div>
+
+        {/* Dispersion */}
+        <div className="mt-3 sm:mt-4">
+          <DispersionCard rounds={rounds} />
         </div>
 
         {/* Bottom: Recent Rounds */}

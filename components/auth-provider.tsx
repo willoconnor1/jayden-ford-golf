@@ -16,6 +16,8 @@ interface AuthUser {
   city?: string | null;
   state?: string | null;
   country?: string | null;
+  distanceUnit: "yards" | "meters";
+  benchmarkLevel: string;
 }
 
 interface ProfileData {
@@ -29,6 +31,8 @@ interface ProfileData {
   collegeName?: string;
   isTourPlayer?: boolean;
   tourName?: string;
+  distanceUnit?: "yards" | "meters";
+  benchmarkLevel?: string;
 }
 
 interface AuthContextType {

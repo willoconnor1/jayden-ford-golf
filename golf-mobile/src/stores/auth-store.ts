@@ -6,6 +6,11 @@ interface AuthUser {
   userId: string;
   email: string;
   name: string;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
+  distanceUnit: "yards" | "meters";
+  benchmarkLevel: string;
 }
 
 interface AuthState {
@@ -13,7 +18,7 @@ interface AuthState {
   token: string | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string, options?: { distanceUnit?: "yards" | "meters"; benchmarkLevel?: string }) => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
 }
@@ -64,11 +69,11 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
     set({ user: data.user, token: data.token });
   },
 
-  register: async (name: string, email: string, password: string) => {
+  register: async (name: string, email: string, password: string, options?: { distanceUnit?: "yards" | "meters"; benchmarkLevel?: string }) => {
     const res = await fetch(`${API_BASE}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, password, distanceUnit: options?.distanceUnit ?? "yards", benchmarkLevel: options?.benchmarkLevel ?? "pga-tour" }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "Registration failed");

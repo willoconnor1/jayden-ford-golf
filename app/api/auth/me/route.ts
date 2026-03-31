@@ -20,6 +20,8 @@ export async function GET(request: Request) {
       city: users.city,
       state: users.state,
       country: users.country,
+      distanceUnit: users.distanceUnit,
+      benchmarkLevel: users.benchmarkLevel,
     })
     .from(users)
     .where(eq(users.id, tokenUser.userId))
@@ -36,6 +38,8 @@ export async function GET(request: Request) {
     city: dbUser.city,
     state: dbUser.state,
     country: dbUser.country,
+    distanceUnit: (dbUser.distanceUnit ?? "yards") as "yards" | "meters",
+    benchmarkLevel: dbUser.benchmarkLevel ?? "pga-tour",
   };
 
   // Sliding expiry: issue a fresh token with up-to-date data

@@ -6,9 +6,16 @@ import { type ColumnDef, DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { CreateUserDialog } from "./create-user-dialog";
 import { EditUserDialog } from "./edit-user-dialog";
-import { ConfirmDialog } from "./confirm-dialog";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
@@ -32,6 +39,7 @@ export function AdminUsersTab({ users, refresh }: AdminUsersTabProps) {
   const [editUser, setEditUser] = useState<AdminUser | null>(null);
   const [deleteUser, setDeleteUser] = useState<AdminUser | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [confirmName, setConfirmName] = useState("");
   const [search, setSearch] = useState("");
 
   const filteredUsers = useMemo(() => {
@@ -134,6 +142,7 @@ export function AdminUsersTab({ users, refresh }: AdminUsersTabProps) {
 
       toast.success(`Deleted ${deleteUser.name}`);
       setDeleteUser(null);
+      setConfirmName("");
       refresh();
     } catch {
       toast.error("Failed to delete user");
@@ -186,14 +195,61 @@ export function AdminUsersTab({ users, refresh }: AdminUsersTabProps) {
         onUpdated={refresh}
       />
 
-      <ConfirmDialog
+      <Dialog
         open={!!deleteUser}
-        onOpenChange={(open) => !open && setDeleteUser(null)}
-        title={`Delete ${deleteUser?.name}?`}
-        description={`This will permanently delete ${deleteUser?.name}'s account and all their data (${deleteUser?.roundCount} rounds, ${deleteUser?.goalCount} goals). This cannot be undone.`}
-        onConfirm={handleDelete}
-        loading={deleting}
-      />
+        onOpenChange={(open) => {
+          if (!open) {
+            setDeleteUser(null);
+            setConfirmName("");
+          }
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete {deleteUser?.name}?</DialogTitle>
+            <DialogDescription>
+              This will permanently delete {deleteUser?.name}&apos;s account and
+              all their data ({deleteUser?.roundCount} rounds,{" "}
+              {deleteUser?.goalCount} goals). This cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">
+              Type <span className="font-bold">{deleteUser?.name}</span> to
+              confirm
+            </label>
+            <Input
+              placeholder={deleteUser?.name ?? ""}
+              value={confirmName}
+              onChange={(e) => setConfirmName(e.target.value)}
+              autoComplete="off"
+            />
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setDeleteUser(null);
+                setConfirmName("");
+              }}
+              disabled={deleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={
+                deleting ||
+                confirmName.trim().toLowerCase() !==
+                  (deleteUser?.name ?? "").trim().toLowerCase()
+              }
+            >
+              {deleting ? "Deleting..." : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

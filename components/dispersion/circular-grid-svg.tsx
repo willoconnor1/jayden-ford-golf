@@ -3,12 +3,14 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { EnrichedApproachShot } from "@/lib/stats/dispersion";
 import { CLUB_COLORS, CLUBS } from "@/lib/constants-clubs";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 interface CircularGridSvgProps {
   shots: EnrichedApproachShot[];
 }
 
 export function CircularGridSvg({ shots }: CircularGridSvgProps) {
+  const { dFeet, fLabel } = useDistanceUnit();
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(400);
   const [hoveredShot, setHoveredShot] = useState<EnrichedApproachShot | null>(null);
@@ -94,7 +96,7 @@ export function CircularGridSvg({ shots }: CircularGridSvgProps) {
               fillOpacity={0.35}
               fontSize={9}
             >
-              {r}ft
+              {dFeet(r)}{fLabel}
             </text>
           </g>
         ))}
@@ -161,21 +163,30 @@ export function CircularGridSvg({ shots }: CircularGridSvgProps) {
           R
         </text>
 
-        {/* Pin/flag icon */}
+        {/* Target center (blue) — pin/flag */}
         <line
           x1={center}
           y1={center}
           x2={center}
           y2={center - 14}
-          stroke="#ef4444"
+          stroke="#3b82f6"
           strokeWidth={1.5}
         />
         <polygon
           points={`${center},${center - 14} ${center + 8},${center - 11} ${center},${center - 8}`}
-          fill="#ef4444"
+          fill="#3b82f6"
           fillOpacity={0.8}
         />
-        <circle cx={center} cy={center} r={2.5} fill="#ef4444" />
+        <circle cx={center} cy={center} r={7} fill="#3b82f6" fillOpacity={0.9} stroke="white" strokeWidth={1.5} />
+
+        {/* Shot pattern center (red) */}
+        {shots.length > 0 && (() => {
+          const meanX = shots.reduce((s, sh) => s + sh.missX, 0) / shots.length;
+          const meanY = shots.reduce((s, sh) => s + sh.missY, 0) / shots.length;
+          return (
+            <circle cx={toSvgX(meanX)} cy={toSvgY(meanY)} r={7} fill="#ef4444" fillOpacity={0.9} stroke="white" strokeWidth={1.5} />
+          );
+        })()}
 
         {/* Shot dots */}
         {shots.map((shot, i) => {
@@ -224,7 +235,7 @@ export function CircularGridSvg({ shots }: CircularGridSvgProps) {
           <p className="text-muted-foreground">
             {hoveredShot.missX === 0 && hoveredShot.missY === 0
               ? "On target"
-              : `${hoveredShot.missX !== 0 ? `${Math.abs(hoveredShot.missX).toFixed(0)}ft ${hoveredShot.missX > 0 ? "R" : "L"}` : ""}${hoveredShot.missX !== 0 && hoveredShot.missY !== 0 ? ", " : ""}${hoveredShot.missY !== 0 ? `${Math.abs(hoveredShot.missY).toFixed(0)}ft ${hoveredShot.missY > 0 ? "long" : "short"}` : ""}`}
+              : `${hoveredShot.missX !== 0 ? `${dFeet(Math.abs(hoveredShot.missX)).toFixed(0)}${fLabel} ${hoveredShot.missX > 0 ? "R" : "L"}` : ""}${hoveredShot.missX !== 0 && hoveredShot.missY !== 0 ? ", " : ""}${hoveredShot.missY !== 0 ? `${dFeet(Math.abs(hoveredShot.missY)).toFixed(0)}${fLabel} ${hoveredShot.missY > 0 ? "long" : "short"}` : ""}`}
           </p>
         </div>
       )}

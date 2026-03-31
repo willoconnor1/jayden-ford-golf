@@ -11,6 +11,7 @@ import { useState } from "react";
 import { cn, holeScoreColor } from "@/lib/utils";
 import { ShotEntryCard } from "./shot-entry-card";
 import { PuttMissInput } from "./putt-miss-input";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 interface HoleEntryCardProps {
   hole: HoleData;
@@ -155,6 +156,7 @@ function ShotTrackingSection({
 }
 
 export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
+  const { dYards, dFeet, iFeet, yLabel, fLabel } = useDistanceUnit();
   const [expanded, setExpanded] = useState(false);
   const scoreToPar = hole.score - hole.par;
 
@@ -188,7 +190,7 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
             </span>
             {hole.distance > 0 && (
               <span className="text-xs text-muted-foreground">
-                {hole.distance} yds
+                {dYards(hole.distance)} {yLabel}
               </span>
             )}
           </div>
@@ -314,19 +316,19 @@ export function HoleEntryCard({ hole, onChange }: HoleEntryCardProps) {
                       </Label>
                       <Input
                         type="number"
-                        value={(hole.puttDistances || [])[i] || ""}
+                        value={dFeet((hole.puttDistances || [])[i] || 0) || ""}
                         onChange={(e) => {
                           const newDists = [...(hole.puttDistances || [])];
                           while (newDists.length <= i) newDists.push(0);
-                          newDists[i] = parseInt(e.target.value) || 0;
+                          newDists[i] = iFeet(parseInt(e.target.value) || 0);
                           update({ puttDistances: newDists });
                         }}
                         className="w-16 h-8 text-xs"
-                        placeholder="ft"
+                        placeholder={fLabel}
                         min={0}
                         max={120}
                       />
-                      <span className="text-xs text-muted-foreground">ft</span>
+                      <span className="text-xs text-muted-foreground">{fLabel}</span>
                       {isMiss && (
                         <span className="text-xs text-amber-600 font-medium">miss</span>
                       )}

@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
     // Look up target user
     const [targetUser] = await db
-      .select({ id: users.id, email: users.email, name: users.name })
+      .select({ id: users.id, email: users.email, name: users.name, distanceUnit: users.distanceUnit, benchmarkLevel: users.benchmarkLevel })
       .from(users)
       .where(eq(users.id, userId))
       .limit(1);
@@ -60,6 +60,8 @@ export async function POST(request: Request) {
       userId: targetUser.id,
       email: targetUser.email,
       name: targetUser.name,
+      distanceUnit: (targetUser.distanceUnit ?? "yards") as "yards" | "meters",
+      benchmarkLevel: targetUser.benchmarkLevel ?? "pga-tour",
     });
 
     // Set the impersonation token as active auth

@@ -24,6 +24,8 @@ export const users = pgTable("users", {
   collegeName: text("college_name"),
   isTourPlayer: boolean("is_tour_player").default(false),
   tourName: text("tour_name"),
+  distanceUnit: text("distance_unit").notNull().default("yards"),
+  benchmarkLevel: text("benchmark_level").notNull().default("pga-tour"),
   createdAt: text("created_at").notNull(),
   updatedAt: text("updated_at").notNull(),
 });

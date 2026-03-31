@@ -5,6 +5,7 @@ import { GestureDetector, Gesture } from "react-native-gesture-handler";
 import Animated, { useSharedValue, useAnimatedProps, runOnJS } from "react-native-reanimated";
 import { hapticLight } from "@/lib/platform";
 import { colors } from "@/theme/colors";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -23,11 +24,12 @@ const YARDS_SCALE = 50;
 const FEET_SCALE = 75;
 
 export function ShotMissInput({ missX, missY, onChange }: ShotMissInputProps) {
+  const { yLabelShort, yLabel, fLabel: feetLabel } = useDistanceUnit();
   const [zoom, setZoom] = useState(2);
   const [unit, setUnit] = useState<MissUnit>("yards");
 
   const isFeet = unit === "feet";
-  const unitLabel = isFeet ? "ft" : "y";
+  const unitLabel = isFeet ? feetLabel : yLabelShort;
   const scale = isFeet ? FEET_SCALE : YARDS_SCALE;
   const maxRange = scale / zoom;
 
@@ -106,7 +108,7 @@ export function ShotMissInput({ missX, missY, onChange }: ShotMissInputProps) {
         </Text>
         <Pressable onPress={toggleUnit} style={styles.unitToggle}>
           <Text style={styles.unitToggleText}>
-            {isFeet ? "yds" : "ft"}
+            {isFeet ? yLabel : feetLabel}
           </Text>
         </Pressable>
       </View>

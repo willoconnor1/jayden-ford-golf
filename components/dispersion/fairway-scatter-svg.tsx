@@ -3,12 +3,14 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { EnrichedTeeShot } from "@/lib/stats/dispersion";
 import { CLUB_COLORS, CLUBS } from "@/lib/constants-clubs";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 interface FairwayScatterSvgProps {
   shots: EnrichedTeeShot[];
 }
 
 export function FairwayScatterSvg({ shots }: FairwayScatterSvgProps) {
+  const { dYards, dFeet, yLabelShort, fLabel } = useDistanceUnit();
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(400);
   const [hoveredShot, setHoveredShot] = useState<EnrichedTeeShot | null>(null);
@@ -154,7 +156,7 @@ export function FairwayScatterSvg({ shots }: FairwayScatterSvgProps) {
               fillOpacity={0.4}
               fontSize={9}
             >
-              {v}yd
+              {dYards(v)}{yLabelShort}
             </text>
           </g>
         ))}
@@ -181,7 +183,7 @@ export function FairwayScatterSvg({ shots }: FairwayScatterSvgProps) {
                 fillOpacity={0.4}
                 fontSize={9}
               >
-                {v > 0 ? `${v}ft R` : `${Math.abs(v)}ft L`}
+                {v > 0 ? `${dFeet(v)}${fLabel} R` : `${dFeet(Math.abs(v))}${fLabel} L`}
               </text>
             )}
           </g>
@@ -229,6 +231,18 @@ export function FairwayScatterSvg({ shots }: FairwayScatterSvgProps) {
           Right →
         </text>
 
+        {/* Target center (blue) & shot pattern center (red) */}
+        {shots.length > 0 && (() => {
+          const meanX = shots.reduce((s, sh) => s + sh.missX, 0) / shots.length;
+          const meanY = shots.reduce((s, sh) => s + sh.distanceHit, 0) / shots.length;
+          return (
+            <>
+              <circle cx={toSvgX(0)} cy={toSvgY(meanY)} r={7} fill="#3b82f6" fillOpacity={0.9} stroke="white" strokeWidth={1.5} />
+              <circle cx={toSvgX(meanX)} cy={toSvgY(meanY)} r={7} fill="#ef4444" fillOpacity={0.9} stroke="white" strokeWidth={1.5} />
+            </>
+          );
+        })()}
+
         {/* Shot dots */}
         {shots.map((shot, i) => {
           const cx = toSvgX(shot.missX);
@@ -274,9 +288,9 @@ export function FairwayScatterSvg({ shots }: FairwayScatterSvgProps) {
             {CLUBS.find((c) => c.value === hoveredShot.club)?.label}
           </p>
           <p className="text-muted-foreground">
-            {hoveredShot.distanceHit.toFixed(0)}yd drive
+            {dYards(hoveredShot.distanceHit).toFixed(0)}{yLabelShort} drive
             {hoveredShot.missX !== 0 &&
-              ` · ${Math.abs(hoveredShot.missX).toFixed(0)}ft ${hoveredShot.missX > 0 ? "right" : "left"}`}
+              ` · ${dFeet(Math.abs(hoveredShot.missX)).toFixed(0)}${fLabel} ${hoveredShot.missX > 0 ? "right" : "left"}`}
           </p>
         </div>
       )}

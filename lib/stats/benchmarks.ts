@@ -1,4 +1,4 @@
-import { LieType } from "@/lib/types";
+import { LieType, BenchmarkLevel } from "@/lib/types";
 
 // PGA Tour expected strokes baseline data
 // Source: Mark Broadie's "Every Shot Counts" + PGA Tour ShotLink
@@ -581,4 +581,26 @@ export function getExpectedStrokes(lie: LieType, distance: number): number {
   }
   const ratio = (dist - lower) / (upper - lower);
   return table[lower] + ratio * (table[upper] - table[lower]);
+}
+
+// Scaling factors for amateur benchmarks relative to PGA Tour baseline
+// Source: derived from Mark Broadie's amateur data — amateurs lose proportionally
+// more strokes from rough/sand/recovery, least from putting
+export const BENCHMARK_SCALING: Record<BenchmarkLevel, Record<LieType, number>> = {
+  "pga-tour": { tee: 1.0, fairway: 1.0, rough: 1.0, sand: 1.0, green: 1.0, recovery: 1.0 },
+  "scratch":  { tee: 1.03, fairway: 1.045, rough: 1.06, sand: 1.07, green: 1.04, recovery: 1.055 },
+  "hdcp-4":   { tee: 1.055, fairway: 1.085, rough: 1.11, sand: 1.13, green: 1.07, recovery: 1.105 },
+  "hdcp-9":   { tee: 1.09, fairway: 1.14, rough: 1.175, sand: 1.20, green: 1.11, recovery: 1.17 },
+  "hdcp-13":  { tee: 1.12, fairway: 1.195, rough: 1.245, sand: 1.275, green: 1.15, recovery: 1.24 },
+  "hdcp-18":  { tee: 1.155, fairway: 1.26, rough: 1.325, sand: 1.36, green: 1.195, recovery: 1.32 },
+};
+
+export function getExpectedStrokesForLevel(
+  lie: LieType,
+  distance: number,
+  level: BenchmarkLevel = "pga-tour"
+): number {
+  const base = getExpectedStrokes(lie, distance);
+  if (level === "pga-tour") return base;
+  return base * (BENCHMARK_SCALING[level]?.[lie] ?? 1.0);
 }

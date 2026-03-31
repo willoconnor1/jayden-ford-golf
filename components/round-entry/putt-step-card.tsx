@@ -11,6 +11,7 @@ import {
   PUTT_SPEEDS,
 } from "@/lib/constants-clubs";
 import { cn } from "@/lib/utils";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 export interface PuttData {
   distance: number;
@@ -47,6 +48,7 @@ export function PuttStepCard({
   onBack,
   isDetailed,
 }: PuttStepCardProps) {
+  const { dFeet, iFeet, fLabel } = useDistanceUnit();
   const update = (partial: Partial<PuttData>) => {
     onChange({ ...putt, ...partial });
   };
@@ -62,12 +64,12 @@ export function PuttStepCard({
       {/* Distance */}
       <div className="space-y-1">
         <div className="text-xs font-medium text-muted-foreground">
-          Distance (feet)
+          Distance ({fLabel})
         </div>
         <Input
           type="number"
-          value={putt.distance || ""}
-          onChange={(e) => update({ distance: parseInt(e.target.value) || 0 })}
+          value={dFeet(putt.distance) || ""}
+          onChange={(e) => update({ distance: iFeet(parseInt(e.target.value) || 0) })}
           className="h-10 text-sm"
           placeholder="20"
           min={0}
@@ -169,13 +171,13 @@ export function PuttStepCard({
           {/* Distance from hole after miss */}
           <div className="space-y-1">
             <div className="text-xs font-medium text-muted-foreground">
-              Distance from Hole (ft)
+              Distance from Hole ({fLabel})
             </div>
             <Input
               type="number"
-              value={putt.remainingDistance ?? ""}
+              value={dFeet(putt.remainingDistance ?? 0) || ""}
               onChange={(e) =>
-                update({ remainingDistance: parseInt(e.target.value) || 0 })
+                update({ remainingDistance: iFeet(parseInt(e.target.value) || 0) })
               }
               className="h-10 text-sm"
               placeholder="3"

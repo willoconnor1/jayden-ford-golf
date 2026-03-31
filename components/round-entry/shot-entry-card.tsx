@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { CLUBS, SHOT_LIES, SHOT_RESULTS, ABNORMAL_DETAILS } from "@/lib/constants-clubs";
 import { ShotMissInput } from "./shot-miss-input";
 import { DriverMissInput } from "./driver-miss-input";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 interface ShotEntryCardProps {
   shotIndex: number;
@@ -17,6 +18,7 @@ interface ShotEntryCardProps {
 const PENALTY_RESULTS: ShotResult[] = ["out-of-bounds", "penalty-area", "tree-trouble", "abnormal"];
 
 export function ShotEntryCard({ shotIndex, shot, onChange }: ShotEntryCardProps) {
+  const { dYards, iYards, yLabel } = useDistanceUnit();
   const isDriver = shot.club === "driver";
 
   const update = (partial: Partial<ShotData>) => {
@@ -54,12 +56,12 @@ export function ShotEntryCard({ shotIndex, shot, onChange }: ShotEntryCardProps)
 
         {/* Target Distance */}
         <div className="space-y-1">
-          <Label className="text-xs">Target (yds)</Label>
+          <Label className="text-xs">Target ({yLabel})</Label>
           <Input
             type="number"
-            value={shot.targetDistance || ""}
+            value={dYards(shot.targetDistance) || ""}
             onChange={(e) =>
-              update({ targetDistance: parseInt(e.target.value) || 0 })
+              update({ targetDistance: iYards(parseInt(e.target.value) || 0) })
             }
             className="h-8 text-xs"
             placeholder="150"

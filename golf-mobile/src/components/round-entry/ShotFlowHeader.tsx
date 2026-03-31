@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { colors } from "@/theme/colors";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 interface ShotFlowHeaderProps {
   holeNumber: number;
@@ -19,11 +20,12 @@ export function ShotFlowHeader({
   subtitle,
   progress,
 }: ShotFlowHeaderProps) {
+  const { dYards, yLabel } = useDistanceUnit();
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>
         Hole {holeNumber} of {totalHoles}
-        <Text style={styles.details}> · Par {par} · {distance} yds</Text>
+        <Text style={styles.details}> · Par {par} · {dYards(distance)} {yLabel}</Text>
       </Text>
       <Text style={styles.subtitle}>{subtitle}</Text>
       <ProgressBar value={Math.max(1, progress * 100)} />

@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { EnrichedTeeShot, computeHistogramBins } from "@/lib/stats/dispersion";
 import { Club } from "@/lib/types";
 import { CLUB_COLORS, CLUBS } from "@/lib/constants-clubs";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 import {
   BarChart,
   Bar,
@@ -21,6 +22,7 @@ interface HistogramStripProps {
 }
 
 export function HistogramStrip({ shots, selectedClubs }: HistogramStripProps) {
+  const { fLabel } = useDistanceUnit();
   const bins = useMemo(() => computeHistogramBins(shots, 10), [shots]);
 
   const chartData = useMemo(() => {
@@ -58,7 +60,7 @@ export function HistogramStrip({ shots, selectedClubs }: HistogramStripProps) {
             tick={{ fontSize: 9, fill: "rgba(255,255,255,0.5)" }}
             axisLine={{ stroke: "rgba(255,255,255,0.15)" }}
             label={{
-              value: "← Left (ft) | Right (ft) →",
+              value: `← Left (${fLabel}) | Right (${fLabel}) →`,
               position: "bottom",
               offset: 0,
               style: { fontSize: 10, fill: "rgba(255,255,255,0.5)" },

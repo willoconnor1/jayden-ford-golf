@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 import { useRoundStore } from "@/stores/round-store";
+import { useAuthStore } from "@/stores/auth-store";
 import { calculateRoundStrokesGained } from "@/lib/stats/strokes-gained";
-import { StrokesGainedResult } from "@/lib/types";
+import { StrokesGainedResult, BenchmarkLevel } from "@/lib/types";
 
 function average(nums: number[]): number {
   if (nums.length === 0) return 0;
@@ -10,6 +11,8 @@ function average(nums: number[]): number {
 
 export function useStrokesGained() {
   const rounds = useRoundStore((state) => state.rounds);
+  const user = useAuthStore((state) => state.user);
+  const benchmarkLevel = (user?.benchmarkLevel ?? "pga-tour") as BenchmarkLevel;
 
   const sgByRound = useMemo(
     () =>
@@ -21,9 +24,9 @@ export function useStrokesGained() {
           roundId: r.id,
           date: r.date,
           course: r.course.name,
-          sg: calculateRoundStrokesGained(r),
+          sg: calculateRoundStrokesGained(r, benchmarkLevel),
         })),
-    [rounds]
+    [rounds, benchmarkLevel]
   );
 
   const sgAverages = useMemo((): StrokesGainedResult | null => {

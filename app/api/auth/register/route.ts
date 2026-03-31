@@ -19,6 +19,8 @@ const registerSchema = z.object({
   collegeName: z.string().max(100).optional(),
   isTourPlayer: z.boolean().optional(),
   tourName: z.string().max(100).optional(),
+  distanceUnit: z.enum(["yards", "meters"]).optional(),
+  benchmarkLevel: z.enum(["hdcp-18", "hdcp-13", "hdcp-9", "hdcp-4", "scratch", "pga-tour"]).optional(),
 });
 
 export async function POST(request: Request) {
@@ -69,11 +71,13 @@ export async function POST(request: Request) {
       collegeName: profile.isCollegePlayer ? (profile.collegeName ?? null) : null,
       isTourPlayer: profile.isTourPlayer ?? false,
       tourName: profile.isTourPlayer ? (profile.tourName ?? null) : null,
+      distanceUnit: profile.distanceUnit ?? "yards",
+      benchmarkLevel: profile.benchmarkLevel ?? "pga-tour",
       createdAt: now,
       updatedAt: now,
     });
 
-    const authUser = { userId, email, name: name.trim(), city: profile.city ?? null, state: profile.state ?? null, country: profile.country ?? null };
+    const authUser = { userId, email, name: name.trim(), city: profile.city ?? null, state: profile.state ?? null, country: profile.country ?? null, distanceUnit: (profile.distanceUnit ?? "yards") as "yards" | "meters", benchmarkLevel: profile.benchmarkLevel ?? "pga-tour" };
     const token = await createToken(authUser);
     await setAuthCookie(token);
 

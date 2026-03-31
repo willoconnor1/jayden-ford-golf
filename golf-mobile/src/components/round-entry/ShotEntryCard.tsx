@@ -7,6 +7,7 @@ import { DriverMissInput } from "./DriverMissInput";
 import { CLUBS, SHOT_LIES, SHOT_RESULTS, ABNORMAL_DETAILS } from "@/lib/constants-clubs";
 import { hapticLight } from "@/lib/platform";
 import { colors } from "@/theme/colors";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 interface ShotEntryCardProps {
   shotIndex: number;
@@ -15,6 +16,7 @@ interface ShotEntryCardProps {
 }
 
 export function ShotEntryCard({ shotIndex, shot, onChange }: ShotEntryCardProps) {
+  const { dYards, iYards, yLabel } = useDistanceUnit();
   const [clubModal, setClubModal] = useState(false);
   const [resultModal, setResultModal] = useState(false);
   const isDriver = shot.club === "driver";
@@ -48,9 +50,9 @@ export function ShotEntryCard({ shotIndex, shot, onChange }: ShotEntryCardProps)
         {/* Target distance */}
         <View style={styles.halfField}>
           <TextInput
-            label="Target (yds)"
-            value={shot.targetDistance ? String(shot.targetDistance) : ""}
-            onChangeText={(t) => update({ targetDistance: parseInt(t) || 0 })}
+            label={`Target (${yLabel})`}
+            value={shot.targetDistance ? String(dYards(shot.targetDistance)) : ""}
+            onChangeText={(t) => update({ targetDistance: iYards(parseInt(t) || 0) })}
             keyboardType="number-pad"
             placeholder="150"
             style={{ height: 36, fontSize: 13 }}

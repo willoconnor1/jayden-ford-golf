@@ -6,12 +6,13 @@ import { File, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import * as DocumentPicker from "expo-document-picker";
 import { useAuthStore } from "@/stores/auth-store";
+import { API_BASE } from "@/lib/api-config";
 import { useRoundStore } from "@/stores/round-store";
 import { useGoalStore } from "@/stores/goal-store";
 import { ScreenBackground } from "@/components/ui/ScreenBackground";
 import { BACKGROUNDS } from "@/lib/background-images";
 import { Card } from "@/components/ui/Card";
-import { Round, Goal } from "@/lib/types";
+import { Round, Goal, BENCHMARK_LEVELS, BENCHMARK_LABELS, BenchmarkLevel } from "@/lib/types";
 import { colors } from "@/theme/colors";
 
 interface ExportData {
@@ -23,6 +24,8 @@ interface ExportData {
 
 export default function SettingsScreen() {
   const user = useAuthStore((s) => s.user);
+  const token = useAuthStore((s) => s.token);
+  const checkAuth = useAuthStore((s) => s.checkAuth);
   const logout = useAuthStore((s) => s.logout);
   const rounds = useRoundStore((s) => s.rounds);
   const addRound = useRoundStore((s) => s.addRound);
@@ -30,6 +33,64 @@ export default function SettingsScreen() {
   const goals = useGoalStore((s) => s.goals);
   const addGoal = useGoalStore((s) => s.addGoal);
   const [importing, setImporting] = useState(false);
+  const [updatingUnit, setUpdatingUnit] = useState(false);
+  const [updatingBenchmark, setUpdatingBenchmark] = useState(false);
+
+  async function handleDistanceUnitChange(unit: "yards" | "meters") {
+    if (unit === user?.distanceUnit) return;
+    setUpdatingUnit(true);
+    try {
+      const res = await fetch(`${API_BASE}/profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: user?.name ?? "",
+          city: user?.city ?? "",
+          country: user?.country ?? "",
+          distanceUnit: unit,
+        }),
+      });
+      if (res.ok) {
+        await checkAuth();
+        Alert.alert("Updated", `Distance units set to ${unit}.`);
+      }
+    } catch {
+      Alert.alert("Error", "Failed to update distance unit.");
+    } finally {
+      setUpdatingUnit(false);
+    }
+  }
+
+  async function handleBenchmarkChange(level: BenchmarkLevel) {
+    if (level === user?.benchmarkLevel) return;
+    setUpdatingBenchmark(true);
+    try {
+      const res = await fetch(`${API_BASE}/profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: user?.name ?? "",
+          city: user?.city ?? "",
+          country: user?.country ?? "",
+          benchmarkLevel: level,
+        }),
+      });
+      if (res.ok) {
+        await checkAuth();
+        Alert.alert("Updated", `Benchmark set to ${BENCHMARK_LABELS[level]}.`);
+      }
+    } catch {
+      Alert.alert("Error", "Failed to update benchmark level.");
+    } finally {
+      setUpdatingBenchmark(false);
+    }
+  }
 
   async function handleLogout() {
     useRoundStore.getState().reset();
@@ -136,6 +197,83 @@ export default function SettingsScreen() {
             <Text style={styles.value}>{user?.name}</Text>
             <Text style={[styles.label, { marginTop: 12 }]}>Email</Text>
             <Text style={styles.value}>{user?.email}</Text>
+          </Card>
+
+          {/* Distance Units */}
+          <Card style={styles.card}>
+            <Text style={styles.sectionTitle}>Distance Units</Text>
+            <Text style={styles.description}>
+              Choose whether distances are shown in yards/feet or meters.
+            </Text>
+            <View style={styles.buttonRow}>
+              <Pressable
+                style={[
+                  styles.outlineButton,
+                  user?.distanceUnit !== "meters" && styles.activeUnitButton,
+                  updatingUnit && styles.buttonDisabled,
+                ]}
+                onPress={() => handleDistanceUnitChange("yards")}
+                disabled={updatingUnit}
+              >
+                <Text
+                  style={[
+                    styles.outlineButtonText,
+                    user?.distanceUnit !== "meters" && styles.activeUnitText,
+                  ]}
+                >
+                  Yards / Feet
+                </Text>
+              </Pressable>
+              <Pressable
+                style={[
+                  styles.outlineButton,
+                  user?.distanceUnit === "meters" && styles.activeUnitButton,
+                  updatingUnit && styles.buttonDisabled,
+                ]}
+                onPress={() => handleDistanceUnitChange("meters")}
+                disabled={updatingUnit}
+              >
+                <Text
+                  style={[
+                    styles.outlineButtonText,
+                    user?.distanceUnit === "meters" && styles.activeUnitText,
+                  ]}
+                >
+                  Meters
+                </Text>
+              </Pressable>
+            </View>
+          </Card>
+
+          {/* Benchmark Level */}
+          <Card style={styles.card}>
+            <Text style={styles.sectionTitle}>Benchmark Level</Text>
+            <Text style={styles.description}>
+              Choose who you compare your Strokes Gained against. Change this as your game improves.
+            </Text>
+            <View style={styles.benchmarkGrid}>
+              {BENCHMARK_LEVELS.map((level) => (
+                <Pressable
+                  key={level}
+                  style={[
+                    styles.benchmarkButton,
+                    (user?.benchmarkLevel ?? "pga-tour") === level && styles.activeUnitButton,
+                    updatingBenchmark && styles.buttonDisabled,
+                  ]}
+                  onPress={() => handleBenchmarkChange(level)}
+                  disabled={updatingBenchmark}
+                >
+                  <Text
+                    style={[
+                      styles.benchmarkButtonText,
+                      (user?.benchmarkLevel ?? "pga-tour") === level && styles.activeUnitText,
+                    ]}
+                  >
+                    {BENCHMARK_LABELS[level]}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
           </Card>
 
           {/* Data Backup */}
@@ -251,6 +389,32 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     color: colors.primary,
+  },
+  activeUnitButton: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  activeUnitText: {
+    color: "#fff",
+  },
+  benchmarkGrid: {
+    flexDirection: "row" as const,
+    flexWrap: "wrap" as const,
+    gap: 8,
+  },
+  benchmarkButton: {
+    width: "31%" as unknown as number,
+    borderWidth: 1,
+    borderColor: colors.inputBorder,
+    borderRadius: 10,
+    paddingVertical: 10,
+    alignItems: "center" as const,
+    backgroundColor: colors.inputBg,
+  },
+  benchmarkButtonText: {
+    fontSize: 12,
+    fontWeight: "600" as const,
+    color: colors.textSecondary,
   },
   buttonDisabled: {
     opacity: 0.5,

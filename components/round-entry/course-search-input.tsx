@@ -8,6 +8,7 @@ import { useCourseStore } from "@/stores/course-store";
 import { useRoundStore } from "@/stores/round-store";
 import type { CourseInfo, SavedCourse } from "@/lib/types";
 import { Search, Loader2, MapPin, ChevronDown, X } from "lucide-react";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 interface CourseSearchInputProps {
   course: CourseInfo;
@@ -20,6 +21,7 @@ export function CourseSearchInput({
   onCourseSelect,
   onManualEntry,
 }: CourseSearchInputProps) {
+  const { dYards, yLabelShort } = useDistanceUnit();
   const [query, setQuery] = useState(course.name);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<SavedCourse | null>(null);
@@ -274,7 +276,7 @@ export function CourseSearchInput({
               >
                 {tee.name}
                 <span className="ml-1 text-[10px] opacity-70">
-                  {tee.totalDistance > 0 ? `${tee.totalDistance}y` : ""}
+                  {tee.totalDistance > 0 ? `${dYards(tee.totalDistance)}${yLabelShort}` : ""}
                 </span>
               </Button>
             ))}

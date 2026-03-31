@@ -5,6 +5,7 @@ import { GestureDetector, Gesture } from "react-native-gesture-handler";
 import Animated, { useSharedValue, useAnimatedProps, runOnJS } from "react-native-reanimated";
 import { hapticLight } from "@/lib/platform";
 import { colors } from "@/theme/colors";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -21,6 +22,7 @@ const CENTER_Y = SVG_HEIGHT / 2;
 const SCALE = 50; // yards (+/-50 default)
 
 export function DriverMissInput({ missX, onChange }: DriverMissInputProps) {
+  const { dYards, yLabelShort } = useDistanceUnit();
   const [zoom, setZoom] = useState(1);
   const maxRange = SCALE / zoom;
   const pxPerYard = (SVG_WIDTH / 2) / maxRange;
@@ -66,7 +68,7 @@ export function DriverMissInput({ missX, onChange }: DriverMissInputProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>
-        Miss: {missX === 0 ? "Center" : `${Math.round(Math.abs(missX))}y ${missX < 0 ? "Left" : "Right"}`}
+        Miss: {missX === 0 ? "Center" : `${dYards(Math.round(Math.abs(missX)))}${yLabelShort} ${missX < 0 ? "Left" : "Right"}`}
       </Text>
       <GestureDetector gesture={composed}>
         <View>
@@ -97,7 +99,7 @@ export function DriverMissInput({ missX, onChange }: DriverMissInputProps) {
         <Pressable onPress={() => setZoom(Math.min(4, zoom * 2))} style={styles.zoomButton}>
           <Text style={styles.zoomText}>+</Text>
         </Pressable>
-        <Text style={styles.zoomLabel}>{"\u00b1"}{maxRange}y</Text>
+        <Text style={styles.zoomLabel}>{"\u00b1"}{dYards(maxRange)}{yLabelShort}</Text>
         <Pressable onPress={() => setZoom(Math.max(0.5, zoom / 2))} style={styles.zoomButton}>
           <Text style={styles.zoomText}>{"\u2212"}</Text>
         </Pressable>

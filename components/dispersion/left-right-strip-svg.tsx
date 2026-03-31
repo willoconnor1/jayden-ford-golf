@@ -3,12 +3,14 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { EnrichedTeeShot } from "@/lib/stats/dispersion";
 import { CLUB_COLORS, CLUBS } from "@/lib/constants-clubs";
+import { useDistanceUnit } from "@/hooks/use-distance-unit";
 
 interface LeftRightStripSvgProps {
   shots: EnrichedTeeShot[];
 }
 
 export function LeftRightStripSvg({ shots }: LeftRightStripSvgProps) {
+  const { dFeet, fLabel } = useDistanceUnit();
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(400);
   const [hoveredShot, setHoveredShot] = useState<EnrichedTeeShot | null>(null);
@@ -104,7 +106,7 @@ export function LeftRightStripSvg({ shots }: LeftRightStripSvgProps) {
                 fillOpacity={0.4}
                 fontSize={9}
               >
-                {v > 0 ? `${v}ft` : `${Math.abs(v)}ft`}
+                {v > 0 ? `${dFeet(v)}${fLabel}` : `${dFeet(Math.abs(v))}${fLabel}`}
               </text>
             )}
           </g>
@@ -142,6 +144,18 @@ export function LeftRightStripSvg({ shots }: LeftRightStripSvgProps) {
         >
           Right →
         </text>
+
+        {/* Target center (blue) & shot pattern center (red) */}
+        {shots.length > 0 && (() => {
+          const meanX = shots.reduce((s, sh) => s + sh.missX, 0) / shots.length;
+          const midY = stripY + stripH / 2;
+          return (
+            <>
+              <circle cx={toSvgX(0)} cy={midY} r={7} fill="#3b82f6" fillOpacity={0.9} stroke="white" strokeWidth={1.5} />
+              <circle cx={toSvgX(meanX)} cy={midY} r={7} fill="#ef4444" fillOpacity={0.9} stroke="white" strokeWidth={1.5} />
+            </>
+          );
+        })()}
 
         {/* Shot dots */}
         {jitteredShots.map(({ shot, jitterY }, i) => (
@@ -185,7 +199,7 @@ export function LeftRightStripSvg({ shots }: LeftRightStripSvgProps) {
           <p className="text-muted-foreground">
             {hoveredShot.missX === 0
               ? "On line"
-              : `${Math.abs(hoveredShot.missX).toFixed(0)}ft ${hoveredShot.missX > 0 ? "right" : "left"}`}
+              : `${dFeet(Math.abs(hoveredShot.missX)).toFixed(0)}${fLabel} ${hoveredShot.missX > 0 ? "right" : "left"}`}
           </p>
         </div>
       )}

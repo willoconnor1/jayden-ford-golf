@@ -14,7 +14,8 @@ import { useStrokesGained } from "@/hooks/use-strokes-gained";
 import { useRoundStore } from "@/stores/round-store";
 import { analyzePracticeNeeds } from "@/lib/stats/practice-analyzer";
 import { DRILL_DATABASE } from "@/lib/drills/drill-database";
-import { PracticeFocus, Drill } from "@/lib/types";
+import { PracticeFocus, Drill, BenchmarkLevel } from "@/lib/types";
+import { useAuth } from "@/components/auth-provider";
 import { cn } from "@/lib/utils";
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -138,6 +139,8 @@ export default function PracticePage() {
   const hydrated = useHydration();
   const rounds = useRoundStore((s) => s.rounds);
   const { sgAverages } = useStrokesGained();
+  const { user } = useAuth();
+  const benchmarkLevel = (user?.benchmarkLevel ?? "pga-tour") as BenchmarkLevel;
 
   if (!hydrated) {
     return <><PageBackground image="/tara-iti.jpg" /><div className="relative z-10 animate-pulse h-96 bg-muted/60 rounded-lg" /></>;
@@ -165,7 +168,7 @@ export default function PracticePage() {
     );
   }
 
-  const focuses = analyzePracticeNeeds(sgAverages);
+  const focuses = analyzePracticeNeeds(sgAverages, benchmarkLevel);
 
   return (
     <>

@@ -17,8 +17,8 @@ export default function InsightsLayout({
   const pathname = usePathname();
 
   return (
-    <div>
-      <nav className="flex gap-1 p-1 glass-card rounded-full w-fit mb-6">
+    <div className="relative z-10">
+      <nav className="relative z-10 flex gap-1 p-1 glass-card rounded-full w-fit mb-6">
         {TABS.map((tab) => (
           <Link
             key={tab.href}
